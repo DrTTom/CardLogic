@@ -115,6 +115,7 @@ public class WorkspacePersistence implements Persistence
    *
    * @throws IOException
    */
+  @Override
   public String createNewBinRef(String parentsPrimKey, String parentsType, String fileExtension)
     throws IOException
   {

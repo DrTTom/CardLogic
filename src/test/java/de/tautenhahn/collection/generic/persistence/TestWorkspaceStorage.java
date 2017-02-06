@@ -21,6 +21,7 @@ public class TestWorkspaceStorage
    *
    * @throws IOException
    */
+  @SuppressWarnings("boxing")
   @Test
   public void storeAndFind() throws IOException
   {

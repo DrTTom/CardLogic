@@ -5,12 +5,17 @@ import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * Enumeration with fixed set of allowed values.
+ *
+ * @author TT
+ */
 public class FixedEnumeration extends Enumeration
 {
 
-  protected FixedEnumeration(String name, String[] allowed, Flag... flags)
+  protected FixedEnumeration(String name, int matchValue, String[] allowed, Flag... flags)
   {
-    super(name, flags);
+    super(name, matchValue, flags);
     allowedValues = Collections.unmodifiableList(Arrays.asList(allowed));
   }
 

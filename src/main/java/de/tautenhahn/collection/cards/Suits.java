@@ -9,6 +9,7 @@ public class Suits extends FixedEnumeration
 
   private static final String[] VALUES = new String[]{"french", "german", "spanish", "italian", "swiss",
                                                       "mixed", "other"};
+
   static
   {
     for ( int i = 0 ; i < VALUES.length ; i++ )
@@ -19,6 +20,6 @@ public class Suits extends FixedEnumeration
 
   public Suits()
   {
-    super("suits", VALUES, Flag.EXACT);
+    super("suits", 10, VALUES, Flag.EXACT);
   }
 }

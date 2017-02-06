@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
-import de.tautenhahn.collection.generic.data.InterpretedAttribute;
+import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 
 
@@ -47,9 +47,9 @@ public abstract class ApplicationContext
   }
 
   /**
-   * return an editor instance for given class
+   * Return an interpreter for described objects of specified type.
    */
-  public abstract InterpretedAttribute getInterpreter(String attributeName, String value);
+  public abstract DescribedObjectInterpreter getInterpreter(String attributeName);
 
   /**
    * Return a text specified by key (internationalization).

@@ -24,6 +24,8 @@ public class Question
 
   private String form;
 
+  private String message;
+
   /**
    * Optional, returns list of allowed values if a selection is to be shown.
    *

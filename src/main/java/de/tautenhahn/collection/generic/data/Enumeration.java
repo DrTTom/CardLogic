@@ -3,10 +3,10 @@ package de.tautenhahn.collection.generic.data;
 import java.util.List;
 
 
-public abstract class Enumeration extends InterpretedAttribute
+public abstract class Enumeration extends AttributeInterpreter
 {
 
-  protected Enumeration(String name, Flag[] flags)
+  protected Enumeration(String name, int matchValue, Flag[] flags)
   {
     super(name, flags);
   }
@@ -17,14 +17,14 @@ public abstract class Enumeration extends InterpretedAttribute
 
 
   @Override
-  boolean isLegalValue()
+  public boolean isLegalValue(String value)
   {
     return (isOptional() && value == null) || getAllowedValues().contains(value);
   }
 
   @Override
-  protected int correllateValue(String otherValue)
+  protected int correllateValue(String thisValue, String otherValue)
   {
-    return value.equals(otherValue) ? matchValue : (isExact() ? -1 : 0);
+    return thisValue.equals(otherValue) ? matchValue : (isExact() ? -1 : 0);
   }
 }
