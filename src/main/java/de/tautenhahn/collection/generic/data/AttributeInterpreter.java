@@ -75,6 +75,11 @@ public abstract class AttributeInterpreter
     return exact;
   }
 
+  /**
+   * Returns true if OK, message in case of violation.
+   * @param value
+   * @return
+   */
   public abstract boolean isLegalValue(String value);
 
   public final int computeCorrellation(String thisValue, String otherValue)
@@ -87,5 +92,6 @@ public abstract class AttributeInterpreter
   }
 
   abstract int correllateValue(String thisValue, String otherValue);
+
 
 }

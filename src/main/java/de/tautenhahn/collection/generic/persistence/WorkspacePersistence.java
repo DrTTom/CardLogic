@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -139,7 +140,7 @@ public class WorkspacePersistence implements Persistence
     throws IOException
   {
     Path subDir = collectionBaseDir.resolve(Paths.get(sanitize(parentsType),
-                                                      Integer.toHexString(parentsPrimKey.hashCode() % 64)));
+                                                      Integer.toHexString(parentsPrimKey.hashCode() & 0xff)));
     if (!Files.exists(subDir))
     {
       Files.createDirectories(subDir);
@@ -155,10 +156,11 @@ public class WorkspacePersistence implements Persistence
 
   private String sanitize(String input)
   {
-    StringBuilder result = new StringBuilder();
+	CharsetEncoder ascii = StandardCharsets.US_ASCII.newEncoder();
+	StringBuilder result = new StringBuilder();
     for ( char x : input.toCharArray() )
     {
-      if (Character.isLetterOrDigit(x))
+      if (Character.isLetterOrDigit(x) && ascii.canEncode(x))
       {
         result.append(x);
       }
@@ -288,7 +290,7 @@ public class WorkspacePersistence implements Persistence
     {
       this.ins = ins;
     }
-
+    
     @Override
     public int read() throws IOException
     {

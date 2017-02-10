@@ -12,14 +12,39 @@ public abstract class DescribedObjectInterpreter
 {
 
 
+  /**
+   * Returns the list of all supported attribute names.
+   */
+  public abstract Collection<String> getSupportedAttributes();
+  
+  /**
+   * Returns a list of all attributes backed up by binary objects.
+   */
+  public abstract Collection<String> getBinaryValuedAttributes();
 
   /**
-   * Returns a list of AttributeInterpreters for all attributes supported by the given type.
+   * Returns the interpreter for attribute of specified name.
+   * @param name
    */
-  public abstract Collection<AttributeInterpreter> getSupportedAttributes();
-
-  public AttributeInterpreter getAttributeInterpreter(String name)
+  public abstract AttributeInterpreter getAttributeInterpreter(String name);
+  
+  public int countSimilarity(DescribedObject searchMask, DescribedObject candidate)
   {
-    return getSupportedAttributes().stream().filter(a -> name.equals(a.getName())).findAny().orElse(null);
+	  int result = 0;
+	  for (String name: getSupportedAttributes())
+	  {
+		  int contrib = getAttributeInterpreter(name).computeCorrellation(searchMask.getAttributes().get(name), candidate.getAttributes().get(name));
+		  if (contrib<0)
+		  {
+			  return contrib;
+		  }
+		  result+=contrib;
+	  }
+	  return result;
+  }
+  
+  public Collection<Question> getQuestions()
+  {
+	return null;  
   }
 }

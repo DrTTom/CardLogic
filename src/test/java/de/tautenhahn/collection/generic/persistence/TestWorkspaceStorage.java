@@ -9,7 +9,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -60,7 +66,7 @@ public class TestWorkspaceStorage
       assertThat(ins.available(), is(content.length));
     }
   }
-
+  
   /**
    * Sort migrated data into new workspace
    *
@@ -71,12 +77,20 @@ public class TestWorkspaceStorage
   {
     WorkspacePersistence systemUnderTest = new WorkspacePersistence();
     systemUnderTest.init("cards");
-    System.out.println(systemUnderTest.getNumberItems("maker"));
     systemUnderTest.close();
     systemUnderTest.getObjectTypes().forEach(t -> systemUnderTest.getKeyValues(t).forEach(k -> importImage(t,
                                                                                                            k,
                                                                                                            systemUnderTest)));
     systemUnderTest.close();
+    try(OutputStream out = new FileOutputStream("example.zip"))
+    {
+    	Map<String, List<String>> binRefs = new HashMap<>();
+    	binRefs.put("deck", Collections.singletonList("image"));
+    	binRefs.put("makerSign", Collections.singletonList("image")); 
+    	binRefs.put("pattern", Collections.singletonList("image")); 
+    	binRefs.put("taxStamp", Collections.singletonList("image"));
+    	systemUnderTest.exportZip(binRefs, out);
+    }
   }
 
   private void importImage(String type, String key, WorkspacePersistence systemUnderTest)
@@ -92,9 +106,9 @@ public class TestWorkspaceStorage
           object.getAttributes().remove("image");
           return;
         }
-        String newRef = systemUnderTest.createNewBinRef(key, type, ".jpg");
+        String newRef = systemUnderTest.createNewBinRef(key, type, "jpg");
         object.getAttributes().put("image", newRef);
-        try (InputStream ins = getClass().getResourceAsStream(imageRef))
+        try (InputStream ins = getClass().getResourceAsStream(imageRef.startsWith("/")? imageRef: "/"+imageRef))
         {
           System.out.println(imageRef + " -> " + ins);
           if (ins == null)

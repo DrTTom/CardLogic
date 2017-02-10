@@ -12,7 +12,8 @@ import java.util.List;
 public class Question
 {
 
-  private final String paramName;
+	private final String paramName;
+	private  String value;
 
   private List<String> allowedValues;
 
@@ -24,8 +25,10 @@ public class Question
 
   private String form;
 
-  private String message;
-
+  private boolean skipped;
+  
+  private String problem;
+  
   /**
    * Optional, returns list of allowed values if a selection is to be shown.
    *
