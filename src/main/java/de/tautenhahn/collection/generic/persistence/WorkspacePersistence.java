@@ -1,7 +1,11 @@
 package de.tautenhahn.collection.generic.persistence;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +20,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,6 +40,8 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
  */
 public class WorkspacePersistence implements Persistence
 {
+
+  private static final String JSON_FILENAME = "objects.json";
 
   private final Map<String, Map<String, DescribedObject>> objects = new TreeMap<>();
 
@@ -73,7 +82,7 @@ public class WorkspacePersistence implements Persistence
   {
     Gson gson = new GsonBuilder().create();
 
-    Path path = collectionBaseDir.resolve("objects.json");
+    Path path = collectionBaseDir.resolve(JSON_FILENAME);
     try (Writer wr = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
       JsonWriter writer = new JsonWriter(wr))
     {
@@ -93,21 +102,31 @@ public class WorkspacePersistence implements Persistence
     {
       Files.createDirectories(collectionBaseDir);
     }
-    Path path = collectionBaseDir.resolve("objects.json");
+    Path path = collectionBaseDir.resolve(JSON_FILENAME);
     if (Files.exists(path))
     {
-      Gson gson = new GsonBuilder().create();
-      try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8);
-        JsonReader jr = gson.newJsonReader(reader))
+      try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8))
       {
-        jr.beginArray();
-        while (jr.hasNext())
-        {
-          store(gson.fromJson(jr, DescribedObject.class));
-        }
-        jr.endArray();
+        importGson(reader);
       }
     }
+  }
+
+  private int importGson(Reader reader) throws IOException
+  {
+    int result = 0;
+    Gson gson = new GsonBuilder().create();
+    try (JsonReader jr = gson.newJsonReader(reader))
+    {
+      jr.beginArray();
+      while (jr.hasNext())
+      {
+        store(gson.fromJson(jr, DescribedObject.class));
+        result++;
+      }
+      jr.endArray();
+    }
+    return result;
   }
 
   /**
@@ -234,4 +253,99 @@ public class WorkspacePersistence implements Persistence
     return result;
   }
 
+  public void exportZip(Map<String, List<String>> binRefs, OutputStream outs) throws IOException
+  {
+    close();
+    List<String> relPathes = new ArrayList<>();
+    relPathes.add(JSON_FILENAME);
+    binRefs.forEach((type, binAttrs) -> {
+      getTypeMap(type).values()
+                      .stream()
+                      .flatMap(v -> v.getAttributes().entrySet().stream())
+                      .filter(e -> binAttrs.contains(e.getKey()))
+                      .map(e -> e.getValue())
+                      .filter(p -> p != null)
+                      .forEach(relPathes::add);
+    });
+
+    try (ZipOutputStream zip = new ZipOutputStream(outs))
+    {
+      for ( String path : relPathes )
+      {
+        zip.putNextEntry(new ZipEntry(path));
+        Files.copy(collectionBaseDir.resolve(path), zip);
+        zip.flush();
+      }
+    }
+  }
+
+  private static class NonClosingFilter extends InputStream
+  {
+
+    private final InputStream ins;
+
+    NonClosingFilter(InputStream ins)
+    {
+      this.ins = ins;
+    }
+
+    @Override
+    public int read() throws IOException
+    {
+      return ins.read();
+    }
+
+  }
+
+  public void importZip(InputStream ins) throws IOException
+  {
+    try (ZipInputStream zip = new ZipInputStream(ins))
+    {
+      ZipEntry entry = zip.getNextEntry();
+      if (!JSON_FILENAME.equals(entry.getName()) || entry.isDirectory())
+      {
+        throw new IOException("Zip file is not a Collection -> aborting import without changes to wiorkspace.");
+      }
+      int allowedNumberFiles = 0;
+      try (InputStream nonClosing = new NonClosingFilter(zip);
+        Reader reader = new InputStreamReader(nonClosing, StandardCharsets.UTF_8))
+      {
+        allowedNumberFiles = importGson(reader) * 10;
+        close();
+        zip.closeEntry();
+        int numberFiles = 1;
+        while ((entry = zip.getNextEntry()) != null && numberFiles < allowedNumberFiles)
+        {
+          createLimitedFile(entry.getName(), zip);
+          zip.closeEntry();
+        }
+      }
+    }
+  }
+
+  private static final int MAX_FILESIZE = 100 * 1024 * 1024;
+
+  private void createLimitedFile(String relativePath, InputStream content) throws IOException
+  {
+    File target = collectionBaseDir.resolve(relativePath).toFile();
+    if (target.getCanonicalPath().startsWith(collectionBaseDir.toFile().getCanonicalPath()))
+    {
+      if (!target.getParentFile().exists())
+      {
+        target.getParentFile().mkdirs();
+      }
+      try (OutputStream fos = new FileOutputStream(target))
+      {
+        byte[] buffer = new byte[4 * 1024];
+        int total = 0;
+        int count = 0;
+
+        while (total + buffer.length <= MAX_FILESIZE && (count = content.read(buffer)) != -1)
+        {
+          fos.write(buffer, 0, count);
+          total += count;
+        }
+      }
+    }
+  }
 }

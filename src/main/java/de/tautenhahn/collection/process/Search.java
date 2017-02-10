@@ -81,10 +81,9 @@ public class Search
    */
   public void search()
   {
+    // TODO: handle queryText
 
   }
-
-
 
   public List<Question> getQuestions()
   {
