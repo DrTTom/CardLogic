@@ -9,84 +9,84 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
+import de.tautenhahn.collection.generic.data.Message;
 import de.tautenhahn.collection.generic.data.Question;
 
-
 /**
- * Handles the search process. There is always exactly at most one search going on for each object type. The
- * search mask may be passed to the Submission process, primary key values from elements of the search result
- * may be passed to View, Edit or Delete processes.
- *
+ * Wraps all data about the search process transported to the front end.  
  * @author TT
+ *
  */
-public class Search
-{
+public class Search {
 
-  private DescribedObject searchMask;
+	  private String type;
 
-  private final String type;
+	  private String queryText;
 
-  private final DescribedObjectInterpreter interpreter;
+	  private List<Question> questions;
+	  
+	  private int currentQuestion;
+	  
+	  private List<Message> messages;
 
-  /**
-   * Data for deciding whether to do a new search or a refinement.
-   */
-  private final Map<String, String> matchedAttributes = new HashMap<>();
+	  private int numberTotal;
 
-  private boolean queryMeansRefine;
+	  private List<DescribedObject> matches = new ArrayList<>();
 
-  private String queryText;
+	public String getType() {
+		return type;
+	}
 
-  private Search(String type)
-  {
-    this.type = type;
-    interpreter = ApplicationContext.getInstance().getInterpreter(type);
-  }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-  /**
-   * May be empty as long as initialization appears to be too expensive.
-   */
-  private final List<DescribedObject> matches = new ArrayList<>();
+	public String getQueryText() {
+		return queryText;
+	}
 
-  private int numberTotal;
+	public void setQueryText(String queryText) {
+		this.queryText = queryText;
+	}
 
-  private int numberMatch;
+	public List<Question> getQuestions() {
+		return questions;
+	}
 
-  public void clear()
-  {
-    matchedAttributes.clear();
-    searchMask.getAttributes().clear();
-    queryMeansRefine = false;
-    queryText = null;
-  }
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
+	}
 
-  public void setAttribute(String name, String value)
-  {
-    AttributeInterpreter ai = interpreter.getAttributeInterpreter(name);
-    if (!ai.isLegalValue(value))
-    {
-      throw new IllegalArgumentException(name); // TODO implement some message handling
-    }
-    searchMask.getAttributes().put(name, value);
-  }
+	public int getCurrentQuestion() {
+		return currentQuestion;
+	}
 
-  public void setQueryText(String value, boolean refine)
-  {
-    queryText = value;
-    queryMeansRefine = refine;
-  }
+	public void setCurrentQuestion(int currentQuestion) {
+		this.currentQuestion = currentQuestion;
+	}
 
-  /**
-   * Actually do the search with all the restrictions specified so far.
-   */
-  public void search()
-  {
-    // TODO: handle queryText
+	public List<Message> getMessages() {
+		return messages;
+	}
 
-  }
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
 
-  public List<Question> getQuestions()
-  {
-    return null;
-  }
+	public int getNumberTotal() {
+		return numberTotal;
+	}
+
+	public void setNumberTotal(int numberTotal) {
+		this.numberTotal = numberTotal;
+	}
+
+	public List<DescribedObject> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(List<DescribedObject> matches) {
+		this.matches = matches;
+	}
+
 }

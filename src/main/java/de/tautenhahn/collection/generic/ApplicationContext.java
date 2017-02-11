@@ -24,8 +24,6 @@ public abstract class ApplicationContext
 
   private final ResourceBundle texts = null; // TODO
 
-  private Persistence persistence;
-
   /**
    * singleton getter
    */
@@ -73,10 +71,7 @@ public abstract class ApplicationContext
    *
    * @return
    */
-  public Persistence getPersistence()
-  {
-    return persistence;
-  }
+  public abstract Persistence getPersistence();
 
   /**
    * @return image to be shown in place of missing images.

@@ -1,27 +1,34 @@
 package de.tautenhahn.collection.cards;
 
-import de.tautenhahn.collection.generic.data.DescribedObject;
+import java.util.Collection;
+
+import de.tautenhahn.collection.generic.data.AttributeInterpreter;
+import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 
 
-public class Deck extends DescribedObject
+public class Deck extends DescribedObjectInterpreter
 {
 
   private static final String TYPE = "Deck";
 
-  public Deck(DescribedObject data)
-  {
-    super(checkType(data.getType()), data.getPrimKey());
-    getAttributes().putAll(data.getAttributes());
-  }
+@Override
+public Collection<String> getSupportedAttributes() {
+	// TODO Auto-generated method stub
+	return null;
+}
 
-  private static String checkType(String type2)
-  {
-    if (!TYPE.equals(type2))
-    {
-      throw new IllegalArgumentException("wrong data type " + type2);
-    }
-    return type2;
-  }
+@Override
+public Collection<String> getBinaryValuedAttributes() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public AttributeInterpreter getAttributeInterpreter(String name) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
 
 
 }
