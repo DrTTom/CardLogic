@@ -43,8 +43,5 @@ public abstract class DescribedObjectInterpreter
 	  return result;
   }
   
-  public Collection<Question> getQuestions()
-  {
-	return null;  
-  }
+  public abstract Collection<Question> getQuestions();
 }

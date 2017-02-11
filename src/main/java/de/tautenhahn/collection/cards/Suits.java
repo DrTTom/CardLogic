@@ -2,6 +2,7 @@ package de.tautenhahn.collection.cards;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.FixedEnumeration;
+import de.tautenhahn.collection.generic.data.Question;
 
 
 public class Suits extends FixedEnumeration
@@ -22,4 +23,12 @@ public class Suits extends FixedEnumeration
   {
     super("suits", 10, VALUES, Flag.EXACT);
   }
+
+@Override
+public Question getQuestion() {
+	Question result = new Question("suits", "Was für Farben hat das Spiel?", "Messen und zählen");
+	result.setHelptext("Die Dinger in den Ecken!");
+	result.setAllowedValues(getAllowedValues());
+	return result;
+}
 }

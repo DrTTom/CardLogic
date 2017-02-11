@@ -74,7 +74,8 @@ public abstract class AttributeInterpreter
   {
     return exact;
   }
-
+// TODO: provide a described object as context to allow the following  methods changing behavior. 
+  // For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish  suits.
   /**
    * Returns true if OK, message in case of violation.
    * @param value
@@ -91,7 +92,8 @@ public abstract class AttributeInterpreter
     return correllateValue(thisValue, otherValue);
   }
 
-  abstract int correllateValue(String thisValue, String otherValue);
+  protected abstract int correllateValue(String thisValue, String otherValue);
 
+  public abstract Question getQuestion();
 
 }

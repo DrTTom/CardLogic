@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author TT
  */
-public class FixedEnumeration extends Enumeration
+public abstract class FixedEnumeration extends Enumeration
 {
 
   protected FixedEnumeration(String name, int matchValue, String[] allowed, Flag... flags)

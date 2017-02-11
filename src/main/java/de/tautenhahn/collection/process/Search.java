@@ -1,14 +1,9 @@
 package de.tautenhahn.collection.process;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Message;
 import de.tautenhahn.collection.generic.data.Question;
 

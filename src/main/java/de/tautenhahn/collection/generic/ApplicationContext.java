@@ -56,7 +56,7 @@ public abstract class ApplicationContext
    */
   public final String getText(String key)
   {
-    return Optional.ofNullable(getSpecificText(key)).orElse(texts.getString(key));
+    return Optional.ofNullable(getSpecificText(key)).orElse(key); // TODO use generic bundle as well
   }
 
   protected abstract String getSpecificText(String key);

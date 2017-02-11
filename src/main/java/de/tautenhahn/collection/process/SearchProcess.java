@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
@@ -42,6 +43,7 @@ public class SearchProcess
   SearchProcess(String type)
   {
     this.type = type;
+    searchMask=new DescribedObject(type, null);
     interpreter = ApplicationContext.getInstance().getInterpreter(type);
   }
 
@@ -92,6 +94,11 @@ public class SearchProcess
 	  result.setType(type);
 	  result.setNumberTotal(ApplicationContext.getInstance().getPersistence().getNumberItems(type));
 	  result.setQueryText(queryText);
+	  result.setQuestions(new ArrayList<>(interpreter.getQuestions())); // TODO: give search mask
+	  
+	  // TODO: add caching, use exact attributes, sort,  ... 
+	  result.setMatches(ApplicationContext.getInstance().getPersistence().findAll(type).filter(d -> interpreter.countSimilarity(searchMask, d)>=0).collect(Collectors.toList()));
+	  
 	  return result;
 
   }
