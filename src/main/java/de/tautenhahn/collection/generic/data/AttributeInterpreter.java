@@ -35,16 +35,13 @@ public abstract class AttributeInterpreter
     OPTIONAL, SEARCHABLE, EXACT
   }
 
-
-
-  protected AttributeInterpreter(String name, Flag... flags)
+protected AttributeInterpreter(String name, Flag... flags)
   {
     this.name = name;
     List<Flag> flagList = Arrays.asList(flags);
     optional = flagList.contains(Flag.OPTIONAL);
     searchable = flagList.contains(Flag.SEARCHABLE);
-    exact = flagList.contains(Flag.EXACT);
-
+    exact = flagList.contains(Flag.EXACT);    
   }
 
   private final String name;
@@ -74,6 +71,7 @@ public abstract class AttributeInterpreter
   {
     return exact;
   }
+  
 // TODO: provide a described object as context to allow the following  methods changing behavior. 
   // For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish  suits.
   /**

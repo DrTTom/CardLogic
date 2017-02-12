@@ -92,10 +92,12 @@ public class SearchProcess
 	  result.setType(type);
 	  result.setNumberTotal(ApplicationContext.getInstance().getPersistence().getNumberItems(type));
 	  result.setQueryText(queryText);
-	  result.setQuestions(new ArrayList<>(interpreter.getQuestions())); // TODO: give search mask
+	  result.setQuestions(new ArrayList<>(interpreter.getQuestions())); 
+	  result.getQuestions().forEach(q -> q.setValue(searchMask.getAttributes().get(q.getParamName())));
 	  
 	  // TODO: add caching, use exact attributes, sort,  ... 
 	  result.setMatches(ApplicationContext.getInstance().getPersistence().findAll(type).filter(d -> interpreter.countSimilarity(searchMask, d)>=0).collect(Collectors.toList()));
+	  
 	  clear();
 	  
 	  return result;

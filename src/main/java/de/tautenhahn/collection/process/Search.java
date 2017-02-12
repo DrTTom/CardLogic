@@ -25,6 +25,10 @@ public class Search {
 	  private List<Message> messages;
 
 	  private int numberTotal;
+	  
+	  private int numberMatching;
+	  
+	  private int numberPossible;
 
 	  private List<DescribedObject> matches = new ArrayList<>();
 

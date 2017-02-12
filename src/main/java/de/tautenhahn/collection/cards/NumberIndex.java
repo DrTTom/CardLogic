@@ -11,7 +11,7 @@ public class NumberIndex extends AttributeInterpreter {
 
 	@Override
 	public boolean isLegalValue(String value) {
-		return value.matches("[0-9](/[0-9])*");
+		return value.matches("[1-9](/[1-9])*");
 	}
 
 	@Override
