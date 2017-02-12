@@ -15,7 +15,7 @@ public class Suits extends FixedEnumeration
   {
     for ( int i = 0 ; i < VALUES.length ; i++ )
     {
-      VALUES[i] = ApplicationContext.getInstance().getText("value.suits." + VALUES[i]);
+      VALUES[i] = ApplicationContext.getInstance().getText("suits.value." + VALUES[i]);
     }
   }
 

@@ -1,29 +1,27 @@
 package de.tautenhahn.collection.cards;
 
 
-import static spark.Spark.get;
+import java.io.IOException;
 
+import de.tautenhahn.collection.process.RestServer;
 
+/**
+ * Entry class for the card collecting application.
+ * @author TT
+ *
+ */
 public class Main
 {
 
   /**
-   * Port ist
-   * 
-   * @param args
+   * Starts the application from command line.
+   * @param args to be changed
+ * @throws IOException 
    */
-  public static void main(String[] args)
+  public static void main(String[] args) throws IOException
   {
-    get("/hello/:name", (req, res) -> {
-      res.type("text/plain");
-      String name = req.params(":name");
-      return "Hello " + (name == null ? "World" : name);
-    });
-    get("/other/:name", (req, res) -> {
-      res.type("text/plain");
-      String name = req.params(":name");
-      return "Other " + (name == null ? "World" : name);
-    });
-    System.out.println("End reached");
+	  CardApplicationContext.init();
+	  RestServer.getInstance().start();
+	  System.out.println("Server started, point your browser to http://loacalhost:4567/search/deck");
   }
 }

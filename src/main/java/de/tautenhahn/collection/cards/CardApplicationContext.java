@@ -2,6 +2,7 @@ package de.tautenhahn.collection.cards;
 
 import java.awt.Image;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
@@ -13,6 +14,7 @@ import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 public class CardApplicationContext extends ApplicationContext{
 
 	private Persistence persistence;
+	ResourceBundle messages =ResourceBundle.getBundle("de.tautenhahn.collection.cards.CardMessages");
 	
 	@Override
 	public DescribedObjectInterpreter getInterpreter(String type) {
@@ -26,8 +28,7 @@ public class CardApplicationContext extends ApplicationContext{
 
 	@Override
 	protected String getSpecificText(String key) {
-		// TODO Auto-generated method stub
-		return null;
+		return messages.containsKey(key)? messages.getString(key): null;
 	}
 
 	@Override

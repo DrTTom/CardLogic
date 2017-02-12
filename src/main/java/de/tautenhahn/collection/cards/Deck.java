@@ -1,8 +1,6 @@
 package de.tautenhahn.collection.cards;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +17,9 @@ public class Deck extends DescribedObjectInterpreter {
 	private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
 	static {
 		ATTRIBS.put("suits", new Suits());
+		ATTRIBS.put("condition", new Condition());
+		ATTRIBS.put("numberCards", new NumberCards());
+		ATTRIBS.put("numIndex", new NumberIndex());
 	}
 
 	@Override

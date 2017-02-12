@@ -11,8 +11,6 @@ import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Message;
-import de.tautenhahn.collection.generic.data.Question;
-import de.tautenhahn.collection.generic.persistence.Persistence;
 
 
 /**
@@ -98,6 +96,7 @@ public class SearchProcess
 	  
 	  // TODO: add caching, use exact attributes, sort,  ... 
 	  result.setMatches(ApplicationContext.getInstance().getPersistence().findAll(type).filter(d -> interpreter.countSimilarity(searchMask, d)>=0).collect(Collectors.toList()));
+	  clear();
 	  
 	  return result;
 

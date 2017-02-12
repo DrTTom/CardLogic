@@ -1,6 +1,8 @@
 package de.tautenhahn.collection.process;
 
-import static spark.Spark.*;
+import static spark.Spark.exception;
+import static spark.Spark.get;
+import static spark.Spark.post;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,11 +14,10 @@ import javax.servlet.MultipartConfigElement;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import de.tautenhahn.collection.cards.CardApplicationContext;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import spark.Request;
 import spark.Response;
-import spark.route.RouteOverview;
+import spark.Spark;
 
 /**
  * Feeds the RestServer with content.
@@ -25,15 +26,20 @@ import spark.route.RouteOverview;
  *
  */
 public class RestServer {
-	/**
-	 * Port ist 4567
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		CardApplicationContext.init();		
+	private static final RestServer INSTANCE = new RestServer();;
 
-		get("/search/:type", RestServer::search);
+	private RestServer()
+	{
+		// no other instances allowed
+	}
+	
+	public void stop()
+	{
+		Spark.stop();
+	}
+	public void start()
+	{
+		get("/search/:type", this::search);
 
 		// proof of concept for file upload:
 		get("/upload", (request, response) -> {
@@ -69,15 +75,14 @@ public class RestServer {
 		
 		// proof of concept for serving static files not needed, just stream them
 		
-		// exception handling during developement
+		// exception handling during development
 		exception(Exception.class, (exception, request, response) -> {
 			exception.printStackTrace();
 		});
-
-
 	}
+	
 
-	static Object search(Request req, Response res) throws Exception {
+	private String search(Request req, Response res) throws IOException {
 		res.type("text/plain");
 		res.header("Content-Type","application/json; charset=UTF-8");
 		String type = req.params(":type");
@@ -96,6 +101,10 @@ public class RestServer {
 		{
 			dest.write(buf,  0,  count);
 		}
+	}
+
+	public static RestServer getInstance() {
+		return INSTANCE;
 	}
 
 }
