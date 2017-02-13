@@ -1,7 +1,5 @@
 package de.tautenhahn.collection.cards;
 
-import java.util.StringTokenizer;
-
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.Question;
 
@@ -31,7 +29,18 @@ public class SpecialMeasure extends AttributeInterpreter
     {
       return 0; // cannot decide uniquely if eye is visible and has unique position
     }
-    return new Rectangle(thisValue).similar(new Rectangle(otherValue)) ? 30 : -1;
+    if (thisValue.equals(otherValue))
+    {
+      return 50;
+    }
+    try
+    {
+      return new Format.Rectangle(thisValue).similar(new Format.Rectangle(otherValue)) ? 30 : -1;
+    }
+    catch (IllegalArgumentException e)
+    {
+      return 0;
+    }
   }
 
   @Override
@@ -47,34 +56,5 @@ public class SpecialMeasure extends AttributeInterpreter
     return result;
   }
 
-  static class Rectangle
-  {
 
-    int width, height;
-
-    Rectangle(String value)
-    {
-      StringTokenizer tokens = new StringTokenizer(value, "x (");
-      try
-      {
-        if (tokens.hasMoreTokens())
-        {
-          width = Integer.parseInt(tokens.nextToken());
-        }
-        if (tokens.hasMoreTokens())
-        {
-          height = Integer.parseInt(tokens.nextToken());
-        }
-      }
-      catch (NumberFormatException e)
-      {
-        // cannot handle
-      }
-    }
-
-    boolean similar(Rectangle other)
-    {
-      return Math.abs(width - other.width) < 2 && Math.abs(height - other.height) < 2;
-    }
-  }
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * Provides process instances.
- * 
+ *
  * @author jean
  */
 public class ProcessScheduler
@@ -14,7 +14,7 @@ public class ProcessScheduler
 
   private static final ProcessScheduler INSTANCE = new ProcessScheduler();
 
-  private Map<String, SearchProcess> searches = new HashMap<>();
+  private final Map<String, SearchProcess> searches = new HashMap<>();
 
   public static ProcessScheduler getInstance()
   {
@@ -30,5 +30,10 @@ public class ProcessScheduler
       searches.put(type, result);
     }
     return result;
+  }
+
+  public ViewProcess getView()
+  {
+    return new ViewProcess();
   }
 }

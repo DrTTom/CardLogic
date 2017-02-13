@@ -10,8 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +18,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 
 public class TestWorkspaceStorage
@@ -66,13 +65,30 @@ public class TestWorkspaceStorage
       assertThat(ins.available(), is(content.length));
     }
   }
-  
+
+  /**
+   * Imports zip data into workspace:
+   *
+   * @throws IOException
+   */
+  @Test
+  public void importZip() throws IOException
+  {
+    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+    systemUnderTest.init("cards");
+    try (InputStream ins = TestWorkspaceStorage.class.getResourceAsStream("/example.zip"))
+    {
+      systemUnderTest.importZip(ins);
+    }
+  }
+
   /**
    * Sort migrated data into new workspace
    *
    * @throws IOException
    */
   @Test
+  @Ignore
   public void read() throws IOException
   {
     WorkspacePersistence systemUnderTest = new WorkspacePersistence();
@@ -82,14 +98,14 @@ public class TestWorkspaceStorage
                                                                                                            k,
                                                                                                            systemUnderTest)));
     systemUnderTest.close();
-    try(OutputStream out = new FileOutputStream("example.zip"))
+    try (OutputStream out = new FileOutputStream("example.zip"))
     {
-    	Map<String, List<String>> binRefs = new HashMap<>();
-    	binRefs.put("deck", Collections.singletonList("image"));
-    	binRefs.put("makerSign", Collections.singletonList("image")); 
-    	binRefs.put("pattern", Collections.singletonList("image")); 
-    	binRefs.put("taxStamp", Collections.singletonList("image"));
-    	systemUnderTest.exportZip(binRefs, out);
+      Map<String, List<String>> binRefs = new HashMap<>();
+      binRefs.put("deck", Collections.singletonList("image"));
+      binRefs.put("makerSign", Collections.singletonList("image"));
+      binRefs.put("pattern", Collections.singletonList("image"));
+      binRefs.put("taxStamp", Collections.singletonList("image"));
+      systemUnderTest.exportZip(binRefs, out);
     }
   }
 
@@ -108,7 +124,8 @@ public class TestWorkspaceStorage
         }
         String newRef = systemUnderTest.createNewBinRef(key, type, "jpg");
         object.getAttributes().put("image", newRef);
-        try (InputStream ins = getClass().getResourceAsStream(imageRef.startsWith("/")? imageRef: "/"+imageRef))
+        try (InputStream ins = getClass().getResourceAsStream(imageRef.startsWith("/") ? imageRef
+          : "/" + imageRef))
         {
           System.out.println(imageRef + " -> " + ins);
           if (ins == null)

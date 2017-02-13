@@ -17,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import spark.Request;
 import spark.Response;
+import spark.ResponseTransformer;
 import spark.Spark;
 
 
@@ -28,7 +29,20 @@ import spark.Spark;
 public class RestServer
 {
 
-  private static final RestServer INSTANCE = new RestServer();;
+  static class JsonTransformer implements ResponseTransformer
+  {
+
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    @Override
+    public String render(Object model)
+    {
+      return gson.toJson(model);
+    }
+
+  }
+
+  private static final RestServer INSTANCE = new RestServer();
 
   private RestServer()
   {
@@ -42,7 +56,12 @@ public class RestServer
 
   public void start()
   {
-    get("/search/:type", this::search);
+    get("/view/:type/:key",
+        (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
+                                                                            req.params(":key")),
+        new JsonTransformer());
+
+    get("/search/:type", this::search, new JsonTransformer());
 
     // proof of concept for file upload:
     get("/upload", (request, response) -> {
@@ -87,16 +106,14 @@ public class RestServer
   }
 
 
-  private String search(Request req, Response res) throws IOException
+  private Search search(Request req, Response res)
   {
     res.type("text/plain");
     res.header("Content-Type", "application/json; charset=UTF-8");
     String type = req.params(":type");
     SearchProcess proc = ProcessScheduler.getInstance().getCurrentSearch(type);
     req.queryParams().forEach(p -> proc.setAttribute(p, req.queryParams(p)));
-    Search result = proc.execute();
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    return gson.toJson(result);
+    return proc.execute();
   }
 
   private static void copy(InputStream src, OutputStream dest) throws IOException

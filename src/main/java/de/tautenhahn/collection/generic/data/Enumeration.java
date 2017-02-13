@@ -19,12 +19,16 @@ public abstract class Enumeration extends AttributeInterpreter
   @Override
   public boolean isLegalValue(String value)
   {
-    return (isOptional() && value == null) || getAllowedValues().contains(value);
+    return isOptional() && value == null || getAllowedValues().contains(value);
   }
 
   @Override
   protected int correllateValue(String thisValue, String otherValue)
   {
-    return thisValue.equals(otherValue) ? matchValue : (isExact() ? -1 : 0);
+    if (thisValue.equals(otherValue))
+    {
+      return matchValue;
+    }
+    return isExact() ? -1 : 0;
   }
 }
