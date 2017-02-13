@@ -24,11 +24,12 @@ public class Suits extends FixedEnumeration
     super("suits", 10, VALUES, Flag.EXACT);
   }
 
-@Override
-public Question getQuestion() {
-	Question result = new Question("suits", "Was für Farben hat das Spiel?", "Messen und zählen");
-	result.setHelptext("Die Dinger in den Ecken!");
-	result.setAllowedValues(getAllowedValues());
-	return result;
-}
+  @Override
+  public Question getQuestion()
+  {
+    Question result = new Question("suits", "Was für Farben hat das Spiel?", "Messen und zählen");
+    result.setHelptext("Die Dinger in den Ecken!");
+    result.setAllowedValues(getAllowedValues());
+    return result;
+  }
 }

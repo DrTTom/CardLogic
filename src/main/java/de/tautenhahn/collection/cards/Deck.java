@@ -10,40 +10,47 @@ import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Question;
 
-public class Deck extends DescribedObjectInterpreter {
 
-	
-	private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
-	static {
-		ATTRIBS.put("suits", new Suits());
-		ATTRIBS.put("numIndex", new NumberIndex());
-		ATTRIBS.put("format", new Format());
-		ATTRIBS.put("specialMeasure", new SpecialMeasure());		
-		ATTRIBS.put("numberCards", new NumberCards());
-		ATTRIBS.put("condition", new Condition());	
-	}
+public class Deck extends DescribedObjectInterpreter
+{
 
-	@Override
-	public Collection<String> getSupportedAttributes() {
-		return ATTRIBS.keySet();
-	}
 
-	@Override
-	public Collection<String> getBinaryValuedAttributes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
+  static
+  {
+    ATTRIBS.put("suits", new Suits());
+    ATTRIBS.put("numIndex", new NumberIndex());
+    ATTRIBS.put("format", new Format());
+    ATTRIBS.put("specialMeasure", new SpecialMeasure());
+    ATTRIBS.put("numberCards", new NumberCards());
+    ATTRIBS.put("condition", new Condition());
+  }
 
-	@Override
-	public AttributeInterpreter getAttributeInterpreter(String name) {
-		return Optional.ofNullable(ATTRIBS.get(name))
-				.orElseThrow(() -> new IllegalArgumentException("unsupported attribute " + name));
+  @Override
+  public Collection<String> getSupportedAttributes()
+  {
+    return ATTRIBS.keySet();
+  }
 
-	}
+  @Override
+  public Collection<String> getBinaryValuedAttributes()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	@Override
-	public Collection<Question> getQuestions() {
-		return ATTRIBS.values().stream().map(i -> i.getQuestion()).collect(Collectors.toList());
-	}
+  @Override
+  public AttributeInterpreter getAttributeInterpreter(String name)
+  {
+    return Optional.ofNullable(ATTRIBS.get(name))
+                   .orElseThrow(() -> new IllegalArgumentException("unsupported attribute " + name));
+
+  }
+
+  @Override
+  public Collection<Question> getQuestions()
+  {
+    return ATTRIBS.values().stream().map(i -> i.getQuestion()).collect(Collectors.toList());
+  }
 
 }

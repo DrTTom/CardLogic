@@ -23,12 +23,14 @@ public class Condition extends FixedEnumeration
     super("condition", 1, VALUES);
   }
 
-@Override
-public Question getQuestion() {
-	Question result = new Question("condition", ApplicationContext.getInstance().getText("condition.question"),
-			 "Beschreiben");
-	result.setHelptext("So angeben wie im MGM-Katalog!");
-	result.setAllowedValues(getAllowedValues());
-	return result;
-}
+  @Override
+  public Question getQuestion()
+  {
+    Question result = new Question("condition",
+                                   ApplicationContext.getInstance().getText("condition.question"),
+                                   "Beschreiben");
+    result.setHelptext("So angeben wie im MGM-Katalog!");
+    result.setAllowedValues(getAllowedValues());
+    return result;
+  }
 }

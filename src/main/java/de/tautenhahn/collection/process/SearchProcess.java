@@ -41,7 +41,7 @@ public class SearchProcess
   SearchProcess(String type)
   {
     this.type = type;
-    searchMask=new DescribedObject(type, null);
+    searchMask = new DescribedObject(type, null);
     interpreter = ApplicationContext.getInstance().getInterpreter(type);
   }
 
@@ -65,13 +65,13 @@ public class SearchProcess
   public Message setAttribute(String name, String value)
   {
     AttributeInterpreter ai = interpreter.getAttributeInterpreter(name);
-    if (ai==null)
+    if (ai == null)
     {
-    	return new Message();
+      return new Message();
     }
     if (!ai.isLegalValue(value))
     {
-    	return new Message(); // TODO implement some message handling
+      return new Message(); // TODO implement some message handling
     }
     searchMask.getAttributes().put(name, value);
     return null;
@@ -88,45 +88,55 @@ public class SearchProcess
    */
   public Search execute()
   {
-	  Search result = new Search();
-	  result.setType(type);
-	  result.setNumberTotal(ApplicationContext.getInstance().getPersistence().getNumberItems(type));
-	  result.setQueryText(queryText);
-	  result.setQuestions(new ArrayList<>(interpreter.getQuestions())); 
-	  result.getQuestions().forEach(q -> q.setValue(searchMask.getAttributes().get(q.getParamName())));
-	  
-	  // TODO: add caching, use exact attributes, sort,  ... 
-	  result.setMatches(ApplicationContext.getInstance().getPersistence().findAll(type).filter(d -> interpreter.countSimilarity(searchMask, d)>=0).collect(Collectors.toList()));
-	  
-	  clear();
-	  
-	  return result;
+    Search result = new Search();
+    result.setType(type);
+    result.setNumberTotal(ApplicationContext.getInstance().getPersistence().getNumberItems(type));
+    result.setQueryText(queryText);
+    result.setQuestions(new ArrayList<>(interpreter.getQuestions()));
+    result.getQuestions().forEach(q -> q.setValue(searchMask.getAttributes().get(q.getParamName())));
+
+    // TODO: add caching, use exact attributes, sort, ...
+    result.setMatches(ApplicationContext.getInstance()
+                                        .getPersistence()
+                                        .findAll(type)
+                                        .filter(d -> interpreter.countSimilarity(searchMask, d) >= 0)
+                                        .collect(Collectors.toList()));
+
+    clear();
+
+    return result;
 
   }
 
 
-public void setQueryText(String queryText) {
-	this.queryText = queryText;
-}
+  public void setQueryText(String queryText)
+  {
+    this.queryText = queryText;
+  }
 
 
-public DescribedObject getSearchMask() {
-	return searchMask;
-}
+  public DescribedObject getSearchMask()
+  {
+    return searchMask;
+  }
 
-public String getType() {
-	return type;
-}
+  public String getType()
+  {
+    return type;
+  }
 
-public List<DescribedObject> getMatches() {
-	return matches;
-}
+  public List<DescribedObject> getMatches()
+  {
+    return matches;
+  }
 
-public int getNumberTotal() {
-	return numberTotal;
-}
+  public int getNumberTotal()
+  {
+    return numberTotal;
+  }
 
-public int getNumberMatch() {
-	return numberMatch;
-}
+  public int getNumberMatch()
+  {
+    return numberMatch;
+  }
 }

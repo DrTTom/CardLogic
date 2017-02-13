@@ -156,8 +156,8 @@ public class WorkspacePersistence implements Persistence
 
   private String sanitize(String input)
   {
-	CharsetEncoder ascii = StandardCharsets.US_ASCII.newEncoder();
-	StringBuilder result = new StringBuilder();
+    CharsetEncoder ascii = StandardCharsets.US_ASCII.newEncoder();
+    StringBuilder result = new StringBuilder();
     for ( char x : input.toCharArray() )
     {
       if (Character.isLetterOrDigit(x) && ascii.canEncode(x))
@@ -290,7 +290,7 @@ public class WorkspacePersistence implements Persistence
     {
       this.ins = ins;
     }
-    
+
     @Override
     public int read() throws IOException
     {

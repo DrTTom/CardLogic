@@ -13,8 +13,8 @@ public class Question
 {
 
   private final String paramName;
-  
-  private  String value;
+
+  private String value;
 
   private List<String> allowedValues;
 
@@ -23,15 +23,15 @@ public class Question
   private String helptext;
 
   private URL imageBase;
-  
+
   private URL auxObjectBase;
 
   private String form;
-    
+
   private String problem;
-  
+
   private String uploadStatus;
-  
+
   /**
    * Optional, returns list of allowed values if a selection is to be shown.
    *
@@ -76,8 +76,9 @@ public class Question
     return imageBase;
   }
 
-  /** 
-   * If an URL is returned, the front end may find explaining images for each allowed value under that URL. 
+  /**
+   * If an URL is returned, the front end may find explaining images for each allowed value under that URL.
+   * 
    * @param imageBase
    */
   public void setImageBase(URL imageBase)
@@ -135,49 +136,57 @@ public class Question
     this.form = form;
   }
 
-  public String getValue() {
-		return value;
-	}
+  public String getValue()
+  {
+    return value;
+  }
 
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  public void setValue(String value)
+  {
+    this.value = value;
+  }
 
 
-	public String getProblem() {
-		return problem;
-	}
+  public String getProblem()
+  {
+    return problem;
+  }
 
 
-	public void setProblem(String problem) {
-		this.problem = problem;
-	}
+  public void setProblem(String problem)
+  {
+    this.problem = problem;
+  }
 
-/**
- * If an URL is returned, the front end will find a view of a dependent object for each allowed value there. 
- */
-	public URL getAuxObjectBase() {
-		return auxObjectBase;
-	}
-
-
-	public void setAuxObjectBase(URL auxObjectBase) {
-		this.auxObjectBase = auxObjectBase;
-	}
-
-/**
- * Returns a reference String in case a file upload is possible for this value or "COMPLETED" in case that an upload 
- * to the value has already been done.
- */
-	public String getUploadStatus() {
-		return uploadStatus;
-	}
+  /**
+   * If an URL is returned, the front end will find a view of a dependent object for each allowed value there.
+   */
+  public URL getAuxObjectBase()
+  {
+    return auxObjectBase;
+  }
 
 
-	public void setUploadStatus(String uploadStatus) {
-		this.uploadStatus = uploadStatus;
-	}
+  public void setAuxObjectBase(URL auxObjectBase)
+  {
+    this.auxObjectBase = auxObjectBase;
+  }
+
+  /**
+   * Returns a reference String in case a file upload is possible for this value or "COMPLETED" in case that
+   * an upload to the value has already been done.
+   */
+  public String getUploadStatus()
+  {
+    return uploadStatus;
+  }
+
+
+  public void setUploadStatus(String uploadStatus)
+  {
+    this.uploadStatus = uploadStatus;
+  }
 
 
 
