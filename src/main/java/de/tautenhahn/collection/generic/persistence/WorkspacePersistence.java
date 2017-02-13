@@ -350,4 +350,10 @@ public class WorkspacePersistence implements Persistence
       }
     }
   }
+
+  @Override
+  public boolean binObjectExists(String ref)
+  {
+    return Files.exists(collectionBaseDir.resolve(ref));
+  }
 }

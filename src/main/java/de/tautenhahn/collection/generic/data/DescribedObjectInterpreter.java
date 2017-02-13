@@ -35,7 +35,8 @@ public abstract class DescribedObjectInterpreter
     for ( String name : getSupportedAttributes() )
     {
       int contrib = getAttributeInterpreter(name).computeCorrellation(searchMask.getAttributes().get(name),
-                                                                      candidate.getAttributes().get(name));
+                                                                      candidate.getAttributes().get(name),
+                                                                      searchMask);
       if (contrib < 0)
       {
         return contrib;
@@ -45,5 +46,5 @@ public abstract class DescribedObjectInterpreter
     return result;
   }
 
-  public abstract Collection<Question> getQuestions();
+  public abstract Collection<Question> getQuestions(DescribedObject context);
 }

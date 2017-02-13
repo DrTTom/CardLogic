@@ -17,18 +17,27 @@ public abstract class Enumeration extends AttributeInterpreter
 
 
   @Override
-  public boolean isLegalValue(String value)
+  public boolean isLegalValue(String value, DescribedObject context)
   {
     return isOptional() && value == null || getAllowedValues().contains(value);
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue)
+  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {
       return matchValue;
     }
     return isExact() ? -1 : 0;
+  }
+
+  @Override
+  public Question getQuestion(DescribedObject object)
+  {
+
+    Question result = super.getQuestion(object);
+    result.setAllowedValues(getAllowedValues());
+    return result;
   }
 }

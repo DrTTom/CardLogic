@@ -56,10 +56,10 @@ public class RestServer
 
   public void start()
   {
-    get("/view/:type/:key",
-        (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
-                                                                            req.params(":key")),
-        new JsonTransformer());
+    // get("/view/:type/:key",
+    // (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
+    // req.params(":key")),
+    // new JsonTransformer());
 
     get("/search/:type", this::search, new JsonTransformer());
 

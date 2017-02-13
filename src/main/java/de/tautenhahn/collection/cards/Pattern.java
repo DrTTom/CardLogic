@@ -14,20 +14,15 @@ import de.tautenhahn.collection.generic.data.ImageRef;
 import de.tautenhahn.collection.generic.data.Question;
 
 
-public class Deck extends DescribedObjectInterpreter
+public class Pattern extends DescribedObjectInterpreter
 {
 
 
   private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
   static
   {
-    ATTRIBS.put("suits", new Suits());
-    ATTRIBS.put("numIndex", new NumberIndex());
-    ATTRIBS.put("format", new Format());
-    ATTRIBS.put("specialMeasure", new SpecialMeasure());
-    ATTRIBS.put("numberCards", new NumberCards());
-    ATTRIBS.put("condition", new Condition());
     ATTRIBS.put("image", new ImageRef());
+    ATTRIBS.put("suits", new Suits());
   }
 
   @Override

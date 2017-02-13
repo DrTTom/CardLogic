@@ -22,7 +22,7 @@ public abstract class ApplicationContext
 
   private static ApplicationContext instance;
 
-  private final ResourceBundle texts = null; // TODO
+  private final ResourceBundle texts = ResourceBundle.getBundle("de.tautenhahn.collection.generic.Messages");
 
   /**
    * singleton getter
@@ -56,7 +56,8 @@ public abstract class ApplicationContext
    */
   public final String getText(String key)
   {
-    return Optional.ofNullable(getSpecificText(key)).orElse(key); // TODO use generic bundle as well
+    return texts.containsKey(key) ? texts.getString(key)
+      : Optional.ofNullable(getSpecificText(key)).orElse(key);
   }
 
   protected abstract String getSpecificText(String key);

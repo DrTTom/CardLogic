@@ -3,6 +3,8 @@ package de.tautenhahn.collection.generic.data;
 import java.util.Arrays;
 import java.util.List;
 
+import de.tautenhahn.collection.generic.ApplicationContext;
+
 
 /**
  * How to handle an attribute of a described object.
@@ -72,27 +74,34 @@ public abstract class AttributeInterpreter
     return exact;
   }
 
-  // TODO: provide a described object as context to allow the following methods changing behavior.
-  // For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish suits.
   /**
    * Returns true if OK, message in case of violation.
    * 
    * @param value
-   * @return
+   * @param context provide a described object as context to allow the following methods changing behavior.
+   *          For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish suits.
    */
-  public abstract boolean isLegalValue(String value);
+  public abstract boolean isLegalValue(String value, DescribedObject context);
 
-  public final int computeCorrellation(String thisValue, String otherValue)
+  public final int computeCorrellation(String thisValue, String otherValue, DescribedObject context)
   {
     if (otherValue == null || thisValue == null)
     {
       return 0;
     }
-    return correllateValue(thisValue, otherValue);
+    return correllateValue(thisValue, otherValue, context);
   }
 
-  protected abstract int correllateValue(String thisValue, String otherValue);
+  protected abstract int correllateValue(String thisValue, String otherValue, DescribedObject context);
 
-  public abstract Question getQuestion();
+  public Question getQuestion(DescribedObject object)
+  {
+    ApplicationContext ctx = ApplicationContext.getInstance();
+    Question result = new Question(name, ctx.getText(name + ".question.text"),
+                                   ctx.getText(name + ".question.group"));
+    result.setHelptext(ctx.getText(name + ".question.help"));
+    result.setValue(object.getAttributes().get(name));
+    return result;
+  }
 
 }

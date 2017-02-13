@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.cards;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
+import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.Question;
 
 
@@ -13,20 +14,20 @@ public class NumberIndex extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value)
+  public boolean isLegalValue(String value, DescribedObject context)
   {
     return value.matches("[1-9](/[1-9])*");
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue)
+  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     return thisValue.equals(otherValue) ? 30
       : (thisValue.endsWith(otherValue) || otherValue.endsWith(thisValue)) ? 1 : -1;
   }
 
   @Override
-  public Question getQuestion()
+  public Question getQuestion(DescribedObject context)
   {
     Question result = new Question("numIndex", "Wie oft kommt der Index auf jeder Karte vor?",
                                    "Messen und zählen");
