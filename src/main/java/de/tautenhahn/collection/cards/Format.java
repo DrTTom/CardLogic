@@ -3,7 +3,7 @@ package de.tautenhahn.collection.cards;
 import java.util.StringTokenizer;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
-import de.tautenhahn.collection.generic.data.Question;
+import de.tautenhahn.collection.generic.data.DescribedObject;
 
 
 public class Format extends AttributeInterpreter
@@ -15,13 +15,13 @@ public class Format extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value)
+  public boolean isLegalValue(String value, DescribedObject context)
   {
     return value.matches("[1-9][0-9]*x[1-9][0-9]*( \\(.*\\))?");
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue)
+  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {
@@ -36,14 +36,6 @@ public class Format extends AttributeInterpreter
       return 0;
     }
 
-  }
-
-  @Override
-  public Question getQuestion()
-  {
-    Question result = new Question("format", "Breite und Höhe der Karten in mm:", "Messen und zählen");
-    result.setHelptext("Angabe '<Breite>x<Höhe>', ggf.  Freitext in Klammern nach Leerzeichen anfügen");
-    return result;
   }
 
   static class Rectangle

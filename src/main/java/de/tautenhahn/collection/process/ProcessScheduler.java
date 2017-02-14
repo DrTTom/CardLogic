@@ -32,8 +32,8 @@ public class ProcessScheduler
     return result;
   }
 
-  public ViewProcess getView()
-  {
-    return new ViewProcess();
-  }
+  // public ViewProcess getView()
+  // {
+  // return new ViewProcess();
+  // }
 }

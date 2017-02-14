@@ -123,4 +123,11 @@ public interface Persistence
   String search(String type, String query);
 
   void addToIndex(String type, String key, String data);
+
+  /**
+   * Returns true if a binary content is stored under the specified reference.
+   * 
+   * @param ref
+   */
+  boolean binObjectExists(String ref);
 }

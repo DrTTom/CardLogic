@@ -69,7 +69,7 @@ public class SearchProcess
     {
       return new Message();
     }
-    if (!ai.isLegalValue(value))
+    if (!ai.isLegalValue(value, searchMask))
     {
       return new Message(); // TODO implement some message handling
     }
@@ -92,8 +92,7 @@ public class SearchProcess
     result.setType(type);
     result.setNumberTotal(ApplicationContext.getInstance().getPersistence().getNumberItems(type));
     result.setQueryText(queryText);
-    result.setQuestions(new ArrayList<>(interpreter.getQuestions()));
-    result.getQuestions().forEach(q -> q.setValue(searchMask.getAttributes().get(q.getParamName())));
+    result.setQuestions(new ArrayList<>(interpreter.getQuestions(searchMask)));
 
     // TODO: add caching, use exact attributes, sort, ...
     result.setMatches(ApplicationContext.getInstance()

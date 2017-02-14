@@ -94,6 +94,11 @@ public class RestServer
                                                                             req.params(":key")),
         new JsonTransformer());
 
+    // get("/view/:type/:key",
+    // (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
+    // req.params(":key")),
+    // new JsonTransformer());
+
     get("/search/:type", this::search, new JsonTransformer());
 
     // proof of concept for file upload:
