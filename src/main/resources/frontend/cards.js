@@ -33,6 +33,7 @@ var app = new Vue({
         getQuestions: function(){
             this.$http.get(url+'/search/deck').then((response) => {
                 CardEvents.questionsLoaded.send(response.body);
+                CardEvents.cardsLoaded.send(response.body);
             }, (response) => {
                 alert('Error');
             });
@@ -40,7 +41,7 @@ var app = new Vue({
         getCards: function() {     
         	alert('getCards called');
         	var queryParams = this.buildQueryParamsByAnsweredQuestions();   	
-            this.$http.get('http://localhost:4567/search/deck'+queryParams).then((response) => {
+            this.$http.get(url+'/search/deck'+queryParams).then((response) => {
             	alert('should have asked server');
             	CardEvents.cardsLoaded.send(response.body);
             }, (response) => {

@@ -38,7 +38,7 @@ Vue.component('questions', {
             this.questionGroup=[];
             var that=this;
             this.allQuestions.forEach(function(q){
-            	 if (q.form=='Messen und zählen')
+            	 if (q.form=='identify')
             		 {
             	that.questionGroup.push(q);
             		 }

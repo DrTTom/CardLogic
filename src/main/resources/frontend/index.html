@@ -13,7 +13,7 @@
 <body>
     <!-- Main View -->
     <div id="app">
-        <p> Das ist der statische Teil </p>
+         <p>Oben kommt irgendein Menü</p>
         <menue></menue>
         <questions></questions>
         <cardlist></cardlist>
@@ -23,15 +23,26 @@
     <!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
     <script type="text/x-template" id="questionsTemplate">
         <div>
-
+          <h3>Zählen und Messen</h3>
           <div v-for="currentQuestion in questionGroup"> 
-            <h2>{{currentQuestion.text}}</h2>
-            <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" />
+            <div>{{currentQuestion.text}}</div>
+            <div><input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" />
             <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:changed="answerQuestion">
                  <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
             </select>
-</div>
+         </div>
+       </div>
+        <input type="submit" value="Zurück"/><input type="submit" value="Weiter"/>
         </div>
+    </script>
+
+    <!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
+    <script type="text/x-template" id="cardListTemplate">
+        <div>
+            <h2>{{allCards.length}} Ergebnisse:</h2>
+            <div id="cardContainer">
+                <card v-for="card in allCards" :data="card"></card>
+            </div>
     </script>
 
     <!-- Vue Js Framework and Resource Loader -->

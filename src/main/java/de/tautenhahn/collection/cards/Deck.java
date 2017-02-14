@@ -2,7 +2,7 @@ package de.tautenhahn.collection.cards;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,10 +18,11 @@ public class Deck extends DescribedObjectInterpreter
 {
 
 
-  private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
+  private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
   {
     ATTRIBS.put("suits", new Suits());
+    ATTRIBS.put("index", new Index());
     ATTRIBS.put("numIndex", new NumberIndex());
     ATTRIBS.put("format", new Format());
     ATTRIBS.put("specialMeasure", new SpecialMeasure());

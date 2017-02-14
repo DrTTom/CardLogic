@@ -1,0 +1,25 @@
+body {
+	background-color: #06510F;
+	color: #EBB88A;
+	font-family: sans;
+	
+}
+    ul {
+        list-style: none;
+    }
+    
+    li {
+        margin-bottom: 5px;
+    }
+    
+    div[id=cardContainer] {
+        max-width: 400px;
+    
+    }
+    
+    .answered {
+        color:red;
+    }
+    
+    
+
