@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * Enumeration with fixed set of allowed values.
+ * Enumeration with allowed values defined by existing objects of another type.
  *
  * @author TT
  */

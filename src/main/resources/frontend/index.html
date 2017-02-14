@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <title>Spielkartensammlung</title>
+    <meta name="description" content="">
+    <meta name="author" content="DrTTom">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="libs/blaze@3.2.0.css" />
+    <link rel="stylesheet" href="cards.css" />
+</head>
+
+<body>
+    <!-- Main View -->
+    <div id="app">
+        <p> Das ist der statische Teil </p>
+        <menue></menue>
+        <questions></questions>
+        <cardlist></cardlist>
+        <p> hier drüber sollte das dynamische Zeugs stehen</p>
+    </div>
+
+    <!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
+    <script type="text/x-template" id="questionsTemplate">
+        <div>
+
+          <div v-for="currentQuestion in questionGroup"> 
+            <h2>{{currentQuestion.text}}</h2>
+            <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" />
+            <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:changed="answerQuestion">
+                 <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
+            </select>
+</div>
+        </div>
+    </script>
+
+    <!-- Vue Js Framework and Resource Loader -->
+    <script src="libs/vue.min.js"></script>
+    <script src="libs/vue-resource.min.js"></script>
+
+    <!-- Contains all named events -->
+    <script src="cardEvents.js"></script>
+
+    <!-- Custom Vue Components -->
+    <script src="components/answeredQuestions.js"></script>
+    <script src="components/questions.js"></script>
+    <script src="components/cardList.js"></script>
+    <script src="components/card.js"></script>
+    <script src="components/greenLabel.js"></script>
+    
+    <!-- Main Application -->    
+    <script src="cards.js"></script>
+</body>
+
+</html>
