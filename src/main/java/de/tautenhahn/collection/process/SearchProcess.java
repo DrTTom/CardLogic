@@ -2,6 +2,7 @@ package de.tautenhahn.collection.process;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,7 +95,7 @@ public class SearchProcess
     result.setQuestions(new ArrayList<>(interpreter.getQuestions(searchMask)));
 
     // TODO: add caching, use exact attributes, sort, ...
-    Map<DescribedObject, Integer> candidates = new HashMap();
+    Map<DescribedObject, Integer> candidates = new LinkedHashMap<>();
     ApplicationContext.getInstance().getPersistence().findAll(type).forEach(d -> {
       int sim = interpreter.countSimilarity(searchMask, d);
       if (sim >= 0)
@@ -105,8 +106,11 @@ public class SearchProcess
 
     result.setNumberPossible(candidates.size());
     result.setNumberMatching((int)candidates.values().stream().filter(x -> x.intValue() > 0).count());
-    result.setMatches(new ArrayList<>(candidates.keySet()));
-    result.getMatches().sort((a, b) -> candidates.get(a).intValue() - candidates.get(b).intValue());
+    if (result.getNumberMatching() > 0 || candidates.size() < 60)
+    {
+      result.setMatches(new ArrayList<>(candidates.keySet()));
+      result.getMatches().sort((a, b) -> candidates.get(a).intValue() - candidates.get(b).intValue());
+    }
     clear();
 
     return result;

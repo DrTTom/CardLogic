@@ -44,7 +44,19 @@
                 <card v-for="card in allCards" :data="card"></card>
             </div>
     </script>
-
+    
+    <script type="text/x-template" id="cardTemplate">
+        <div>
+            <h3>{{data.primKey}}. {{data.attributes.name}} <span v-if="data.attributes.maker">({{data.attributes.maker}})</span></h3>
+            <p>{{data.attributes.numberCards}} Karten, Format: {{data.attributes.format}}</p>
+            <p>Index: {{data.attributes.index}} ({{data.attributes.numIndex}})</p>
+            <p v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</p>
+            <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
+            <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" ></img>
+            </div>
+    </script>
+    
+    
     <!-- Vue Js Framework and Resource Loader -->
     <script src="libs/vue.min.js"></script>
     <script src="libs/vue-resource.min.js"></script>

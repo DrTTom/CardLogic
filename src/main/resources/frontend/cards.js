@@ -19,7 +19,6 @@ var app = new Vue({
     	},
     	buildQueryParamsByAnsweredQuestions: function(){
     		var queryParams='';
-        	alert("building params for " +this.listKeys(answeredQuestions))
     		answeredQuestions.forEach(function(answer,index){
     			if (answer.value != '')
     				{
@@ -33,7 +32,6 @@ var app = new Vue({
     			queryParams+=answer.paramName+"="+answer.value;
     		}
     		});
-    		alert(queryParams);
     		return queryParams;
     	},
     	listKeys : function(obj){

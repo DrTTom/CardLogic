@@ -26,7 +26,6 @@ Vue.component('cardlist', {
         this.allCards = response.matches;
         this.numberMatching = response.numberMatching;
         this.numberPossible = response.numberPossible;
-        alert('got cards '+ response.matches.length+" "+response.numberMatching +" "+ response.numberPossible)
       }
     }
 })
