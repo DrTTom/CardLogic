@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
@@ -23,7 +22,7 @@ import de.tautenhahn.collection.generic.data.Message;
 public class SearchProcess
 {
 
-  private DescribedObject searchMask;
+  private final DescribedObject searchMask;
 
   private final String type;
 
@@ -95,12 +94,19 @@ public class SearchProcess
     result.setQuestions(new ArrayList<>(interpreter.getQuestions(searchMask)));
 
     // TODO: add caching, use exact attributes, sort, ...
-    result.setMatches(ApplicationContext.getInstance()
-                                        .getPersistence()
-                                        .findAll(type)
-                                        .filter(d -> interpreter.countSimilarity(searchMask, d) >= 0)
-                                        .collect(Collectors.toList()));
+    Map<DescribedObject, Integer> candidates = new HashMap();
+    ApplicationContext.getInstance().getPersistence().findAll(type).forEach(d -> {
+      int sim = interpreter.countSimilarity(searchMask, d);
+      if (sim >= 0)
+      {
+        candidates.put(d, Integer.valueOf(sim));
+      }
+    });
 
+    result.setNumberPossible(candidates.size());
+    result.setNumberMatching((int)candidates.values().stream().filter(x -> x.intValue() > 0).count());
+    result.setMatches(new ArrayList<>(candidates.keySet()));
+    result.getMatches().sort((a, b) -> candidates.get(a).intValue() - candidates.get(b).intValue());
     clear();
 
     return result;

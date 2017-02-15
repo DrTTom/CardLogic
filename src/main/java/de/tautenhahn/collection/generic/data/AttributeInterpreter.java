@@ -2,6 +2,7 @@ package de.tautenhahn.collection.generic.data;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 
@@ -76,7 +77,7 @@ public abstract class AttributeInterpreter
 
   /**
    * Returns true if OK, message in case of violation.
-   * 
+   *
    * @param value
    * @param context provide a described object as context to allow the following methods changing behavior.
    *          For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish suits.
@@ -94,13 +95,20 @@ public abstract class AttributeInterpreter
 
   protected abstract int correllateValue(String thisValue, String otherValue, DescribedObject context);
 
+  /**
+   * Returns a default question for that attribute. Overwrite in case you want a more specific question. Note
+   * that an empty String is filled in instead of a missing value because HTML and JavaScript front ends
+   * cannot recognize null values properly.
+   *
+   * @param object
+   */
   public Question getQuestion(DescribedObject object)
   {
     ApplicationContext ctx = ApplicationContext.getInstance();
     Question result = new Question(name, ctx.getText(name + ".question.text"),
                                    ctx.getText(name + ".question.group"));
     result.setHelptext(ctx.getText(name + ".question.help"));
-    result.setValue(object.getAttributes().get(name));
+    result.setValue(Optional.ofNullable(object.getAttributes().get(name)).orElse(""));
     return result;
   }
 

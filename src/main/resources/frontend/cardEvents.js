@@ -8,7 +8,6 @@ var CardEvents = (function() {
           bus.$emit(name, typeof payload == 'undefined' ? {} : payload)
         },
         on: function(callback){
-        	// alert('Event called callback: '+name+' '+callback);
           bus.$on(name,callback);
         }
       }

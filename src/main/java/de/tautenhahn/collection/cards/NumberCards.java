@@ -2,7 +2,6 @@ package de.tautenhahn.collection.cards;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.Question;
 
 
 public class NumberCards extends AttributeInterpreter
@@ -27,15 +26,6 @@ public class NumberCards extends AttributeInterpreter
       return 1;
     }
     return thisValue.equals(otherValue) ? 1 : 0;
-  }
-
-  @Override
-  public Question getQuestion(DescribedObject context)
-  {
-    Question result = new Question("numberCards", "Anzahl der Karten: ", "Messen und zählen");
-    result.setHelptext("Das wirst Du ja wohl rauskriegen!!");
-
-    return result;
   }
 
 }

@@ -147,7 +147,10 @@ public class RestServer
     res.header("Content-Type", "application/json; charset=UTF-8");
     String type = req.params(":type");
     SearchProcess proc = ProcessScheduler.getInstance().getCurrentSearch(type);
-    req.queryParams().forEach(p -> proc.setAttribute(p, req.queryParams(p)));
+    req.queryParams().forEach(p -> {
+      System.out.println(p + "-> " + req.queryParams(p));
+      proc.setAttribute(p, req.queryParams(p));
+    });
     return proc.execute();
   }
 

@@ -21,13 +21,13 @@
     </div>
 
     <!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
-    <script type="text/x-template" id="questionsTemplate">
+    <script type="text/x-template" id="questionsTemplate" >
         <div>
           <h3>Zählen und Messen</h3>
           <div v-for="currentQuestion in questionGroup"> 
             <div>{{currentQuestion.text}}</div>
             <div><input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" />
-            <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:changed="answerQuestion">
+            <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion">
                  <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
             </select>
          </div>
@@ -39,7 +39,7 @@
     <!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
     <script type="text/x-template" id="cardListTemplate">
         <div>
-            <h2>{{allCards.length}} Ergebnisse:</h2>
+            <h2>{{numberMatching}}-{{numberPossible}} Ergebnisse:</h2>
             <div id="cardContainer">
                 <card v-for="card in allCards" :data="card"></card>
             </div>

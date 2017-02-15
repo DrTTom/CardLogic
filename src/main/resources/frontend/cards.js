@@ -13,23 +13,36 @@ var app = new Vue({
             answeredQuestions.splice(answeredQuestions.indexOf(question),1);
             this.getCards();
         },
-    	answerQuestion: function(answeredQuestion){
-    		answeredQuestions.push(answeredQuestion);
+    	answerQuestion: function(updatedQuestions){    		
+    		answeredQuestions = updatedQuestions;
     		this.getCards();
     	},
     	buildQueryParamsByAnsweredQuestions: function(){
     		var queryParams='';
+        	alert("building params for " +this.listKeys(answeredQuestions))
     		answeredQuestions.forEach(function(answer,index){
+    			if (answer.value != '')
+    				{
     			if(index==0){
     				queryParams='?';
     			}
-    			queryParams+=answer.attribute+"="+answer.answer;
-    			if(index!=this.answeredQuestions.length-1){
+    			else 
+    				{
     				queryParams+='&';
-    			}
+    				}    			
+    			queryParams+=answer.paramName+"="+answer.value;
+    		}
     		});
+    		alert(queryParams);
     		return queryParams;
     	},
+    	listKeys : function(obj){
+     	   var keys = [];
+     	   for(var key in obj){
+     	      keys.push(key);
+     	   }
+     	   return keys;
+     	},
         getQuestions: function(){
             this.$http.get(url+'/search/deck').then((response) => {
                 CardEvents.questionsLoaded.send(response.body);
@@ -39,10 +52,8 @@ var app = new Vue({
             });
         },
         getCards: function() {     
-        	alert('getCards called');
         	var queryParams = this.buildQueryParamsByAnsweredQuestions();   	
             this.$http.get(url+'/search/deck'+queryParams).then((response) => {
-            	alert('should have asked server');
             	CardEvents.cardsLoaded.send(response.body);
             }, (response) => {
                 // error callback

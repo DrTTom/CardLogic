@@ -49,10 +49,18 @@ Vue.component('questions', {
             // this.currentQuestion = response.questions.length > 0 ? response.questions[this.questionindex] : '';
         },
         answerQuestion: function (event) {
-            if (event.which == 13 || event.keyCode == 13) {
+        	if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {
                 //this.currentQuestion.answer = this.answer;
-                CardEvents.answerQuestion.send(this.currentQuestion)
+                CardEvents.answerQuestion.send(this.allQuestions);
             }
-        }
+           // if (event.which == 0 || event.keyCode == 9)  for tab
+        },
+       getKeys : function(obj){
+        	   var keys = [];
+        	   for(var key in obj){
+        	      keys.push(key);
+        	   }
+        	   return keys;
+        	}
     }
 })

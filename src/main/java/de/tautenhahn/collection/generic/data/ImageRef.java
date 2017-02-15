@@ -8,7 +8,7 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 
 /**
  * Basic image illustrating the object.
- * 
+ *
  * @author jean
  */
 public class ImageRef extends AttributeInterpreter
@@ -37,7 +37,7 @@ public class ImageRef extends AttributeInterpreter
   {
     Question result = super.getQuestion(object);
     Persistence persistence = ApplicationContext.getInstance().getPersistence();
-    if (result.getValue() == null)
+    if (result.getValue() == null || result.getValue().isEmpty())
     {
       if (object.getPrimKey() == null)
       {
