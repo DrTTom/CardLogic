@@ -27,15 +27,15 @@ Vue.component('cardlist', {
     },
     methods: {
       updateCards: function(response){
-        this.allCards = response.matches;
         this.numberMatching = response.numberMatching;
         this.numberPossible = response.numberPossible;
         if (this.numberPossible<24)
         {
          this.detaillevel='highDetail';
          } else {
-         this.detallevel='lowDetail';
+         this.detaillevel='lowDetail';
          }
+         this.allCards = response.matches;
       }
     }
 })

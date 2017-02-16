@@ -21,9 +21,6 @@ Vue.component('card', {
     }
     },
     methods: {
-      updateCards: function(response){
-        this.allCards = response.data;
-      },
       showFully: function(response){
         this.showfully=true;
       }, 

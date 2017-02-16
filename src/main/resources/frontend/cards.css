@@ -18,20 +18,25 @@ body {
         float: left;
     }
     
+    .c-card
+    {
+		border-radius: 10px !important;
+    }
+    
     .highDetail {
+        	margin: 5px !important;
         display: inline-block;
         width: 500px;
         height: 280px;
-		margin: 5px !important;
-		border-radius: 10px !important;
-    }
+	}
     .lowDetail {
+        	margin: 5px !important;
         display: inline-block;
         width: 333px;
         height: 140px;
-		margin: 5px !important;
-		border-radius: 10px !important;
     }
+    
+    
 
     .highDetail img {
     	float: right;
@@ -39,6 +44,12 @@ body {
         max-width: 250px;
         max-height: 230px;
     }
+    
+    .c-overlay img{
+        max-width: 320px;
+        max-height: 400px;
+    }
+    
     .smaller
     {font-size: 0.85em
     }
@@ -47,8 +58,15 @@ body {
         color:red;
     }
     
+    .width300
+    {
+    	max-width: 330px;
+    	padding-left: 5px
+    }
+    
     .o-modal {
 position: fixed !important;
+		border-radius: 10px !important;
 }
 .c-overlay {
 position: fixed !important;
