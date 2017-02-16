@@ -40,28 +40,30 @@
 	<script type="text/x-template" id="cardListTemplate">
         <div>
             <h2>{{numberMatching}}-{{numberPossible}} Ergebnisse:</h2>
-            <div id="cardContainer">
+            <ul id="cardContainer">
                 <card v-for="card in allCards" :data="card" :detaillevel="detaillevel"></card>
-            </div>
+            </ul>
     </script>
 
 	<script type="text/x-template" id="cardTemplate">
-        <div>
-<div class="highDetail">
-        <div class="c-card">
-            <div class="c-card__item c-card__item--divider"> {{data.primKey}}. {{data.attributes.name}} <span v-if="data.attributes.maker">({{data.attributes.maker}})</span></div>
+        <li class="c-card u-high" v-bind:class="detaillevel">
+            <div class="c-card__item c-card__item--divider"> {{data.primKey}}. {{data.attributes.name}} <span v-if="data.attributes.maker && detaillevel=='highDetail'">({{data.attributes.maker}})</span></div> 
 <div class="o-grid">
-  <div class="o-grid__cell">
-<p>{{data.attributes.numberCards}} Karten, Format: {{data.attributes.format}}</p>
-            <p>Index: {{data.attributes.index}} ({{data.attributes.numIndex}})</p>
+  <div class="o-grid__cell smaller">
+           <p>
+            <span v-if="data.attributes.maker && detaillevel=='lowDetail'">Hersteller: {{data.attributes.maker}}</br></span>
+            {{data.attributes.numberCards}} Karten</br>
+            Format: {{data.attributes.format}}</br>
+            Index: {{data.attributes.index}}</br>
+            <span v-if="detaillevel=='highDetail'">Anzahl Index: {{data.attributes.numIndex}}</p></div>
+			<div v-if="detaillevel=='highDetail'">
             <p v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</p>
             <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
 </div>
-  <div class="o-grid__cell"><img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" ></img></div>
+</div>
+  <div class="o-grid__cell" v-if="detaillevel=='highDetail'"><img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" ></img></div>
 </div>            
-            </div>
-            </div>
-<div>
+            </li>
     </script>
 
 

@@ -22,7 +22,7 @@ Vue.component('cardlist', {
         detaillevel: {
         type: String,
         required: false,
-        default: 'high'
+        default: 'lowDetail'
         }
     },
     methods: {
@@ -30,7 +30,7 @@ Vue.component('cardlist', {
         this.allCards = response.matches;
         this.numberMatching = response.numberMatching;
         this.numberPossible = response.numberPossible;
-        this.detaillevel='low';
+        this.detaillevel='highDetail';
       }
     }
 })

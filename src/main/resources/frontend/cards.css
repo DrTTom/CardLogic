@@ -1,6 +1,6 @@
 body {
 	background-color: #06510F;
-	color: #EBB88A;
+	color: #0F0000;
 	font-family: sans;
 	padding-left:1ex;
 	padding-rigth:1ex;
@@ -13,17 +13,36 @@ body {
         margin-bottom: 5px;
     }
     
-    div[id=cardContainer] {
-        width: 1100px;
-    
+    ul[id=cardContainer] {
+    	width: 100%;
+        float: left;
     }
     
     .highDetail {
         display: inline-block;
         width: 500px;
-        height: 300px;
-        margin: 5px
+        height: 280px;
+		margin: 5px !important;
+		border-radius: 10px !important;
     }
+    .lowDetail {
+        display: inline-block;
+        width: 333px;
+        height: 140px;
+		margin: 5px !important;
+		border-radius: 10px !important;
+    }
+
+    .highDetail img {
+    	float: right;
+    	margin-top: 7px;
+        max-width: 250px;
+        max-height: 230px;
+    }
+    .smaller
+    {font-size: 0.85em
+    }
+    
     .answered {
         color:red;
     }
