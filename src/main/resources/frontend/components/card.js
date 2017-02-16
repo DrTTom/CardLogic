@@ -12,12 +12,23 @@ Vue.component('card', {
         detaillevel: {
         type: String,
         required: false,
-        default: 'high'
+        default: 'highDetails'
+    }, 
+    showfully: {
+        type: Boolean,
+        required: false,
+        default: false
     }
     },
     methods: {
       updateCards: function(response){
         this.allCards = response.data;
+      },
+      showFully: function(response){
+        this.showfully=true;
+      }, 
+      hideOverlay: function(response){
+        this.showfully=false;
       }
     }
 })

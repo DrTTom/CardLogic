@@ -106,7 +106,7 @@ public class SearchProcess
 
     result.setNumberPossible(candidates.size());
     result.setNumberMatching((int)candidates.values().stream().filter(x -> x.intValue() > 0).count());
-    if (result.getNumberMatching() > 0 || candidates.size() < 60)
+    if (result.getNumberMatching() > 0 || candidates.size() < 100)
     {
       result.setMatches(new ArrayList<>(candidates.keySet()));
       result.getMatches().sort((a, b) -> candidates.get(a).intValue() - candidates.get(b).intValue());

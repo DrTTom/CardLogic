@@ -47,23 +47,67 @@
 
 	<script type="text/x-template" id="cardTemplate">
         <li class="c-card u-high" v-bind:class="detaillevel">
-            <div class="c-card__item c-card__item--divider"> {{data.primKey}}. {{data.attributes.name}} <span v-if="data.attributes.maker && detaillevel=='highDetail'">({{data.attributes.maker}})</span></div> 
-<div class="o-grid">
-  <div class="o-grid__cell smaller">
-           <p>
-            <span v-if="data.attributes.maker && detaillevel=='lowDetail'">Hersteller: {{data.attributes.maker}}</br></span>
-            {{data.attributes.numberCards}} Karten</br>
-            Format: {{data.attributes.format}}</br>
-            Index: {{data.attributes.index}}</br>
-            <span v-if="detaillevel=='highDetail'">Anzahl Index: {{data.attributes.numIndex}}</p></div>
-			<div v-if="detaillevel=='highDetail'">
-            <p v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</p>
-            <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
-</div>
-</div>
-  <div class="o-grid__cell" v-if="detaillevel=='highDetail'"><img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" ></img></div>
-</div>            
-            </li>
+            <div class="c-card__item c-card__item--divider" v-on:click="showFully"> {{data.primKey}}. {{data.attributes.name}} 
+                <span v-if="data.attributes.maker && detaillevel=='highDetail'">({{data.attributes.maker}})</span>
+            </div> 
+            <div class="o-grid" v-on:click="showFully">
+               <div class="o-grid__cell smaller">
+               <p>
+                  <span v-if="data.attributes.maker && detaillevel=='lowDetail'">Hersteller: {{data.attributes.maker}}</br></span>
+                  {{data.attributes.numberCards}} Karten</br>
+                  Format: {{data.attributes.format}}</br>
+                  Index: {{data.attributes.index}}</br>
+                  <span v-if="detaillevel=='highDetail'">Anzahl Index: {{data.attributes.numIndex}}</span>
+               </p>
+               <span v-if="detaillevel=='highDetail'">
+                  <p v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</p>
+                  <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
+               </span>
+            </div>
+            <div class="o-grid__cell" v-if="detaillevel=='highDetail'">
+               <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
+            </div>
+            </div>
+            <div v-if="showfully" class="c-overlay">
+               <div class="o-modal">
+                  <div class="c-card">
+                     <header class="c-card__header c-card__item--divider">
+                        <button type="button" class="c-button c-button--close" v-on:click="hideOverlay">×</button>
+                            <h2 class="c-heading">{{data.primKey}}. {{data.attributes.name}} </h2>
+                    </header>
+                    <div class="c-card__body">
+                       <div class="o-grid">
+                         <div class="o-grid__cell">
+                           <p>
+                             {{data.attributes.numberCards}} Karten</br>
+                             Farben: {{data.attributes.suits}}</br>
+                             <span v-if="data.attributes.pattern">Bild: {{data.attributes.pattern}}</br></span>
+                             Format: {{data.attributes.format}}</br>
+                             Auge des Königs: {{data.attributes.specialMeasure}}</br>
+                             Index: {{data.attributes.index}}</br>
+                             Anzahl Index: {{data.attributes.numIndex}}
+                          </p>
+                          <p>
+                             <span v-if="data.attributes.maker">Hersteller: {{data.attributes.maker}}</br></span>
+                             <span v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</span>
+                          </p>
+                          <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
+                          <p>
+                          <span v-if="data.attributes.bought">Erworben {{data.attributes.bought}},</span> {{data.attributes.condition}}, befindet sich in {{data.attributes.location}}</p>
+                          <p>{{data.attributes.remark}}</p>
+                        </div>
+                        <div class="o-grid__cell o-grid__cell--width-300">
+                           <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
+                        </div>
+                    </div>
+                    <footer class="c-card__footer">
+                       <button type="button" class="c-button c-button--brand">Edit</button>
+                    </footer>
+                  </div>
+               </div>
+            </div> 
+         </li>
+            
     </script>
 
 

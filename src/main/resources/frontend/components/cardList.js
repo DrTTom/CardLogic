@@ -30,7 +30,12 @@ Vue.component('cardlist', {
         this.allCards = response.matches;
         this.numberMatching = response.numberMatching;
         this.numberPossible = response.numberPossible;
-        this.detaillevel='highDetail';
+        if (this.numberPossible<24)
+        {
+         this.detaillevel='highDetail';
+         } else {
+         this.detallevel='lowDetail';
+         }
       }
     }
 })

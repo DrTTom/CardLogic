@@ -47,5 +47,11 @@ body {
         color:red;
     }
     
+    .o-modal {
+position: fixed !important;
+}
+.c-overlay {
+position: fixed !important;
+}
     
 
