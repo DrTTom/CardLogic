@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="utf-8">
-    <title>Spielkartensammlung</title>
-    <meta name="description" content="">
-    <meta name="author" content="DrTTom">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="libs/blaze@3.2.0.css" />
-    <link rel="stylesheet" href="cards.css" />
+<meta charset="utf-8">
+<title>Spielkartensammlung</title>
+<meta name="description" content="">
+<meta name="author" content="DrTTom">
+<!-- meta name="viewport" content="width=device-width, initial-scale=1"-->
+<link rel="stylesheet" href="libs/blaze@3.2.0.css" />
+<link rel="stylesheet" href="cards.css" />
 </head>
 
 <body>
-    <!-- Main View -->
-    <div id="app">
-         <p>Oben kommt irgendein Menü</p>
-        <menue></menue>
-        <questions></questions>
-        <cardlist></cardlist>
-        <p> hier drüber sollte das dynamische Zeugs stehen</p>
-    </div>
+	<!-- Main View -->
+	<div id="app">
+		<p>Oben kommt irgendein Menü</p>
+		<menue></menue>
+		<questions></questions>
+		<cardlist></cardlist>
+		<p>hier drüber sollte das dynamische Zeugs stehen</p>
+	</div>
 
-    <!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
-    <script type="text/x-template" id="questionsTemplate" >
+	<!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
+	<script type="text/x-template" id="questionsTemplate">
         <div>
           <h3>Zählen und Messen</h3>
           <div v-for="currentQuestion in questionGroup"> 
@@ -36,43 +36,51 @@
         </div>
     </script>
 
-    <!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
-    <script type="text/x-template" id="cardListTemplate">
+	<!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
+	<script type="text/x-template" id="cardListTemplate">
         <div>
             <h2>{{numberMatching}}-{{numberPossible}} Ergebnisse:</h2>
             <div id="cardContainer">
-                <card v-for="card in allCards" :data="card"></card>
+                <card v-for="card in allCards" :data="card" :detaillevel="detaillevel"></card>
             </div>
     </script>
-    
-    <script type="text/x-template" id="cardTemplate">
+
+	<script type="text/x-template" id="cardTemplate">
         <div>
-            <h3>{{data.primKey}}. {{data.attributes.name}} <span v-if="data.attributes.maker">({{data.attributes.maker}})</span></h3>
-            <p>{{data.attributes.numberCards}} Karten, Format: {{data.attributes.format}}</p>
+<div class="highDetail">
+        <div class="c-card">
+            <div class="c-card__item c-card__item--divider"> {{data.primKey}}. {{data.attributes.name}} <span v-if="data.attributes.maker">({{data.attributes.maker}})</span></div>
+<div class="o-grid">
+  <div class="o-grid__cell">
+<p>{{data.attributes.numberCards}} Karten, Format: {{data.attributes.format}}</p>
             <p>Index: {{data.attributes.index}} ({{data.attributes.numIndex}})</p>
             <p v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</p>
             <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
-            <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" ></img>
+</div>
+  <div class="o-grid__cell"><img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" ></img></div>
+</div>            
             </div>
+            </div>
+<div>
     </script>
-    
-    
-    <!-- Vue Js Framework and Resource Loader -->
-    <script src="libs/vue.min.js"></script>
-    <script src="libs/vue-resource.min.js"></script>
 
-    <!-- Contains all named events -->
-    <script src="cardEvents.js"></script>
 
-    <!-- Custom Vue Components -->
-    <script src="components/answeredQuestions.js"></script>
-    <script src="components/questions.js"></script>
-    <script src="components/cardList.js"></script>
-    <script src="components/card.js"></script>
-    <script src="components/greenLabel.js"></script>
-    
-    <!-- Main Application -->    
-    <script src="cards.js"></script>
+	<!-- Vue Js Framework and Resource Loader -->
+	<script src="libs/vue.min.js"></script>
+	<script src="libs/vue-resource.min.js"></script>
+
+	<!-- Contains all named events -->
+	<script src="cardEvents.js"></script>
+
+	<!-- Custom Vue Components -->
+	<script src="components/answeredQuestions.js"></script>
+	<script src="components/questions.js"></script>
+	<script src="components/cardList.js"></script>
+	<script src="components/card.js"></script>
+	<script src="components/greenLabel.js"></script>
+
+	<!-- Main Application -->
+	<script src="cards.js"></script>
 </body>
 
 </html>

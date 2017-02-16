@@ -18,14 +18,19 @@ Vue.component('cardlist', {
     	{
     	type: Number,
         required: true
-    	}
-
+    	},
+        detaillevel: {
+        type: String,
+        required: false,
+        default: 'high'
+        }
     },
     methods: {
       updateCards: function(response){
         this.allCards = response.matches;
         this.numberMatching = response.numberMatching;
         this.numberPossible = response.numberPossible;
+        this.detaillevel='low';
       }
     }
 })

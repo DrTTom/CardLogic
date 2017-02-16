@@ -2,7 +2,8 @@ body {
 	background-color: #06510F;
 	color: #EBB88A;
 	font-family: sans;
-	
+	padding-left:1ex;
+	padding-rigth:1ex;
 }
     ul {
         list-style: none;
@@ -13,10 +14,16 @@ body {
     }
     
     div[id=cardContainer] {
-        max-width: 400px;
+        width: 1100px;
     
     }
     
+    .highDetail {
+        display: inline-block;
+        width: 500px;
+        height: 300px;
+        margin: 5px
+    }
     .answered {
         color:red;
     }

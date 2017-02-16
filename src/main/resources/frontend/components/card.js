@@ -4,11 +4,16 @@ Vue.component('card', {
         
     },
     props: {
-        data: {
+    	data: {
             type: Object,
             required: true,
             default: {}
-        }
+        },
+        detaillevel: {
+        type: String,
+        required: false,
+        default: 'high'
+    }
     },
     methods: {
       updateCards: function(response){
