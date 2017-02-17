@@ -26,10 +26,10 @@ public class ImageRef extends AttributeInterpreter
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
-    // TODO: could incorporate image recognition if too much computing power is available
-    return 0;
+    return Similarity.NO_STATEMENT; // TODO: could incorporate image recognition if too much computing power
+                                    // is available and images are strictly defined
   }
 
   @Override

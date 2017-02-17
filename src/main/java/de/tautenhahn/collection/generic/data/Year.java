@@ -15,9 +15,9 @@ public abstract class Year extends AttributeInterpreter
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue, DescribedObject content)
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
   {
-    return 0;
+    return Similarity.NO_STATEMENT;
   }
 
   public class Latest extends Year

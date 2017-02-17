@@ -2,6 +2,7 @@ package de.tautenhahn.collection.cards;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.Similarity;
 
 
 public class NumberIndex extends AttributeInterpreter
@@ -19,10 +20,11 @@ public class NumberIndex extends AttributeInterpreter
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
-    return thisValue.equals(otherValue) ? 30
-      : (thisValue.endsWith(otherValue) || otherValue.endsWith(thisValue)) ? 1 : -1;
+    return thisValue.equals(otherValue) ? Similarity.SIMILAR
+      : (thisValue.endsWith(otherValue) || otherValue.endsWith(thisValue)) ? Similarity.HINT
+        : Similarity.DIFFERENT;
   }
 
 }

@@ -84,16 +84,16 @@ public abstract class AttributeInterpreter
    */
   public abstract boolean isLegalValue(String value, DescribedObject context);
 
-  public final int computeCorrellation(String thisValue, String otherValue, DescribedObject context)
+  public final Similarity computeCorrellation(String thisValue, String otherValue, DescribedObject context)
   {
     if (otherValue == null || thisValue == null)
     {
-      return 0;
+      return Similarity.NO_STATEMENT;
     }
     return correllateValue(thisValue, otherValue, context);
   }
 
-  protected abstract int correllateValue(String thisValue, String otherValue, DescribedObject context);
+  protected abstract Similarity correllateValue(String thisValue, String otherValue, DescribedObject context);
 
   /**
    * Returns a default question for that attribute. Overwrite in case you want a more specific question. Note

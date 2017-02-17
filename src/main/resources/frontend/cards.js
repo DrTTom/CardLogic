@@ -22,12 +22,12 @@ var app = new Vue({
     		answeredQuestions.forEach(function(answer,index){
     			if (answer.value != '')
     				{
-    			if(index==0){
-    				queryParams='?';
+    			if(queryParams){
+    				queryParams+='&';
     			}
     			else 
     				{
-    				queryParams+='&';
+    				queryParams='?';
     				}    			
     			queryParams+=answer.paramName+"="+answer.value;
     		}

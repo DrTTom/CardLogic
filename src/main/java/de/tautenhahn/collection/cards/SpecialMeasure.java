@@ -2,6 +2,7 @@ package de.tautenhahn.collection.cards;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.Similarity;
 
 
 public class SpecialMeasure extends AttributeInterpreter
@@ -19,27 +20,24 @@ public class SpecialMeasure extends AttributeInterpreter
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {
-      return 50;
+      return Similarity.SIMILAR;
     }
     if ("0".equals(thisValue) || "0".equals(otherValue))
     {
-      return 0; // cannot decide uniquely if eye is visible and has unique position
-    }
-    if (thisValue.equals(otherValue))
-    {
-      return 50;
+      return Similarity.NO_STATEMENT; // cannot decide uniquely if eye is visible and has unique position
     }
     try
     {
-      return new Format.Rectangle(thisValue).similar(new Format.Rectangle(otherValue)) ? 30 : -1;
+      return new Format.Rectangle(thisValue).similar(new Format.Rectangle(otherValue))
+        ? Similarity.ALMOST_SIMILAR : Similarity.DIFFERENT;
     }
     catch (IllegalArgumentException e)
     {
-      return 0;
+      return Similarity.NO_STATEMENT;
     }
   }
 

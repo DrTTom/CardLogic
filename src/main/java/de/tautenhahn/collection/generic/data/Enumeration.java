@@ -9,9 +9,10 @@ public abstract class Enumeration extends AttributeInterpreter
   protected Enumeration(String name, int matchValue, Flag[] flags)
   {
     super(name, flags);
+    this.matchValue = matchValue;
   }
 
-  private int matchValue;
+  private final int matchValue;
 
   public abstract List<String> getAllowedValues();
 
@@ -23,13 +24,13 @@ public abstract class Enumeration extends AttributeInterpreter
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {
-      return matchValue;
+      return new Similarity(matchValue);
     }
-    return isExact() ? -1 : 0;
+    return isExact() ? Similarity.DIFFERENT : Similarity.NO_STATEMENT;
   }
 
   @Override

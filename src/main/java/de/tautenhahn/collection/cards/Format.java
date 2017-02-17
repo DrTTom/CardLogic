@@ -4,6 +4,7 @@ import java.util.StringTokenizer;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.Similarity;
 
 
 public class Format extends AttributeInterpreter
@@ -21,19 +22,20 @@ public class Format extends AttributeInterpreter
   }
 
   @Override
-  protected int correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {
-      return 50;
+      return Similarity.SIMILAR;
     }
     try
     {
-      return new Rectangle(thisValue).similar(new Rectangle(otherValue)) ? 30 : -1;
+      return new Rectangle(thisValue).similar(new Rectangle(otherValue)) ? Similarity.ALMOST_SIMILAR
+        : Similarity.DIFFERENT;
     }
     catch (IllegalArgumentException e)
     {
-      return 0;
+      return Similarity.NO_STATEMENT;
     }
 
   }

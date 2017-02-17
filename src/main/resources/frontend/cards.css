@@ -2,8 +2,6 @@ body {
 	background-color: #06510F;
 	color: #0F0000;
 	font-family: sans;
-	padding-left:1ex;
-	padding-rigth:1ex;
 }
     ul {
         list-style: none;
@@ -64,12 +62,66 @@ body {
     	padding-left: 5px
     }
     
+    .sliding 
+    {
+    transform: scaleY(1);
+   	animation: showAnimation 0.5s ease-in-out;
+-moz-animation: showAnimation 0.5s ease-in-out;
+-webkit-animation: showAnimation 0.5s ease-in-out;
+-moz-transition: max-height 2s ease-in-out;
+-o-transition: max-height 2s ease-in-out;
+-webkit-transition: max-height 2s ease-in-out;
+transition: max-height 2s ease-in-out;
+transform-origin: 50% 0%;
+    }
+        
+        @keyframes showAnimation {
+	0% {
+		 transform:scaleY(0.1);
+		 max-height:0.1;
+	}
+	40% {
+		transform:scaleY(1.04);
+		max-height:1.0;
+	}
+	60% {
+		transform:scaleY(0.98);
+	}
+	80% {
+		transform:scaleY(1.04);
+	}
+	100% {
+		transform:scaleY(0.98);
+	}				
+	80% {
+		transform:scaleY(1.02);
+	}
+	100% {
+		transform:scaleY(1);
+	}
+}
+
+@keyframes hideAnimation{
+  0% {
+  	transform:scaleY(1);
+  }
+  60% {
+  	transform:scaleY(0.98);
+  }
+  80% {
+  	transform:scaleY(1.02);
+  }
+  100% {
+  	transform:scaleY(0);
+  }
+}
     .o-modal {
 position: fixed !important;
 		border-radius: 10px !important;
 }
 .c-overlay {
 position: fixed !important;
+background-color: hsla(0,0%,7%,.7) !important;
 }
     
 

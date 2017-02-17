@@ -11,6 +11,7 @@ import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Message;
+import de.tautenhahn.collection.generic.data.Similarity;
 
 
 /**
@@ -95,21 +96,21 @@ public class SearchProcess
     result.setQuestions(new ArrayList<>(interpreter.getQuestions(searchMask)));
 
     // TODO: add caching, use exact attributes, sort, ...
-    Map<DescribedObject, Integer> candidates = new LinkedHashMap<>();
+    Map<DescribedObject, Similarity> candidates = new LinkedHashMap<>();
     ApplicationContext.getInstance().getPersistence().findAll(type).forEach(d -> {
-      int sim = interpreter.countSimilarity(searchMask, d);
-      if (sim >= 0)
+      Similarity sim = interpreter.countSimilarity(searchMask, d);
+      if (sim.possiblyEqual())
       {
-        candidates.put(d, Integer.valueOf(sim));
+        candidates.put(d, sim);
       }
     });
 
     result.setNumberPossible(candidates.size());
-    result.setNumberMatching((int)candidates.values().stream().filter(x -> x.intValue() > 0).count());
+    result.setNumberMatching((int)candidates.values().stream().filter(x -> x.probablyEqual()).count());
     if (result.getNumberMatching() > 0 || candidates.size() < 100)
     {
       result.setMatches(new ArrayList<>(candidates.keySet()));
-      result.getMatches().sort((a, b) -> candidates.get(a).intValue() - candidates.get(b).intValue());
+      result.getMatches().sort((a, b) -> candidates.get(b).compareTo(candidates.get(a)));
     }
     clear();
 

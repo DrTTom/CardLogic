@@ -24,24 +24,20 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Returns the interpreter for attribute of specified name.
-   * 
+   *
    * @param name
    */
   public abstract AttributeInterpreter getAttributeInterpreter(String name);
 
-  public int countSimilarity(DescribedObject searchMask, DescribedObject candidate)
+  public Similarity countSimilarity(DescribedObject searchMask, DescribedObject candidate)
   {
-    int result = 0;
+    Similarity result = Similarity.NO_STATEMENT;
     for ( String name : getSupportedAttributes() )
     {
-      int contrib = getAttributeInterpreter(name).computeCorrellation(searchMask.getAttributes().get(name),
-                                                                      candidate.getAttributes().get(name),
-                                                                      searchMask);
-      if (contrib < 0)
-      {
-        return contrib;
-      }
-      result += contrib;
+      AttributeInterpreter interpreter = getAttributeInterpreter(name);
+      result = result.add(interpreter.computeCorrellation(searchMask.getAttributes().get(name),
+                                                          candidate.getAttributes().get(name),
+                                                          searchMask));
     }
     return result;
   }

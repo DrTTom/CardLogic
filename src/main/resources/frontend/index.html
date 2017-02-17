@@ -13,27 +13,41 @@
 <body>
 	<!-- Main View -->
 	<div id="app">
-		<p>Oben kommt irgendein Menü</p>
+<ul class="c-nav c-nav--inline">
+  <li class="c-nav__item">Datei</li>
+  <li class="c-nav__item">Suche</li>
+  <li class="c-nav__item">Basisdaten</li>
+  <li class="c-nav__item">Werkzeuge</li>
+  <li class="c-nav__item c-nav__item--right">Hilfe</li>
+</ul>
 		<menue></menue>
 		<questions></questions>
 		<cardlist></cardlist>
-		<p>hier drüber sollte das dynamische Zeugs stehen</p>
+		<p>Ende der Seite. Karten nicht anfassen, nicht dem Sonnenlicht aussetzen!</p>
 	</div>
 
 	<!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
-	<script type="text/x-template" id="questionsTemplate">
-        <div>
-          <h3>Zählen und Messen</h3>
+	<script type="text/x-template" id="questionsTemplate">        
+    <div class="c-card c-card--accordion u-high">
+       <input type="checkbox" id="accordion-1">
+       <label class="c-card__item" for="accordion-1">Zählen und Messen</label>
+       <div class="c-card__item sliding">
           <div v-for="currentQuestion in questionGroup"> 
-            <div>{{currentQuestion.text}}</div>
-            <div><input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" />
-            <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion">
-                 <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
-            </select>
-         </div>
+             <div>{{currentQuestion.text}}</div>
+             <div>
+                <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" 
+                       v-bind:title="currentQuestion.helptext"/>
+                <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion">
+                   <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
+                </select>
+             </div>
+          </div>
+         <input type="submit" value="Weiter"/>
        </div>
-        <input type="submit" value="Zurück"/><input type="submit" value="Weiter"/>
-        </div>
+      <input type="checkbox" id="accordion-2">
+      <label class="c-card__item" for="accordion-2">Einordnen</label>
+      <div class="c-card__item" for="accordion-1">Kommt noch!</div>
+    </div>
     </script>
 
 	<!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
