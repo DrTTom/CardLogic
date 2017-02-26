@@ -10,20 +10,15 @@ Vue.component('questions', {
             required:false,
             default:[]
         },
-        questionGroup: {
+        questionGroups: {
             type:Array,
             required:false,
             default:[]
         },
-        questionindex: {
-            type: String,
-            required: true,
-            default:0
-        },
-        answer: {
-            type: String,
-            required: false,
-            default: ''
+        questionGroup: {
+            type:Array,
+            required:false,
+            default:[]
         },
         currentQuestion: {
             type: Object,
@@ -36,6 +31,18 @@ Vue.component('questions', {
         updateQuestions: function (response) {
             this.allQuestions= response.questions;
             this.questionGroup=[];
+            this.questionGroups=[];
+            var currentGroup= { name:'', elements:[] };
+            for (i=0; i< this.allQuestions.length; i++)
+            {
+            	if (this.allQuestions[i].form!=currentGroup.name)
+            	{
+             	currentGroup= { name:this.allQuestions[i].form, elements:[] };
+            	this.questionGroups.push(currentGroup);
+            	 console.log("pushed group");
+             	}
+             currentGroup.elements.push(this.allQuestions[i]);	
+             }
             var that=this;
             this.allQuestions.forEach(function(q){
             	 if (q.form=='identify')
@@ -44,13 +51,10 @@ Vue.component('questions', {
             		 }
             });
             console.log(this.allQuestions.length)
-            this.answer = '';
             console.log("========== " + this.questionindex)
-            // this.currentQuestion = response.questions.length > 0 ? response.questions[this.questionindex] : '';
         },
         answerQuestion: function (event) {
         	if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {
-                //this.currentQuestion.answer = this.answer;
                 CardEvents.answerQuestion.send(this.allQuestions);
             }
            // if (event.which == 0 || event.keyCode == 9)  for tab

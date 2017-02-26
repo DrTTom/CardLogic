@@ -27,33 +27,33 @@
 	</div>
 
 	<!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
-	<script type="text/x-template" id="questionsTemplate">        
-    <div class="c-card c-card--accordion u-high">
-       <input type="checkbox" id="accordion-1">
-       <label class="c-card__item" for="accordion-1">Zählen und Messen</label>
-       <div class="c-card__item sliding">
-          <div v-for="currentQuestion in questionGroup"> 
-             <div>{{currentQuestion.text}}</div>
-             <div>
+	<script type="text/x-template" id="questionsTemplate">
+	<div>
+    <div class="c-card c-card--accordion u-high" v-for="group in questionGroups">
+       <input type="checkbox" v-bind:id="group.name">       
+       <label class="c-card__item" v-bind:for="group.name">{{group.name}}</label>
+       <div class="c-card__item">
+          <div v-for="currentQuestion in group.elements"> 
+             <div class="left">{{currentQuestion.text}}</div>
+             <div class="right">
                 <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" 
                        v-bind:title="currentQuestion.helptext"/>
                 <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion">
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
              </div>
+             <div class="clear"/>
           </div>
          <input type="submit" value="Weiter"/>
        </div>
-      <input type="checkbox" id="accordion-2">
-      <label class="c-card__item" for="accordion-2">Einordnen</label>
-      <div class="c-card__item" for="accordion-1">Kommt noch!</div>
-    </div>
+       </div>
+     </div>
     </script>
 
 	<!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
 	<script type="text/x-template" id="cardListTemplate">
         <div>
-            <h2>{{numberMatching}}-{{numberPossible}} Ergebnisse:</h2>
+            <h2>{{numberPossible}} mögliche, {{numberMatching}} wahrscheinliche Ergebnisse:</h2>
             <ul id="cardContainer">
                 <card v-for="card in allCards" :data="card" :detaillevel="detaillevel"></card>
             </ul>
@@ -118,7 +118,7 @@
                         </div>
                     </div>
                     <footer class="c-card__footer">
-                       <button type="button" class="c-button c-button--brand">Edit</button>
+                       <button type="button" class="c-button c-button--brand">Bearbeiten</button>
                     </footer>
                   </div>
                </div>
