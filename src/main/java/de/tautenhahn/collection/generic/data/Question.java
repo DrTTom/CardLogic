@@ -96,11 +96,6 @@ public class Question
     return form;
   }
 
-  public void setForm(String form)
-  {
-    this.form = form;
-  }
-
   /**
    * Returns name of parameter to return the answer in.
    *

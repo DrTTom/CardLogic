@@ -27,7 +27,9 @@ public class Deck extends DescribedObjectInterpreter
     ATTRIBS.put("format", new Format());
     ATTRIBS.put("specialMeasure", new SpecialMeasure());
     ATTRIBS.put("numberCards", new NumberCards());
+    ATTRIBS.put("designer", new Designer());
     ATTRIBS.put("condition", new Condition());
+    ATTRIBS.put("location", new Location());
     ATTRIBS.put("image", new ImageRef());
   }
 

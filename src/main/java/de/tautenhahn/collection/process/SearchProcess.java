@@ -94,6 +94,7 @@ public class SearchProcess
     result.setNumberTotal(ApplicationContext.getInstance().getPersistence().getNumberItems(type));
     result.setQueryText(queryText);
     result.setQuestions(new ArrayList<>(interpreter.getQuestions(searchMask)));
+    result.getQuestions().removeIf(q -> "illustrate".equals(q.getForm()));
 
     // TODO: add caching, use exact attributes, sort, ...
     Map<DescribedObject, Similarity> candidates = new LinkedHashMap<>();
