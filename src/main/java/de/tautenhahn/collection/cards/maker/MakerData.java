@@ -1,8 +1,8 @@
-package de.tautenhahn.collection.cards;
+package de.tautenhahn.collection.cards.maker;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,19 +10,23 @@ import java.util.stream.Collectors;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
-import de.tautenhahn.collection.generic.data.ImageRef;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Question;
+import de.tautenhahn.collection.generic.data.Year;
 
 
-public class Pattern extends DescribedObjectInterpreter
+public class MakerData extends DescribedObjectInterpreter
 {
 
-
-  private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
+  private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
   {
-    ATTRIBS.put("image", new ImageRef());
-    ATTRIBS.put("suits", new Suits());
+    ATTRIBS.put("fullName", new FreeText("fullName"));
+    ATTRIBS.put("from", new Year("from"));
+    ATTRIBS.put("to", new Year("to"));
+    ATTRIBS.put("place", new FreeText("place"));
+    ATTRIBS.put("domain", new Domain());
+    ATTRIBS.put("remark", new FreeText("remark"));
   }
 
   @Override
@@ -34,7 +38,7 @@ public class Pattern extends DescribedObjectInterpreter
   @Override
   public Collection<String> getBinaryValuedAttributes()
   {
-    return Collections.singletonList("image");
+    return Collections.emptyList();
   }
 
   @Override
@@ -50,5 +54,4 @@ public class Pattern extends DescribedObjectInterpreter
   {
     return ATTRIBS.values().stream().map(i -> i.getQuestion(context)).collect(Collectors.toList());
   }
-
 }

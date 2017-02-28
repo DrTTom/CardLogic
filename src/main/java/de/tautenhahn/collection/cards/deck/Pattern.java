@@ -1,8 +1,8 @@
-package de.tautenhahn.collection.cards;
+package de.tautenhahn.collection.cards.deck;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,23 +14,15 @@ import de.tautenhahn.collection.generic.data.ImageRef;
 import de.tautenhahn.collection.generic.data.Question;
 
 
-public class Deck extends DescribedObjectInterpreter
+public class Pattern extends DescribedObjectInterpreter
 {
 
 
-  private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
+  private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
   static
   {
-    ATTRIBS.put("suits", new Suits());
-    ATTRIBS.put("index", new Index());
-    ATTRIBS.put("numIndex", new NumberIndex());
-    ATTRIBS.put("format", new Format());
-    ATTRIBS.put("specialMeasure", new SpecialMeasure());
-    ATTRIBS.put("numberCards", new NumberCards());
-    ATTRIBS.put("designer", new Designer());
-    ATTRIBS.put("condition", new Condition());
-    ATTRIBS.put("location", new Location());
     ATTRIBS.put("image", new ImageRef());
+    ATTRIBS.put("suits", new Suits());
   }
 
   @Override

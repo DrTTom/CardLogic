@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.cards;
+package de.tautenhahn.collection.cards.deck;
 
 import java.util.StringTokenizer;
 

@@ -306,7 +306,7 @@ public class WorkspacePersistence implements Persistence
       ZipEntry entry = zip.getNextEntry();
       if (!JSON_FILENAME.equals(entry.getName()) || entry.isDirectory())
       {
-        throw new IOException("Zip file is not a Collection -> aborting import without changes to wiorkspace.");
+        throw new IOException("Zip file is not a Collection -> aborting import without changes to workspace.");
       }
       int allowedNumberFiles = 0;
       try (InputStream nonClosing = new NonClosingFilter(zip);

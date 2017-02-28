@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
+import de.tautenhahn.collection.cards.deck.Deck;
+import de.tautenhahn.collection.cards.maker.MakerData;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;
@@ -15,7 +17,7 @@ import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 public class CardApplicationContext extends ApplicationContext
 {
 
-  private Persistence persistence;
+  private final Persistence persistence;
 
   ResourceBundle messages = ResourceBundle.getBundle("de.tautenhahn.collection.cards.CardMessages");
 
@@ -26,6 +28,8 @@ public class CardApplicationContext extends ApplicationContext
     {
       case "deck":
         return new Deck();
+      case "maker":
+        return new MakerData();
       default:
         throw new IllegalArgumentException("unsupported type " + type);
     }

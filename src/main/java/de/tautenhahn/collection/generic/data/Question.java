@@ -1,6 +1,5 @@
 package de.tautenhahn.collection.generic.data;
 
-import java.net.URL;
 import java.util.List;
 
 
@@ -22,11 +21,11 @@ public class Question
 
   private String helptext;
 
-  private URL imageBase;
+  private String imageBase;
 
-  private URL auxObjectBase;
+  private String auxObjectBase;
 
-  private String form;
+  private final String form;
 
   private String problem;
 
@@ -71,17 +70,17 @@ public class Question
    *
    * @return null if no images shall be used
    */
-  public URL getImageBase()
+  public String getImageBase()
   {
     return imageBase;
   }
 
   /**
    * If an URL is returned, the front end may find explaining images for each allowed value under that URL.
-   * 
+   *
    * @param imageBase
    */
-  public void setImageBase(URL imageBase)
+  public void setImageBase(String imageBase)
   {
     this.imageBase = imageBase;
   }
@@ -157,13 +156,13 @@ public class Question
   /**
    * If an URL is returned, the front end will find a view of a dependent object for each allowed value there.
    */
-  public URL getAuxObjectBase()
+  public String getAuxObjectBase()
   {
     return auxObjectBase;
   }
 
 
-  public void setAuxObjectBase(URL auxObjectBase)
+  public void setAuxObjectBase(String auxObjectBase)
   {
     this.auxObjectBase = auxObjectBase;
   }
