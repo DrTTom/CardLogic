@@ -6,8 +6,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
+import de.tautenhahn.collection.cards.auxobjects.MakerData;
 import de.tautenhahn.collection.cards.deck.Deck;
-import de.tautenhahn.collection.cards.maker.MakerData;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;

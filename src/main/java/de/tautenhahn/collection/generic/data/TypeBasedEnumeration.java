@@ -11,10 +11,10 @@ import de.tautenhahn.collection.generic.ApplicationContext;
  *
  * @author TT
  */
-public abstract class TypeBasedEnumeration extends Enumeration
+public class TypeBasedEnumeration extends Enumeration
 {
 
-  protected TypeBasedEnumeration(String name, int matchValue, Flag... flags)
+  public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
   {
     super(name, matchValue, flags);
     allowedValues = Collections.unmodifiableList(ApplicationContext.getInstance()

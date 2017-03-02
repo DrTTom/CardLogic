@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.cards.maker;
+package de.tautenhahn.collection.cards.auxobjects;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -11,21 +11,20 @@ import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.FreeText;
+import de.tautenhahn.collection.generic.data.ImageRef;
 import de.tautenhahn.collection.generic.data.Question;
 import de.tautenhahn.collection.generic.data.Year;
 
 
-public class MakerData extends DescribedObjectInterpreter
+public class TaxStampObject extends DescribedObjectInterpreter
 {
 
   private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
   {
-    ATTRIBS.put("fullName", new FreeText("fullName"));
-    ATTRIBS.put("from", new Year("from"));
-    ATTRIBS.put("to", new Year("to"));
-    ATTRIBS.put("place", new FreeText("place"));
-    ATTRIBS.put("domain", new Domain());
+    ATTRIBS.put("usedFrom", new Year("usedFrom"));
+    ATTRIBS.put("usedTo", new Year("usedTo"));
+    ATTRIBS.put("image", new ImageRef());
     ATTRIBS.put("remark", new FreeText("remark"));
   }
 

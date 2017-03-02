@@ -32,6 +32,9 @@ import spark.Spark;
 public class RestServer
 {
 
+  /**
+   * All structured output top frontend is JSON.
+   */
   static class JsonTransformer implements ResponseTransformer
   {
 
@@ -62,7 +65,6 @@ public class RestServer
     staticFiles.location("frontend");
 
     allowCrossSiteCalls();
-
 
     get("/view/:type/:key",
         (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
@@ -102,7 +104,6 @@ public class RestServer
         copy(src, dest);
         return null;
       }
-
     });
 
     // exception handling during development
@@ -120,7 +121,6 @@ public class RestServer
       // Note: this may or may not be necessary in your particular application
       response.type("application/json");
     });
-
 
     options("/*", (request, response) -> {
 
@@ -148,7 +148,6 @@ public class RestServer
     String type = req.params(":type");
     SearchProcess proc = ProcessScheduler.getInstance().getCurrentSearch(type);
     req.queryParams().forEach(p -> {
-      System.out.println(p + "-> " + req.queryParams(p));
       proc.setAttribute(p, req.queryParams(p));
     });
     return proc.execute();

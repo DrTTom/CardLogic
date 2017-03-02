@@ -50,8 +50,6 @@ Vue.component('questions', {
             	that.questionGroup.push(q);
             		 }
             });
-            console.log(this.allQuestions.length)
-            console.log("========== " + this.questionindex)
         },
         answerQuestion: function (event) {
         	if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {

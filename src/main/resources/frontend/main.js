@@ -13,7 +13,7 @@ var app = new Vue({
             answeredQuestions.splice(answeredQuestions.indexOf(question),1);
             this.getCards();
         },
-    	answerQuestion: function(updatedQuestions){    		
+    	answerQuestion: function(updatedQuestions){
     		answeredQuestions = updatedQuestions;
     		this.getCards();
     	},

@@ -18,7 +18,8 @@ var CardEvents = (function() {
       cardsLoaded: createEvent('cardsLoaded'),
       answerQuestion: createEvent('answerQuestion'),
       removeAnsweredQuestion : createEvent('removeAnsweredQuestion'),
-      questionsLoaded : createEvent('questionsLoaded')
+      questionsLoaded : createEvent('questionsLoaded'),
+      showDeck : createEvent('showDeck')
     };
 
 })();

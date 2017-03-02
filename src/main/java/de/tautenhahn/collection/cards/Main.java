@@ -8,7 +8,7 @@ import de.tautenhahn.collection.process.RestServer;
 
 /**
  * Entry class for the card collecting application.
- * 
+ *
  * @author TT
  */
 public class Main
@@ -16,7 +16,7 @@ public class Main
 
   /**
    * Starts the application from command line.
-   * 
+   *
    * @param args to be changed
    * @throws IOException
    */

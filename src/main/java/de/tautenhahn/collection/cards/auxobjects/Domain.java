@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.cards.maker;
+package de.tautenhahn.collection.cards.auxobjects;
 
 import de.tautenhahn.collection.generic.data.FixedEnumeration;
 

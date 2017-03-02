@@ -22,7 +22,7 @@ Vue.component('card', {
     },
     methods: {
       showFully: function(response){
-        this.showfully=true;
+    	  CardEvents.showDeck.send(this.data);
       }, 
       hideOverlay: function(response){
         this.showfully=false;

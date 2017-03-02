@@ -13,17 +13,19 @@
 <body>
 	<!-- Main View -->
 	<div id="app">
-<ul class="c-nav c-nav--inline">
-  <li class="c-nav__item">Datei</li>
-  <li class="c-nav__item">Suche</li>
-  <li class="c-nav__item">Basisdaten</li>
-  <li class="c-nav__item">Werkzeuge</li>
-  <li class="c-nav__item c-nav__item--right">Hilfe</li>
-</ul>
+		<ul class="c-nav c-nav--inline">
+			<li class="c-nav__item">Datei</li>
+			<li class="c-nav__item">Suche</li>
+			<li class="c-nav__item">Basisdaten</li>
+			<li class="c-nav__item">Werkzeuge</li>
+			<li class="c-nav__item c-nav__item--right">Hilfe</li>
+		</ul>
 		<menue></menue>
 		<questions></questions>
 		<cardlist></cardlist>
-		<p>Ende der Seite. Karten nicht anfassen, nicht dem Sonnenlicht aussetzen!</p>
+		<full_deck></full_deck>
+		<p>Ende der Seite. Karten nicht anfassen, nicht dem Sonnenlicht
+			aussetzen!</p>
 	</div>
 
 	<!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
@@ -81,10 +83,14 @@
             <div class="o-grid__cell" v-if="detaillevel=='highDetail'">
                <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
             </div>
-            </div>
-            <div v-if="showfully" class="c-overlay">
-               <div class="o-modal">
-                  <div class="c-card">
+            </div>            
+         </li>
+    </script>
+
+	<script type="text/x-template" id="full_deckTemplate">
+    <div v-if="showfully"  class="c-overlay">
+       <div class="o-modal">
+          <div class="c-card">
                      <header class="c-card__header c-card__item--divider">
                         <button type="button" class="c-button c-button--close" v-on:click="hideOverlay">×</button>
                             <h2 class="c-heading">{{data.primKey}}. {{data.attributes.name}} </h2>
@@ -121,12 +127,9 @@
                        <button type="button" class="c-button c-button--brand">Bearbeiten</button>
                     </footer>
                   </div>
-               </div>
-            </div> 
-         </li>
-            
-    </script>
-
+               </div -->
+            </div>
+</script>
 
 	<!-- Vue Js Framework and Resource Loader -->
 	<script src="libs/vue.min.js"></script>
@@ -136,14 +139,13 @@
 	<script src="cardEvents.js"></script>
 
 	<!-- Custom Vue Components -->
-	<script src="components/answeredQuestions.js"></script>
 	<script src="components/questions.js"></script>
 	<script src="components/cardList.js"></script>
 	<script src="components/card.js"></script>
-	<script src="components/greenLabel.js"></script>
+	<script src="components/fullDeck.js"></script>
 
 	<!-- Main Application -->
-	<script src="cards.js"></script>
+	<script src="main.js"></script>
 </body>
 
 </html>
