@@ -23,7 +23,7 @@
 		<menue></menue>
 		<questions></questions>
 		<cardlist></cardlist>
-		<full_deck></full_deck>
+		<deck_full></deck_full>
 		<p>Ende der Seite. Karten nicht anfassen, nicht dem Sonnenlicht
 			aussetzen!</p>
 	</div>
@@ -57,60 +57,60 @@
         <div>
             <h2>{{numberPossible}} mögliche, {{numberMatching}} wahrscheinliche Ergebnisse:</h2>
             <ul id="cardContainer">
-                <card v-for="card in allCards" :data="card" :detaillevel="detaillevel"></card>
+                <deck_tile v-for="card in allCards" :data="card" :size="itemClass"></deck_tile>
             </ul>
     </script>
 
-	<script type="text/x-template" id="cardTemplate">
-        <li class="c-card u-high" v-bind:class="detaillevel">
-            <div class="c-card__item c-card__item--divider" v-on:click="showFully"> {{data.primKey}}. {{data.attributes.name}} 
-                <span v-if="data.attributes.maker && detaillevel=='highDetail'">({{data.attributes.maker}})</span>
-            </div> 
-            <div class="o-grid" v-on:click="showFully">
-               <div class="o-grid__cell smaller">
+   <script type="text/x-template" id="deck_tileTemplate">
+      <li class="c-card u-high" v-bind:class="size" v-on:click="showFullDetails">
+         <div class="c-card__item c-card__item--divider" > {{data.primKey}}. {{data.attributes.name}}
+            <span v-if="data.attributes.maker && size=='bigTile'">({{data.attributes.maker}})</span>
+         </div> 
+         <div class="o-grid">
+            <div class="o-grid__cell smaller">
                <p>
-                  <span v-if="data.attributes.maker && detaillevel=='lowDetail'">Hersteller: {{data.attributes.maker}}</br></span>
+                  <span v-if="data.attributes.maker && size=='smallTile'">Hersteller: {{data.attributes.maker}}</br></span>
                   {{data.attributes.numberCards}} Karten</br>
                   Format: {{data.attributes.format}}</br>
                   Index: {{data.attributes.index}}</br>
-                  <span v-if="detaillevel=='highDetail'">Anzahl Index: {{data.attributes.numIndex}}</span>
+                  <span v-if="size=='bigTile'">Anzahl Index: {{data.attributes.numIndex}}</span>
                </p>
-               <span v-if="detaillevel=='highDetail'">
+               <span v-if="size=='bigTile'">
                   <p v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</p>
                   <p v-if="data.attributes.printedLatest">Gedruckt spätestens {{data.attributes.printedLatest}}</p>
                </span>
             </div>
-            <div class="o-grid__cell" v-if="detaillevel=='highDetail'">
+            <div class="o-grid__cell" v-if="size=='bigTile'">
                <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
             </div>
-            </div>            
-         </li>
-    </script>
+         </div>
+      </li>
+   </script>
 
-	<script type="text/x-template" id="full_deckTemplate">
-    <div v-if="showfully"  class="c-overlay">
-       <div class="o-modal">
-          <div class="c-card">
-                     <header class="c-card__header c-card__item--divider">
-                        <button type="button" class="c-button c-button--close" v-on:click="hideOverlay">×</button>
-                            <h2 class="c-heading">{{data.primKey}}. {{data.attributes.name}} </h2>
-                    </header>
-                    <div class="c-card__body">
-                       <div class="o-grid">
-                         <div class="o-grid__cell">
-                           <p>
-                             {{data.attributes.numberCards}} Karten</br>
-                             Farben: {{data.attributes.suits}}</br>
-                             <span v-if="data.attributes.pattern">Bild: {{data.attributes.pattern}}</br></span>
-                             Format: {{data.attributes.format}}</br>
-                             Auge des Königs: {{data.attributes.specialMeasure}}</br>
-                             Index: {{data.attributes.index}}</br>
-                             Anzahl Index: {{data.attributes.numIndex}}
-                          </p>
-                          <p>
-                             <span v-if="data.attributes.maker">Hersteller: {{data.attributes.maker}}</br></span>
-                             <span v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</span>
-                          </p>
+   <script type="text/x-template" id="deck_fullTemplate">
+      <div v-if="visible"  class="c-overlay">
+         <div class="o-modal">
+            <div class="c-card">
+               <header class="c-card__header c-card__item--divider">
+                  <button type="button" class="c-button c-button--close" v-on:click="hide">×</button>
+                  <h2 class="c-heading">{{data.primKey}}. {{data.attributes.name}} </h2>
+               </header>
+               <div class="c-card__body">
+                  <div class="o-grid">
+                     <div class="o-grid__cell">
+                        <p>
+                           {{data.attributes.numberCards}} Karten</br>
+                           Farben: {{data.attributes.suits}}</br>
+                           <span v-if="data.attributes.pattern">Bild: {{data.attributes.pattern}}</br></span>
+                           Format: {{data.attributes.format}}</br>
+                           Auge des Königs: {{data.attributes.specialMeasure}}</br>
+                           Index: {{data.attributes.index}}</br>
+                           Anzahl Index: {{data.attributes.numIndex}}
+                        </p>
+                        <p>
+                           <span v-if="data.attributes.maker">Hersteller: {{data.attributes.maker}}</br></span>
+                           <span v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</span>
+                        </p>
                           <p v-if="data.attributes.printedLatest || data.attributes.printedEarliest">Gedruckt 
                           <span v-if="data.attributes.printedEarliest"> frühestens {{data.attributes.printedEarliest}}</span>
                           <span v-if="data.attributes.printedLatest"> spätestens {{data.attributes.printedLatest}}</span>
@@ -126,10 +126,10 @@
                     <footer class="c-card__footer">
                        <button type="button" class="c-button c-button--brand">Bearbeiten</button>
                     </footer>
-                  </div>
-               </div -->
-            </div>
-</script>
+             </div>
+         </div>
+      </div>
+   </script>
 
 	<!-- Vue Js Framework and Resource Loader -->
 	<script src="libs/vue.min.js"></script>
@@ -141,7 +141,7 @@
 	<!-- Custom Vue Components -->
 	<script src="components/questions.js"></script>
 	<script src="components/cardList.js"></script>
-	<script src="components/card.js"></script>
+	<script src="components/deckTile.js"></script>
 	<script src="components/fullDeck.js"></script>
 
 	<!-- Main Application -->

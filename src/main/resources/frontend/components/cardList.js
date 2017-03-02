@@ -19,10 +19,10 @@ Vue.component('cardlist', {
     	type: Number,
         required: true
     	},
-        detaillevel: {
+        itemClass: {
         type: String,
         required: false,
-        default: 'lowDetail'
+        default: 'smallTile'
         }
     },
     methods: {
@@ -31,9 +31,9 @@ Vue.component('cardlist', {
         this.numberPossible = response.numberPossible;
         if (this.numberPossible<24)
         {
-         this.detaillevel='highDetail';
+         this.itemClass='bigTile';
          } else {
-         this.detaillevel='lowDetail';
+         this.itemClass='smallTile';
          }
          this.allCards = response.matches;
       }

@@ -25,13 +25,13 @@ color: white;
 		border-radius: 10px !important;
     }
     
-    .highDetail {
+    .bigTile {
         	margin: 5px !important;
         display: inline-block;
         width: 500px;
         height: 280px;
 	}
-    .lowDetail {
+    .smallTile {
         	margin: 5px !important;
         display: inline-block;
         width: 333px;
@@ -40,7 +40,7 @@ color: white;
     
     
 
-    .highDetail img {
+    .bigTile img {
     	float: right;
     	margin-top: 7px;
         max-width: 250px;
