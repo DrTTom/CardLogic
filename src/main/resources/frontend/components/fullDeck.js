@@ -34,23 +34,19 @@ Vue.component('deck_full', {
       updateDeckView: function(payload) {
          this.data= payload;
          this.visible=true;
-         //alert(this.$http.get(url+'/view/maker/'+this.data.attributes.maker).primKey);
-         var checkme = this.$http.get(url+'/view/maker/'+this.data.attributes.maker);        
-          this.$http.get(url+'/view/maker/'+this.data.attributes.maker).then((response) => {
-          alert(response);
-            }, (response) => {
-                alert('Error');
-            });
+         if (this.data.attributes.maker == undefined || this.data.attributes.maker=='') {
+            this.maker= {};
+            } 
+         else {
+            this.$http.get(url+'/view/maker/'+this.data.attributes.maker).then((response) => {
+               this.maker=response.body;
+               }, (response) => {
+               alert('Error');
+               });
+            }
          },
-         listKeys : function(obj){
-     	   var keys = [];
-     	   for(var key in obj){
-     	      keys.push(key);
-     	   }
-     	   return keys;
-     	},
       hide: function(response) {
          this.visible=false;
          } 
-      }      
+      }
    })

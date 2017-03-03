@@ -108,16 +108,17 @@
                            Anzahl Index: {{data.attributes.numIndex}}
                         </p>
                         <p>
-                           <span v-if="data.attributes.maker">Hersteller: {{data.attributes.maker}}</br></span>
+                           <span v-if="maker.attributes">Hersteller: {{maker.attributes.fullName}}, {{maker.attributes.place}}</br></span>
                            <span v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</span>
                         </p>
-                          <p v-if="data.attributes.printedLatest || data.attributes.printedEarliest">Gedruckt 
+                          <p v-if="data.attributes.printedLatest || data.attributes.printedEarliest">Gedruckt
                           <span v-if="data.attributes.printedEarliest"> frühestens {{data.attributes.printedEarliest}}</span>
                           <span v-if="data.attributes.printedLatest"> spätestens {{data.attributes.printedLatest}}</span>
                           </p>
-                          <p>
-                          <span v-if="data.attributes.bought">Erworben {{data.attributes.bought}},</span> {{data.attributes.condition}}, <br/>befindet sich in {{data.attributes.location}}</p>
                           <p>{{data.attributes.remark}}</p>
+                          <p>
+                          <span v-if="data.attributes.bought">Erworben {{data.attributes.bought}},</span> 
+                            {{data.attributes.condition}}, befindet sich in {{data.attributes.location}}</p>
                         </div>
                         <div class="o-grid__cell width300">
                            <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
