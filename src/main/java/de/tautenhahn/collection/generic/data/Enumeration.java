@@ -14,13 +14,13 @@ public abstract class Enumeration extends AttributeInterpreter
 
   private final int matchValue;
 
-  public abstract List<String> getAllowedValues();
+  public abstract List<String> getAllowedValues(DescribedObject context);
 
 
   @Override
   public boolean isLegalValue(String value, DescribedObject context)
   {
-    return isOptional() && value == null || getAllowedValues().contains(value);
+    return isOptional() && value == null || getAllowedValues(context).contains(value);
   }
 
   @Override
@@ -38,7 +38,7 @@ public abstract class Enumeration extends AttributeInterpreter
   {
 
     Question result = super.getQuestion(object);
-    result.setAllowedValues(getAllowedValues());
+    result.setAllowedValues(getAllowedValues(object));
     return result;
   }
 }

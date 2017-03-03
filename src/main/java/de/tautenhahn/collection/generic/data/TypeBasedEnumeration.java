@@ -1,6 +1,5 @@
 package de.tautenhahn.collection.generic.data;
 
-import java.util.Collections;
 import java.util.List;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
@@ -17,17 +16,12 @@ public class TypeBasedEnumeration extends Enumeration
   public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
   {
     super(name, matchValue, flags);
-    allowedValues = Collections.unmodifiableList(ApplicationContext.getInstance()
-                                                                   .getPersistence()
-                                                                   .getKeyValues(name));
   }
 
-  private final List<String> allowedValues;
-
   @Override
-  public List<String> getAllowedValues()
+  public List<String> getAllowedValues(DescribedObject context)
   {
-    return allowedValues;
+    return ApplicationContext.getInstance().getPersistence().getKeyValues(getName());
   }
 
   @Override

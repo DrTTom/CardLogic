@@ -34,7 +34,7 @@ public abstract class FixedEnumeration extends Enumeration
   private final List<String> allowedValues;
 
   @Override
-  public List<String> getAllowedValues()
+  public List<String> getAllowedValues(DescribedObject context)
   {
     return allowedValues;
   }

@@ -1,54 +1,36 @@
 package de.tautenhahn.collection.cards.deck;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.List;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
+import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
-import de.tautenhahn.collection.generic.data.ImageRef;
-import de.tautenhahn.collection.generic.data.Question;
+import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
 
 
-public class Pattern extends DescribedObjectInterpreter
+public class Pattern extends TypeBasedEnumeration
 {
 
-
-  private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
-  static
+  public Pattern()
   {
-    ATTRIBS.put("image", new ImageRef());
-    ATTRIBS.put("suits", new Suits());
+    super("pattern", 50);
   }
 
   @Override
-  public Collection<String> getSupportedAttributes()
+  public List<String> getAllowedValues(DescribedObject context)
   {
-    return ATTRIBS.keySet();
+    List<String> result = super.getAllowedValues(context);
+    String suits = context.getAttributes().get("suits");
+    if (suits != null)
+    {
+      result.removeIf(p -> !hasSuits(p, suits));
+    }
+    return result;
   }
 
-  @Override
-  public Collection<String> getBinaryValuedAttributes()
+  private boolean hasSuits(String pattern, String suits)
   {
-    return Collections.singletonList("image");
+    DescribedObject po = ApplicationContext.getInstance().getPersistence().find("pattern", pattern);
+    String ps = po == null ? null : po.getAttributes().get("suits");
+    return ps == null || suits.equals(ps);
   }
-
-  @Override
-  public AttributeInterpreter getAttributeInterpreter(String name)
-  {
-    return Optional.ofNullable(ATTRIBS.get(name))
-                   .orElseThrow(() -> new IllegalArgumentException("unsupported attribute " + name));
-
-  }
-
-  @Override
-  public Collection<Question> getQuestions(DescribedObject context)
-  {
-    return ATTRIBS.values().stream().map(i -> i.getQuestion(context)).collect(Collectors.toList());
-  }
-
 }
