@@ -24,8 +24,12 @@ Vue.component('questions', {
             type: Object,
             required: false,
             default: {}
-        }
-
+        },
+        actorUser: {
+         type: Boolean,
+         required: false,
+         default: false
+         }
     },
     methods: {
         updateQuestions: function (response) {
@@ -52,11 +56,21 @@ Vue.component('questions', {
             });
         },
         answerQuestion: function (event) {
+            if (actorUser==true)
+            {
+            actorUser=false;        
         	if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {
+        	console.log("will re-send answers");
                 CardEvents.answerQuestion.send(this.allQuestions);
+            }
             }
            // if (event.which == 0 || event.keyCode == 9)  for tab
         },
+       enableUpdate: function(event)
+       {
+          actorUser=true;
+          console.log("User interaction detected");
+       },
        getKeys : function(obj){
         	   var keys = [];
         	   for(var key in obj){

@@ -38,9 +38,9 @@
           <div v-for="currentQuestion in group.elements"> 
              <div class="left">{{currentQuestion.text}}</div>
              <div class="right">
-                <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:keypress="answerQuestion" 
+                <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" 
                        v-bind:title="currentQuestion.helptext"/>
-                <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion">
+                <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
              </div>
