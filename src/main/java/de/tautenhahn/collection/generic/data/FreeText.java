@@ -9,9 +9,9 @@ package de.tautenhahn.collection.generic.data;
 public class FreeText extends AttributeInterpreter
 {
 
-  public FreeText(String name)
+  public FreeText(String name, Flag... flags)
   {
-    super(name, Flag.SEARCHABLE, Flag.OPTIONAL);
+    super(name, flags);
   }
 
   @Override
