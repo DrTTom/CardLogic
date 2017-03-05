@@ -18,7 +18,7 @@ public class Pattern extends TypeBasedEnumeration
   @Override
   public List<String> getAllowedValues(DescribedObject context)
   {
-    List<String> result = super.getAllowedValues(context);
+    List<String> result = getPossibleValues();
     String suits = context.getAttributes().get("suits");
     if (suits != null)
     {
@@ -32,5 +32,15 @@ public class Pattern extends TypeBasedEnumeration
     DescribedObject po = ApplicationContext.getInstance().getPersistence().find("pattern", pattern);
     String ps = po == null ? null : po.getAttributes().get("suits");
     return ps == null || suits.equals(ps);
+  }
+
+  @Override
+  protected String checkSpecific(String value, DescribedObject context)
+  {
+    if (!getPossibleValues().contains(value))
+    {
+      return "msg.error.invalidOption";
+    }
+    return getAllowedValues(context).contains(value) ? null : "msg.error.optionMismatchesSuits";
   }
 }

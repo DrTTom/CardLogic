@@ -70,7 +70,7 @@ public class SearchProcess
     {
       return new Message();
     }
-    if (!ai.isLegalValue(value, searchMask))
+    if (ai.checkValue(value, searchMask) != null)
     {
       return new Message(); // TODO implement some message handling
     }

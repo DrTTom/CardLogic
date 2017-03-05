@@ -31,6 +31,12 @@ public abstract class FixedEnumeration extends Enumeration
     allowedValues = Collections.unmodifiableList(Arrays.asList(allowed));
   }
 
+  @Override
+  protected String checkSpecific(String value, DescribedObject context)
+  {
+    return getAllowedValues(context).contains(value) ? null : "msg.error.invalidOption";
+  }
+
   private final List<String> allowedValues;
 
   @Override

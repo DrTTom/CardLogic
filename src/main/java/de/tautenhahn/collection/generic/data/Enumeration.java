@@ -16,13 +16,6 @@ public abstract class Enumeration extends AttributeInterpreter
 
   public abstract List<String> getAllowedValues(DescribedObject context);
 
-
-  @Override
-  public boolean isLegalValue(String value, DescribedObject context)
-  {
-    return isOptional() && value == null || getAllowedValues(context).contains(value);
-  }
-
   @Override
   protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {

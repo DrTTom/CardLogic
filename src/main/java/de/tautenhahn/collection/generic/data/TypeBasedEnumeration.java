@@ -10,7 +10,7 @@ import de.tautenhahn.collection.generic.ApplicationContext;
  *
  * @author TT
  */
-public class TypeBasedEnumeration extends Enumeration
+public abstract class TypeBasedEnumeration extends Enumeration
 {
 
   public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
@@ -18,8 +18,7 @@ public class TypeBasedEnumeration extends Enumeration
     super(name, matchValue, flags);
   }
 
-  @Override
-  public List<String> getAllowedValues(DescribedObject context)
+  protected List<String> getPossibleValues()
   {
     return ApplicationContext.getInstance().getPersistence().getKeyValues(getName());
   }
@@ -27,7 +26,6 @@ public class TypeBasedEnumeration extends Enumeration
   @Override
   public Question getQuestion(DescribedObject object)
   {
-
     Question result = super.getQuestion(object);
     result.setAuxObjectBase("/view/" + getName());
     return result;

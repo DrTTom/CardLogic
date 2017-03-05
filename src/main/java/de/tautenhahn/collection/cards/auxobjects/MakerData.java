@@ -3,6 +3,7 @@ package de.tautenhahn.collection.cards.auxobjects;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class MakerData extends DescribedObjectInterpreter
   }
 
   @Override
-  public Collection<Question> getQuestions(DescribedObject context)
+  public List<Question> getQuestions(DescribedObject context)
   {
     return ATTRIBS.values().stream().map(i -> i.getQuestion(context)).collect(Collectors.toList());
   }

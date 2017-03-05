@@ -1,22 +1,16 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
-public class Designer extends AttributeInterpreter
+public class Designer extends FreeText
 {
 
   public Designer()
   {
     super("designer");
-  }
-
-  @Override
-  public boolean isLegalValue(String value, DescribedObject context)
-  {
-    return true;
   }
 
   @Override

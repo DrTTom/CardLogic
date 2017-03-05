@@ -1,22 +1,16 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
-public class Index extends AttributeInterpreter
+public class Index extends FreeText
 {
 
   protected Index()
   {
-    super("index", Flag.EXACT);
-  }
-
-  @Override
-  public boolean isLegalValue(String value, DescribedObject context)
-  {
-    return true;
+    super("index");
   }
 
   @Override

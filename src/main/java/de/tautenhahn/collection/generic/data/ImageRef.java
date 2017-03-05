@@ -20,9 +20,10 @@ public class ImageRef extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value, DescribedObject context)
+  public String checkSpecific(String value, DescribedObject context)
   {
-    return value == null || ApplicationContext.getInstance().getPersistence().binObjectExists(value);
+    return (value == null || ApplicationContext.getInstance().getPersistence().binObjectExists(value)) ? null
+      : "msg.error.missingReferenceImage";
   }
 
   @Override

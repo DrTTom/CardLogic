@@ -9,9 +9,9 @@ public class Year extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value, DescribedObject content)
+  public String checkSpecific(String value, DescribedObject content)
   {
-    return value.matches("[12][0-9][0-9][0-9][0-9]");
+    return value.matches("[12][0-9][0-9][0-9][0-9]") ? null : "msg.error.mustBeYear";
   }
 
   @Override

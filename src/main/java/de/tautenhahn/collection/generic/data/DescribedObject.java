@@ -18,9 +18,15 @@ public class DescribedObject
 
   private final Map<String, String> attributes = new Hashtable<>();
 
+  public DescribedObject(String type, String primKey, Map<String, String> attributes)
+  {
+    this.type = type;
+    this.primKey = primKey;
+    this.attributes.putAll(attributes);
+  }
+
   public DescribedObject(String type, String primKey)
   {
-    super();
     this.type = type;
     this.primKey = primKey;
   }
@@ -38,5 +44,12 @@ public class DescribedObject
   public Map<String, String> getAttributes()
   {
     return attributes;
+  }
+
+  public DescribedObject copyTo(String key)
+  {
+    DescribedObject result = new DescribedObject(type, key);
+    result.getAttributes().putAll(attributes);
+    return result;
   }
 }

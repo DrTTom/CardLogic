@@ -18,7 +18,7 @@ public class MakerSign extends TypeBasedEnumeration
   @Override
   public List<String> getAllowedValues(DescribedObject context)
   {
-    List<String> result = super.getAllowedValues(context);
+    List<String> result = getPossibleValues();
     System.out.println("will filter " + result);
     String maker = context.getAttributes().get("maker");
     if (maker != null)
@@ -34,6 +34,16 @@ public class MakerSign extends TypeBasedEnumeration
     DescribedObject ms = ApplicationContext.getInstance().getPersistence().find("makerSign", sign);
     String mos = ms == null ? null : ms.getAttributes().get("maker");
     return mos == null || mos.equals(maker);
+  }
+
+  @Override
+  protected String checkSpecific(String value, DescribedObject context)
+  {
+    if (!getPossibleValues().contains(value))
+    {
+      return "msg.error.invalidOption";
+    }
+    return getAllowedValues(context).contains(value) ? null : "msg.error.optionMismatchesMaker";
   }
 
 }

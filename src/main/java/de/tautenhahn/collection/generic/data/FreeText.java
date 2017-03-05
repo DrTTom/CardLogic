@@ -15,9 +15,9 @@ public class FreeText extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value, DescribedObject context)
+  protected String checkSpecific(String value, DescribedObject context)
   {
-    return true;
+    return null;
   }
 
   @Override

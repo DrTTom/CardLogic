@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.data;
 
 import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -42,5 +43,5 @@ public abstract class DescribedObjectInterpreter
     return result;
   }
 
-  public abstract Collection<Question> getQuestions(DescribedObject context);
+  public abstract List<Question> getQuestions(DescribedObject context);
 }

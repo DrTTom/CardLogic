@@ -14,9 +14,9 @@ public class NumberCards extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value, DescribedObject context)
+  protected String checkSpecific(String value, DescribedObject context)
   {
-    return value.matches("[1-9][0-9]*");
+    return value.matches("[1-9][0-9]*") ? null : "msg.error.invalidValue";
   }
 
   @Override

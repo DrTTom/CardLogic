@@ -47,7 +47,7 @@ public abstract class ApplicationContext
   /**
    * Return an interpreter for described objects of specified type.
    */
-  public abstract DescribedObjectInterpreter getInterpreter(String attributeName);
+  public abstract DescribedObjectInterpreter getInterpreter(String type);
 
   /**
    * Return a text specified by key (internationalization).

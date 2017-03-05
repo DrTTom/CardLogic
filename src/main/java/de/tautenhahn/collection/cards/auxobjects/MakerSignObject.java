@@ -3,17 +3,18 @@ package de.tautenhahn.collection.cards.auxobjects;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import de.tautenhahn.collection.cards.deck.Maker;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.ImageRef;
 import de.tautenhahn.collection.generic.data.Question;
-import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
 import de.tautenhahn.collection.generic.data.Year;
 
 
@@ -26,7 +27,7 @@ public class MakerSignObject extends DescribedObjectInterpreter
     ATTRIBS.put("usedFrom", new Year("usedFrom"));
     ATTRIBS.put("usedTo", new Year("usedTo"));
     ATTRIBS.put("image", new ImageRef());
-    ATTRIBS.put("maker", new TypeBasedEnumeration("maker", 0));
+    ATTRIBS.put("maker", new Maker());
     ATTRIBS.put("remark", new FreeText("remark"));
   }
 
@@ -51,7 +52,7 @@ public class MakerSignObject extends DescribedObjectInterpreter
   }
 
   @Override
-  public Collection<Question> getQuestions(DescribedObject context)
+  public List<Question> getQuestions(DescribedObject context)
   {
     return ATTRIBS.values().stream().map(i -> i.getQuestion(context)).collect(Collectors.toList());
   }

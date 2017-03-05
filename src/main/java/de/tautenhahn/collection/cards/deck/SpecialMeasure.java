@@ -14,9 +14,9 @@ public class SpecialMeasure extends AttributeInterpreter
   }
 
   @Override
-  public boolean isLegalValue(String value, DescribedObject context)
+  protected String checkSpecific(String value, DescribedObject context)
   {
-    return value.matches("([1-9][0-9]*x[1-9][0-9]*)|0");
+    return value.matches("([1-9][0-9]*x[1-9][0-9]*)|0") ? null : "msg.error.invalidValue";
   }
 
   @Override
