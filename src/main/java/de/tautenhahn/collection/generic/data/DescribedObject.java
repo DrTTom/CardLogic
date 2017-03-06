@@ -16,6 +16,12 @@ public class DescribedObject
 
   private final String primKey;
 
+  /**
+   * Default key to store the display name of the object in - in most cases the name is handled as normal
+   * attribute.
+   */
+  public static final String NAME_KEY = "name";
+
   private final Map<String, String> attributes = new Hashtable<>();
 
   public DescribedObject(String type, String primKey, Map<String, String> attributes)
