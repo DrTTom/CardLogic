@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.Map;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -147,10 +149,9 @@ public class RestServer
     res.header("Content-Type", "application/json; charset=UTF-8");
     String type = req.params(":type");
     SearchProcess proc = ProcessScheduler.getInstance().getCurrentSearch(type);
-    req.queryParams().forEach(p -> {
-      proc.setAttribute(p, req.queryParams(p));
-    });
-    return proc.execute();
+    Map<String, String> allParams = new Hashtable<>();
+    req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));
+    return proc.execute(allParams);
   }
 
   private static void copy(InputStream src, OutputStream dest) throws IOException
