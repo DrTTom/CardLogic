@@ -19,13 +19,11 @@ public class MakerSign extends TypeBasedEnumeration
   public List<String> getAllowedValues(DescribedObject context)
   {
     List<String> result = getPossibleValues();
-    System.out.println("will filter " + result);
     String maker = context.getAttributes().get("maker");
     if (maker != null)
     {
       result.removeIf(p -> !(hasMaker(p, maker) || p.equals(context.getAttributes().get("makerSign"))));
     }
-    System.out.println("left values " + result);
     return result;
   }
 

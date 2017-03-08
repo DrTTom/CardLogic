@@ -8,6 +8,7 @@ import java.util.Map;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
+import de.tautenhahn.collection.generic.data.AttributeTranslator;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Message;
@@ -73,6 +74,10 @@ public class SearchProcess
     if (ai.checkValue(value, searchMask) != null)
     {
       return new Message(); // TODO implement some message handling
+    }
+    if (ai instanceof AttributeTranslator)
+    {
+      value = ((AttributeTranslator)ai).toKey(value);
     }
     searchMask.getAttributes().put(name, value);
     return null;

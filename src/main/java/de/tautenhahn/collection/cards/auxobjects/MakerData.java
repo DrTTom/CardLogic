@@ -16,6 +16,9 @@ import de.tautenhahn.collection.generic.data.Question;
 import de.tautenhahn.collection.generic.data.Year;
 
 
+/**
+ * @author TT
+ */
 public class MakerData extends DescribedObjectInterpreter
 {
 

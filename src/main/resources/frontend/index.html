@@ -99,37 +99,43 @@
                   <div class="o-grid">
                      <div class="o-grid__cell">
                         <p>
-                           {{data.attributes.numberCards}} Karten</br>
-                           Farben: {{data.attributes.suits}}</br>
+                           {{data.attributes.numberCards}} Blatt, Format {{data.attributes.format}}</br>
+                           Farbzeichen: {{data.attributes.suits}}</br>
                            <span v-if="data.attributes.pattern">Bild: {{data.attributes.pattern}}</br></span>
-                           Format: {{data.attributes.format}}</br>
-                           Auge des Königs: {{data.attributes.specialMeasure}}</br>
-                           Index: {{data.attributes.index}}</br>
-                           Anzahl Index: {{data.attributes.numIndex}}
                         </p>
                         <p>
-                           <span v-if="maker.attributes">Hersteller: {{maker.attributes.fullName}}, {{maker.attributes.place}}</br></span>
+                           Index: {{data.attributes.index}}</br>
+                           Anzahl Index: {{data.attributes.numIndex}} </br>
+                           Auge des Königs bei: {{data.attributes.specialMeasure}}</br>
+                        </p>
+                        <p>
+                           <span v-if="maker.attributes">Hersteller: {{maker.attributes.name}}, {{maker.attributes.place}}</br></span>
+                           <span v-if="data.refMaker">Produktbezeichnung: {{data.refMaker}}</br></span>
                            <span v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</span>
                         </p>
-                          <p v-if="data.attributes.printedLatest || data.attributes.printedEarliest">Gedruckt
+                       <img v-if="taxStamp.attributes" v-bind:src="'http://localhost:4567/download/'+taxStamp.attributes.image" />
+                        <p v-if="data.attributes.printedLatest || data.attributes.printedEarliest">Gedruckt
                           <span v-if="data.attributes.printedEarliest"> frühestens {{data.attributes.printedEarliest}}</span>
                           <span v-if="data.attributes.printedLatest"> spätestens {{data.attributes.printedLatest}}</span>
-                          </p>
-                          <p>{{data.attributes.remark}}</p>
-                          <p>
+                          <span v-if="data.refCat">siehe {{data.refCat}}</br></span>
+                        </p>
+                        <p>{{data.attributes.remark}}</p>
+                        <p>
                           <span v-if="data.attributes.bought">Erworben {{data.attributes.bought}},</span> 
-                            {{data.attributes.condition}}, befindet sich in {{data.attributes.location}}</p>
-                        </div>
-                        <div class="o-grid__cell width300">
-                           <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
-                        </div>
-                    </div>
-                    <footer class="c-card__footer">
-                       <button type="button" class="c-button c-button--brand">Bearbeiten</button>
-                    </footer>
-             </div>
-         </div>
-      </div>
+                            {{data.attributes.condition}}, befindet sich in {{data.attributes.location}}
+                        </p>
+                     </div>
+                     <div class="o-grid__cell width300">
+                        <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
+                     </div>
+                  </div>
+                  <footer class="c-card__footer">
+                     <button type="button" class="c-button c-button--brand">Bearbeiten</button>
+                     <button type="button" class="c-button c-button--brand">Kopieren</button>
+                  </footer>
+               </div>
+            </div>
+        </div>
    </script>
 
 	<!-- Vue Js Framework and Resource Loader -->
