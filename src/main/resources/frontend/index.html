@@ -103,7 +103,12 @@
                            Farbzeichen: {{data.attributes.suits}}</br>
                            <span v-if="data.attributes.pattern">Bild: {{data.attributes.pattern}}</br></span>
                         </p>
-                        <p>
+                        <img v-if="taxStamp.attributes" v-bind:src="'http://localhost:4567/download/'+taxStamp.attributes.image" 
+                            v-bind:title="'Steuerstempel '+taxStamp.attributes.issuer+
+                            ',\n verwendet '+taxStamp.attributes.from+ '  bis ' +taxStamp.attributes.to"/>
+                        <img v-if="makerSign.attributes" v-bind:src="'http://localhost:4567/download/'+makerSign.attributes.image" 
+                            v-bind:title="'Firmenzeichen '+makerSign.attributes.from+ ' - ' +makerSign.attributes.to"/>
+                         <p>
                            Index: {{data.attributes.index}}</br>
                            Anzahl Index: {{data.attributes.numIndex}} </br>
                            Auge des Königs bei: {{data.attributes.specialMeasure}}</br>
@@ -113,7 +118,6 @@
                            <span v-if="data.refMaker">Produktbezeichnung: {{data.refMaker}}</br></span>
                            <span v-if="data.attributes.designer">Entwurf {{data.attributes.designer}}</span>
                         </p>
-                       <img v-if="taxStamp.attributes" v-bind:src="'http://localhost:4567/download/'+taxStamp.attributes.image" />
                         <p v-if="data.attributes.printedLatest || data.attributes.printedEarliest">Gedruckt
                           <span v-if="data.attributes.printedEarliest"> frühestens {{data.attributes.printedEarliest}}</span>
                           <span v-if="data.attributes.printedLatest"> spätestens {{data.attributes.printedLatest}}</span>
@@ -127,6 +131,13 @@
                      </div>
                      <div class="o-grid__cell width300">
                         <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
+                        <span v-if="!data.attributes.image">
+                           <h3>Kein Bild vorhanden!</h3>
+                           <span v-if="pattern.attributes && pattern.attributes.image">
+                              Ähnlich folgendem Standardbild:
+                              <img v-bind:src="'http://localhost:4567/download/'+pattern.attributes.image" />
+                           </span>
+                        </span>
                      </div>
                   </div>
                   <footer class="c-card__footer">

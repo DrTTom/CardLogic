@@ -29,6 +29,11 @@ Vue.component('deck_full', {
          required: false,
          default: {}
          },
+      pattern: {
+         type: Object,
+         required: false,
+         default: {}
+         },
       },
    methods: {
       updateDeckView: function(payload) {
@@ -48,10 +53,28 @@ Vue.component('deck_full', {
              this.taxStamp= {};
              } 
           else {
-        	  console.log("will look at tax stamp " +url+'/view/taxStamp/'+this.data.attributes.taxStamp);
              this.$http.get(url+'/view/taxStamp/'+this.data.attributes.taxStamp).then((response) => {
-            	console.log("got" +response.body);
                 this.taxStamp=response.body;
+                }, (response) => {
+                alert('Error');
+                });
+             }
+         if (this.data.attributes.makerSign == undefined || this.data.attributes.makerSign=='') {
+             this.makerSign= {};
+             } 
+          else {
+             this.$http.get(url+'/view/makerSign/'+this.data.attributes.makerSign).then((response) => {
+                this.makerSign=response.body;
+                }, (response) => {
+                alert('Error');
+                });
+             }
+         if (this.data.attributes.pattern == undefined || this.data.attributes.pattern=='') {
+             this.makerSign= {};
+             } 
+          else {
+             this.$http.get(url+'/view/pattern/'+this.data.attributes.pattern).then((response) => {
+                this.pattern=response.body;
                 }, (response) => {
                 alert('Error');
                 });
