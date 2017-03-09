@@ -68,6 +68,10 @@ public class RestServer
 
     allowCrossSiteCalls();
 
+    post("/submit", (req, resp) -> {
+      System.out.println(req.body());
+      return "";
+    });
     get("/view/:type/:key",
         (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
                                                                             req.params(":key")),

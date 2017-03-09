@@ -71,6 +71,13 @@ Vue.component('questions', {
           actorUser=true;
           console.log("User interaction detected");
        },
+       example: function(event) 
+       {
+    	   var dummy={"x": "hallo", "y": "tt"};
+    	   this.$http.post(url+'/submit', dummy).then( (response) => {
+          	 console.log("should have sent");
+            } );
+       },
        getKeys : function(obj){
         	   var keys = [];
         	   for(var key in obj){
