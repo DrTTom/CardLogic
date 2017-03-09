@@ -46,7 +46,7 @@ Vue.component('deck_full', {
          },
          getAuxObject: function(key, value) {
        	  if (typeof value == "undefined" || value=='') {
-       		this[key] ={}
+       		this[key] ={};
                  } 
               else {
             	  var that=this;
@@ -55,7 +55,7 @@ Vue.component('deck_full', {
                 	 console.log("should have got value "+ key);
                 	 console.log(that[key]);
                     }, (response) => {
-                    alert('Error');
+                    this[key] ={};
                     });
                  }
          },
