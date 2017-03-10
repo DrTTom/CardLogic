@@ -13,17 +13,12 @@ Vue.component('questions', {
         groupVisible: {
             type:Array,
             required:false,
-            default:[ false, false, false, false, false, false]
+            default:[ true, false, false, false, false, false]
         },
         questionGroups: {
             type:Array,
             required:false,
             default:[]
-        },
-        currentQuestion: {
-            type: Object,
-            required: false,
-            default: {}
         },
         actorUser: {
             type: Boolean,
@@ -34,13 +29,11 @@ Vue.component('questions', {
     methods: {
         updateQuestions: function (response) {
             this.allQuestions= response.questions;
-            this.questionGroup=[];
             this.questionGroups=[];
             var currentGroup= { name:'', elements:[] };
             for (i=0; i< this.allQuestions.length; i++) {
                if (this.allQuestions[i].form!=currentGroup.name) {
-                  currentGroup.next=this.allQuestions[i].form;
-                  currentGroup= { name:this.allQuestions[i].form, prev: currentGroup.name, elements:[] };
+                  currentGroup= { name:this.allQuestions[i].form, elements:[] };
                   this.questionGroups.push(currentGroup);
                   }
                currentGroup.elements.push(this.allQuestions[i]);	
@@ -48,8 +41,7 @@ Vue.component('questions', {
             },
         answerQuestion: function (event) {
             if (actorUser==true) {
-               actorUser=false;
-               console.log("asking backend, disable further changes");
+               actorUser=false;               
                if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {
                   CardEvents.answerQuestion.send(this.allQuestions);
                   }
@@ -58,7 +50,6 @@ Vue.component('questions', {
             },
         enableUpdate: function(event) {
            actorUser=true;
-           console.log("User interaction detected");
            }, 
         next: function(index) {
         	this.groupVisible[index]=false;
@@ -67,10 +58,13 @@ Vue.component('questions', {
         	this.groupVisible.pop();
               },
        store: function(event) {
-          var dummy={"x": "hallo", "y": "tt"};
-          this.$http.post(url+'/submit', dummy).then( (response) => {
+          var newDeck= {"type": "deck", attributes: {}};
+          for (i=0; i< this.allQuestions.length; i++)
+          {
+          newDeck.attributes[this.allQuestions[i].paramName]= this.allQuestions[i].value; 
+          }          
+          this.$http.post(url+'/submit', newDeck).then( (response) => {
              console.log("should have sent");
-
              });
           }
     }

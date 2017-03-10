@@ -48,9 +48,10 @@
              </div>
              <div class="clear"/>
           </div>
-         <input type="submit" value="Weiter" v-on:click="next(index)"/>
+         <input v-if="index+1<questionGroups.length" class="c-button c-button--brand" type="submit" value="Weiter" v-on:click="next(index)"/>
+         <input v-if="index+1==questionGroups.length" class="c-button c-button--brand" type="submit" value="Prüfen und neu anlegen" v-on:click="store"/>
        </div>
-       </div>
+     </div>
      </div>
     </script>
 
@@ -136,10 +137,10 @@
                      </div>
                      <div class="o-grid__cell width300">
                         <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
-                        <span v-if="!data.attributes.image && pattern.attributes && pattern.attributes.image">
-                              Ähnlich folgendem Standardbild:
-                              <img v-bind:src="'http://localhost:4567/download/'+pattern.attributes.image" />
-                        </span>
+                        <div class="centerbox" v-if="!data.attributes.image && pattern.attributes && pattern.attributes.image">
+                              Bild ähnlich:
+                              <img v-bind:src="'http://localhost:4567/download/'+pattern.attributes.image"/>
+                         </div>
                      </div>
                   </div>
                   <footer class="c-card__footer">
