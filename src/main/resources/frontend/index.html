@@ -32,7 +32,7 @@
 	<script type="text/x-template" id="questionsTemplate">
 	<div>
     <div class="c-card c-card--accordion u-high" v-for="group in questionGroups">
-       <input type="checkbox" v-bind:id="group.name">       
+       <input type="checkbox" v-bind:id="group.name" >
        <label class="c-card__item" v-bind:for="group.name">{{group.name}}</label>
        <div class="c-card__item">
           <div v-for="currentQuestion in group.elements"> 
@@ -46,7 +46,7 @@
              </div>
              <div class="clear"/>
           </div>
-         <input type="submit" value="Weiter" v-on:click="example"/>
+         <input type="submit" value="Weiter" v-on:click="store"/>
        </div>
        </div>
      </div>
