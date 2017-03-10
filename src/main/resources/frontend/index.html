@@ -98,21 +98,24 @@
                <div class="c-card__body">
                   <div class="o-grid">
                      <div class="o-grid__cell">
-                        <p>
-                           {{data.attributes.numberCards}} Blatt, Format {{data.attributes.format}}</br>
-                           Farbzeichen: {{data.attributes.suits}}</br>
-                           <span v-if="data.attributes.pattern">Bild: {{data.attributes.pattern}}</br></span>
-                        </p>
-                        <img v-if="taxStamp.attributes" v-bind:src="'http://localhost:4567/download/'+taxStamp.attributes.image" 
-                            v-bind:title="'Steuerstempel '+taxStamp.attributes.issuer+
-                            ',\n verwendet '+taxStamp.attributes.from+ '  bis ' +taxStamp.attributes.to"/>
-                        <img v-if="makerSign.attributes" v-bind:src="'http://localhost:4567/download/'+makerSign.attributes.image" 
-                            v-bind:title="'Firmenzeichen '+makerSign.attributes.from+ ' - ' +makerSign.attributes.to"/>
-                         <p>
-                           Index: {{data.attributes.index}}</br>
-                           Anzahl Index: {{data.attributes.numIndex}} </br>
-                           Auge des Königs bei: {{data.attributes.specialMeasure}}</br>
-                        </p>
+                        <img class="taxStamp" v-if="taxStamp.attributes" v-bind:src="'http://localhost:4567/download/'+taxStamp.attributes.image" 
+                                v-bind:title="'Steuerstempel '+taxStamp.attributes.issuer+
+                                ',\n verwendet '+taxStamp.attributes.from+ '  bis ' +taxStamp.attributes.to"/>
+                        <div>
+                           <p>
+                             {{data.attributes.numberCards}} Blatt, Format {{data.attributes.format}}</br>
+                             Farbzeichen: {{data.attributes.suits}}</br>
+                             <span v-if="data.attributes.t_pattern">Bild: {{data.attributes.t_pattern}}</br></span>
+                           </p>
+                           <p>
+                              Index: {{data.attributes.index}}</br>
+                              Anzahl Index: {{data.attributes.numIndex}} </br>
+                              Auge des Königs bei: {{data.attributes.specialMeasure}}</br>
+                           </p>
+                        </div>
+                        <div class="clear"/>
+                        <img class="makerSign" v-if="makerSign && makerSign.attributes" v-bind:src="'http://localhost:4567/download/'+makerSign.attributes.image" 
+                                  v-bind:title="'Firmenzeichen '+makerSign.attributes.from+ ' - ' +makerSign.attributes.to"/>
                         <p>
                            <span v-if="maker.attributes">Hersteller: {{maker.attributes.name}}, {{maker.attributes.place}}</br></span>
                            <span v-if="data.refMaker">Produktbezeichnung: {{data.refMaker}}</br></span>
@@ -131,12 +134,9 @@
                      </div>
                      <div class="o-grid__cell width300">
                         <img v-if="data.attributes.image" v-bind:src="'http://localhost:4567/download/'+data.attributes.image" />
-                        <span v-if="!data.attributes.image">
-                           <h3>Kein Bild vorhanden!</h3>
-                           <span v-if="pattern.attributes && pattern.attributes.image">
+                        <span v-if="!data.attributes.image && pattern.attributes && pattern.attributes.image">
                               Ähnlich folgendem Standardbild:
                               <img v-bind:src="'http://localhost:4567/download/'+pattern.attributes.image" />
-                           </span>
                         </span>
                      </div>
                   </div>

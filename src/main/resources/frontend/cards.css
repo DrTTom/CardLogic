@@ -115,3 +115,17 @@ background-color: hsla(0,0%,7%,.7) !important;
       clear: both;
       padding-bottom: 0.5em;
     }
+
+.taxStamp
+{
+padding-left:1em;
+padding-rigth:1em;
+float: right;
+}
+.makerSign
+{
+padding-left:1em;
+padding-rigth:1em;
+float: right;
+max-heigth: 60px;
+}
