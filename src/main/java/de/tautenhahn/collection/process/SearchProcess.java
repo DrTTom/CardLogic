@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
@@ -59,6 +60,7 @@ public class SearchProcess
     DescribedObject searchMask = translateInput(parameters);
 
     Stream<DescribedObject> candidates;
+    boolean enrichmentNecessary = false;
     synchronized (this)
     {
       if (lastCandidates != null && refinesLastSearch(parameters))
@@ -68,11 +70,12 @@ public class SearchProcess
       else
       {
         candidates = PERSISTENCE.findAll(type);
+        enrichmentNecessary = true;
       }
     }
 
     Search result = createSearchQuestions(searchMask);
-    computeSearchResults(result, candidates, searchMask);
+    computeSearchResults(result, candidates, searchMask, enrichmentNecessary);
 
     return result;
   }
@@ -97,7 +100,8 @@ public class SearchProcess
 
   private void computeSearchResults(Search result,
                                     Stream<DescribedObject> candidates,
-                                    DescribedObject searchMask)
+                                    DescribedObject searchMask,
+                                    boolean enrichmentNecessary)
   {
     Map<DescribedObject, Similarity> similars = new LinkedHashMap<>();
     List<DescribedObject> remainingCandidates = new ArrayList<>();
@@ -109,6 +113,10 @@ public class SearchProcess
         similars.put(d, sim);
       }
     });
+    if (enrichmentNecessary)
+    {
+      remainingCandidates.forEach(this::addTranslation);
+    }
 
     result.setNumberPossible(similars.size());
     result.setNumberMatching((int)similars.values().stream().filter(x -> x.probablyEqual()).count());
@@ -123,6 +131,18 @@ public class SearchProcess
       lastSearch = searchMask.getAttributes();
       lastCandidates = remainingCandidates;
     }
+  }
+
+  private void addTranslation(DescribedObject d)
+  {
+    interpreter.getSupportedAttributes()
+               .stream()
+               .map(name -> interpreter.getAttributeInterpreter(name))
+               .filter(ai -> ai instanceof AttributeTranslator)
+               .forEach(ai -> Optional.ofNullable(d.getAttributes().get(ai.getName()))
+                                      .map(v -> ((AttributeTranslator)ai).toName(v))
+                                      .ifPresent(v -> d.getAttributes().put("t_" + ai.getName(),
+                                                                            v)));
   }
 
   private Search createSearchQuestions(DescribedObject questionContext)

@@ -33,14 +33,6 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
 
   protected List<String> getPossibleValues()
   {
-
-    primKeyByName.clear();
-    for ( String key : persistence.getKeyValues(getName()) )
-    {
-      DescribedObject obj = persistence.find(getName(), key);
-      primKeyByName.put(Optional.ofNullable(obj.getAttributes().get(DescribedObject.NAME_KEY)).orElse(key),
-                        key); // TODO: handle alternative names here as well
-    }
     return new ArrayList<>(primKeyByName.keySet());
   }
 
@@ -70,14 +62,14 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
   @Override
   public void refresh()
   {
-    primKeyByName.clear();// TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public List<String> getAllowedValues(DescribedObject context)
-  {
-    // TODO Auto-generated method stub
-    return null;
+    primKeyByName.clear();
+    nameByPrimKey.clear();
+    for ( String key : persistence.getKeyValues(getName()) )
+    {
+      DescribedObject obj = persistence.find(getName(), key);
+      String name = Optional.ofNullable(obj.getAttributes().get(DescribedObject.NAME_KEY)).orElse(key);
+      primKeyByName.put(name, key); // TODO: handle alternative names here as well
+      nameByPrimKey.put(key, name);
+    }
   }
 }

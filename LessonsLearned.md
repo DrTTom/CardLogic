@@ -14,3 +14,9 @@ Das Paket wird eingebunden als Dependency "com.sparkjava:spark-core:2.5.4" in Gr
 und ist mit 145 KB die Jar bzw. etwas über 2MB einschließlich Jetty-Server (geht auch mit anderen Servern) recht klein.
 Es ist sorgfältig dokumentiert unter [http://sparkjava.com/documentation.html] und kommt auch mit Sonderlocken wie Dateiupload 
 klar.
+
+VUEJS und update von gebundenen Elementen
+=========================================
+
+Wenn z.B. eine Checkbox an eine Variable von Vue gebunden ist und sich die Variable ändert, erfolgt manchmal kein Update. 
+VUE triggert den Update nicht, wenn es sich bei der Variable um ein Attribut in einem Attribut handelt. Anhilfe: irgendein _direktes_ Attribut der VUE Komponente ändern 

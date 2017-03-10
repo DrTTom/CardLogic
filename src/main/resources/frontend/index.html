@@ -31,22 +31,24 @@
 	<!-- HTML for components/questions.js <questions> (Shows the current active Question and offers a textinputfield)-->
 	<script type="text/x-template" id="questionsTemplate">
 	<div>
-    <div class="c-card c-card--accordion u-high" v-for="group in questionGroups">
-       <input type="checkbox" v-bind:id="group.name" >
-       <label class="c-card__item" v-bind:for="group.name">{{group.name}}</label>
+    <div class="c-card c-card--accordion u-high" v-for="(group, index) in questionGroups">
+       <input type="checkbox" v-bind:id="'group'+index" v-model="groupVisible[index]"/>
+       <label class="c-card__item" v-bind:for="'group'+index">{{group.name}}</label>
        <div class="c-card__item">
           <div v-for="currentQuestion in group.elements"> 
              <div class="left">{{currentQuestion.text}}</div>
              <div class="right">
-                <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" 
+                <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" 
+                       v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:mouseout="enableUpdate" v-on:keypress="enableUpdate" 
                        v-bind:title="currentQuestion.helptext"/>
-                <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
+                <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" 
+                        v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
              </div>
              <div class="clear"/>
           </div>
-         <input type="submit" value="Weiter" v-on:click="store"/>
+         <input type="submit" value="Weiter" v-on:click="next(index)"/>
        </div>
        </div>
      </div>
