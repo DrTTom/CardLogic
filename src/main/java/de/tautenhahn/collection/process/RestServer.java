@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.DescribedObject;
 import spark.Request;
 import spark.Response;
 import spark.ResponseTransformer;
@@ -68,10 +69,8 @@ public class RestServer
 
     allowCrossSiteCalls();
 
-    post("/submit", (req, resp) -> {
-      System.out.println(req.body());
-      return "";
-    });
+    post("/submit", this::submit, new JsonTransformer());
+
     get("/view/:type/:key",
         (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
                                                                             req.params(":key")),
@@ -118,6 +117,15 @@ public class RestServer
     });
   }
 
+  private SubmissionData submit(Request req, Response res)
+  {
+    Gson gson = new GsonBuilder().create();
+    DescribedObject object = gson.fromJson(req.body(), DescribedObject.class);
+
+    SubmitProcess proc = ProcessScheduler.getInstance().getSubmission(object.getType());
+    return proc.submit(object, false);
+  }
+
   private void allowCrossSiteCalls()
   {
     before((request, response) -> {
@@ -147,7 +155,7 @@ public class RestServer
   }
 
 
-  private Search search(Request req, Response res)
+  private SearchResult search(Request req, Response res)
   {
     res.type("text/plain");
     res.header("Content-Type", "application/json; charset=UTF-8");

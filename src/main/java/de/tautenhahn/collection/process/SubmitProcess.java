@@ -37,16 +37,15 @@ public class SubmitProcess
    * @param force
    * @return
    */
-  public SubmissionData submit(Map<String, String> attributes, boolean force)
+  public SubmissionData submit(DescribedObject candidate, boolean force)
   {
     Map<String, String> problems = new HashMap<>();
-    DescribedObject candidate = new DescribedObject(type, null, attributes);
     if (!force)
     {
       for ( String attributeName : interpreter.getSupportedAttributes() )
       {
-        String value = attributes.get(attributeName);
-        if (value.trim().isEmpty())
+        String value = candidate.getAttributes().get(attributeName);
+        if (value != null && value.trim().isEmpty())
         {
           value = null;
         }
@@ -63,11 +62,12 @@ public class SubmitProcess
         i++;
       }
       candidate = candidate.copyTo(Integer.toString(i));
-      ApplicationContext.getInstance().getPersistence().store(candidate);
+      // ApplicationContext.getInstance().getPersistence().store(candidate);
       return new SubmissionData(Collections.emptyList(), "msg.ok.objectStored", Integer.toString(i), true);
     }
     SubmissionData result = new SubmissionData(interpreter.getQuestions(candidate),
                                                "msg.error.remainingProblems", null, false);
+    System.out.println(problems);
     result.getQuestions().forEach(q -> q.setProblem(problems.get(q.getParamName())));
     return result;
   }

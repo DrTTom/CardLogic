@@ -10,6 +10,7 @@ repositories {
 dependencies {
   compile "com.sparkjava:spark-core:2.5.4"
   compile "com.google.code.gson:gson:2.6.2"
+  compile 'org.apache.lucene:lucene-core:6.4.2'
   testCompile ("junit:junit:4.12")
   {
 	exclude module: "hamcrest-core"

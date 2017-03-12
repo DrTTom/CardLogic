@@ -36,4 +36,9 @@ public class ProcessScheduler
   {
     return new ViewProcess();
   }
+
+  public SubmitProcess getSubmission(String type)
+  {
+    return new SubmitProcess(type);
+  }
 }

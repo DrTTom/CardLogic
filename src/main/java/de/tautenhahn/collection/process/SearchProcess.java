@@ -55,7 +55,7 @@ public class SearchProcess
    * Do the search. If too expensive, maybe cache old similarity values as well. However, current
    * implementation does not require the similarity to be additive.
    */
-  public Search execute(Map<String, String> parameters)
+  public SearchResult execute(Map<String, String> parameters)
   {
     DescribedObject searchMask = translateInput(parameters);
 
@@ -74,7 +74,7 @@ public class SearchProcess
       }
     }
 
-    Search result = createSearchQuestions(searchMask);
+    SearchResult result = createSearchQuestions(searchMask);
     computeSearchResults(result, candidates, searchMask, enrichmentNecessary);
 
     return result;
@@ -98,7 +98,7 @@ public class SearchProcess
     return new DescribedObject(type, null, attribs);
   }
 
-  private void computeSearchResults(Search result,
+  private void computeSearchResults(SearchResult result,
                                     Stream<DescribedObject> candidates,
                                     DescribedObject searchMask,
                                     boolean enrichmentNecessary)
@@ -145,9 +145,9 @@ public class SearchProcess
                                                                             v)));
   }
 
-  private Search createSearchQuestions(DescribedObject questionContext)
+  private SearchResult createSearchQuestions(DescribedObject questionContext)
   {
-    Search result = new Search();
+    SearchResult result = new SearchResult();
     result.setType(type);
     result.setNumberTotal(PERSISTENCE.getNumberItems(type));
     result.setQuestions(new ArrayList<>(interpreter.getQuestions(questionContext)));

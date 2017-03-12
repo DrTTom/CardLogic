@@ -64,7 +64,14 @@ Vue.component('questions', {
           newDeck.attributes[this.allQuestions[i].paramName]= this.allQuestions[i].value; 
           }          
           this.$http.post(url+'/submit', newDeck).then( (response) => {
-             console.log("should have sent");
+             var result = response.body;
+             console.log(result.done);
+             console.log(result.questions[0].problem);
+             
+             if (!result.done)
+             {
+             CardEvents.questionsLoaded.send(response.body);
+             }
              });
           }
     }

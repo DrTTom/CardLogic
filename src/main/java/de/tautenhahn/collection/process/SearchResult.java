@@ -9,20 +9,17 @@ import de.tautenhahn.collection.generic.data.Question;
 
 
 /**
- * Wraps all data about the search process transported to the front end.
+ * Contains all data created by a search process. Note that search will also be active during submission or
+ * modification of objects.
  *
  * @author TT
  */
-public class Search
+public class SearchResult
 {
 
   private String type;
 
-  private String queryText;
-
   private List<Question> questions;
-
-  private int currentQuestion;
 
   private List<Message> messages;
 
@@ -50,19 +47,6 @@ public class Search
     this.type = type;
   }
 
-  /**
-   * Returns a free text search
-   */
-  public String getQueryText()
-  {
-    return queryText;
-  }
-
-  public void setQueryText(String queryText)
-  {
-    this.queryText = queryText;
-  }
-
   public List<Question> getQuestions()
   {
     return questions;
@@ -73,15 +57,6 @@ public class Search
     this.questions = questions;
   }
 
-  public int getCurrentQuestion()
-  {
-    return currentQuestion;
-  }
-
-  public void setCurrentQuestion(int currentQuestion)
-  {
-    this.currentQuestion = currentQuestion;
-  }
 
   public List<Message> getMessages()
   {
