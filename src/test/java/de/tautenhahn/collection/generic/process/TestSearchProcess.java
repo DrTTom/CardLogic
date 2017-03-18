@@ -19,7 +19,7 @@ public class TestSearchProcess
   @Test
   public void initialStep()
   {
-    CardApplicationContext.init();
+    CardApplicationContext.register("cards");
     SearchProcess search = ProcessScheduler.getInstance().getCurrentSearch("deck");
     assertThat(search.execute(Collections.emptyMap()).getQuestions(), not(empty()));
   }

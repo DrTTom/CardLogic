@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
@@ -25,6 +26,7 @@ public class RestructureStorage
   Properties patternKeys = new Properties();
 
   @Test
+  @Ignore("this is a tool")
   public void test() throws IOException
   {
     Persistence source = new WorkspacePersistence();

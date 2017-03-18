@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.data;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -13,6 +14,8 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
 
   private final String foreignKey;
 
+  private Map<String, String> foreignKeyByPrimKey;
+
   public TypeBasedEnumWithForeignKey(String name, String foreignKey, int matchValue, Flag[] flags)
   {
     super(name, matchValue, flags);
@@ -23,15 +26,35 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
   @Override
   public List<String> getAllowedValues(DescribedObject context)
   {
-    // TODO Auto-generated method stub
-    return null;
+    List<String> result = super.getAllowedValues(context);
+    String foreignKeyValue = realValue(context.getAttributes().get(foreignKey));
+    if (foreignKeyValue != null)
+    {
+      result.removeIf(v -> !foreignKeyValue.equals(foreignKeyByPrimKey.get(v)));
+    }
+    return result;
+  }
+
+  @Override
+  protected void registerObject(DescribedObject obj)
+  {
+    super.registerObject(obj);
+    foreignKeyByPrimKey.put(obj.getPrimKey(), obj.getAttributes().get(foreignKey));
   }
 
   @Override
   protected String checkSpecific(String value, DescribedObject context)
   {
-    // TODO Auto-generated method stub
-    return null;
+    String primKey = primKeyByName.get(value);
+    if (primKey == null)
+    {
+      return "msg.error.invalidOption";
+    }
+    String foreignKeyValue = realValue(context.getAttributes().get(foreignKey));
+    if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(primKey)))
+    {
+      return null;
+    }
+    return "msg.error.optionMismatches" + foreignKey;
   }
-
 }

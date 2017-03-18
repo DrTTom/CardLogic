@@ -29,7 +29,6 @@ public abstract class Enumeration extends AttributeInterpreter
   @Override
   public Question getQuestion(DescribedObject object)
   {
-
     Question result = super.getQuestion(object);
     result.setAllowedValues(getAllowedValues(object));
     return result;

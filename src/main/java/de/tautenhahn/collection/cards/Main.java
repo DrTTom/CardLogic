@@ -22,7 +22,7 @@ public class Main
    */
   public static void main(String[] args) throws IOException
   {
-    CardApplicationContext.init();
+    CardApplicationContext.register("cards");
     RestServer.getInstance().start();
     System.out.println("Server started, point your browser to http://localhost:4567/search/deck");
   }

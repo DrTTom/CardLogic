@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 
 public class TestWorkspaceStorage
@@ -34,7 +34,7 @@ public class TestWorkspaceStorage
   public void storeAndFind() throws IOException
   {
     WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-    systemUnderTest.init();
+    systemUnderTest.init("testing");
     DescribedObject obj = new DescribedObject("cryptoUrl", "primary");
     obj.getAttributes().put("protocol", "https");
     DescribedObject prot = new DescribedObject("protocol", "https");
@@ -53,7 +53,7 @@ public class TestWorkspaceStorage
     }
 
     systemUnderTest = new WorkspacePersistence();
-    systemUnderTest.init("other");
+    systemUnderTest.init("testingOther");
     try (FileInputStream ins = new FileInputStream("checkme.zip"))
     {
       systemUnderTest.importZip(ins);
@@ -72,6 +72,7 @@ public class TestWorkspaceStorage
    * @throws IOException
    */
   @Test
+  @Ignore("this is a tool")
   public void importZip() throws IOException
   {
     WorkspacePersistence systemUnderTest = new WorkspacePersistence();

@@ -55,18 +55,17 @@ public class CardApplicationContext extends ApplicationContext
     return null;
   }
 
-  public static void init()
+  public static void register(String initialCollectionName)
   {
-    new CardApplicationContext();
-
+    new CardApplicationContext(initialCollectionName);
   }
 
-  private CardApplicationContext()
+  private CardApplicationContext(String initialCollectionName)
   {
     persistence = new WorkspacePersistence();
     try
     {
-      persistence.init("cards");
+      persistence.init(initialCollectionName);
     }
     catch (IOException e)
     {

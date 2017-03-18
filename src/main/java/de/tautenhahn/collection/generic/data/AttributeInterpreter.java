@@ -124,4 +124,9 @@ public abstract class AttributeInterpreter
     return result;
   }
 
+  protected String realValue(String value)
+  {
+    return value == null ? null : value.trim().isEmpty() ? null : value;
+  }
+
 }
