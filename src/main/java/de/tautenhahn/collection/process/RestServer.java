@@ -160,10 +160,10 @@ public class RestServer
     res.type("text/plain");
     res.header("Content-Type", "application/json; charset=UTF-8");
     String type = req.params(":type");
-    SearchProcess proc = ProcessScheduler.getInstance().getCurrentSearch(type);
+    SearchProcess proc = ProcessScheduler.getInstance().getSearch(type);
     Map<String, String> allParams = new Hashtable<>();
     req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));
-    return proc.execute(allParams);
+    return proc.search(allParams);
   }
 
   private static void copy(InputStream src, OutputStream dest) throws IOException

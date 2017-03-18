@@ -50,7 +50,7 @@ public class SubmitProcess
           value = null;
         }
         AttributeInterpreter attr = interpreter.getAttributeInterpreter(attributeName);
-        Optional.ofNullable(attr.checkValue(value, candidate)).ifPresent(v -> problems.put(attributeName, v));
+        Optional.ofNullable(attr.check(value, candidate)).ifPresent(v -> problems.put(attributeName, v));
       }
     }
     if (problems.isEmpty())
@@ -65,7 +65,7 @@ public class SubmitProcess
       // ApplicationContext.getInstance().getPersistence().store(candidate);
       return new SubmissionData(Collections.emptyList(), "msg.ok.objectStored", Integer.toString(i), true);
     }
-    SubmissionData result = new SubmissionData(interpreter.getQuestions(candidate),
+    SubmissionData result = new SubmissionData(interpreter.getQuestions(candidate, true),
                                                "msg.error.remainingProblems", null, false);
     System.out.println(problems);
     result.getQuestions().forEach(q -> q.setProblem(problems.get(q.getParamName())));

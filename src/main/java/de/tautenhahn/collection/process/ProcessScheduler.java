@@ -21,7 +21,7 @@ public class ProcessScheduler
     return INSTANCE;
   }
 
-  public SearchProcess getCurrentSearch(String type)
+  public SearchProcess getSearch(String type)
   {
     SearchProcess result = searches.get(type);
     if (result == null)

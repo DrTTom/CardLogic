@@ -1,5 +1,6 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,13 +15,13 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
 
   private final String foreignKey;
 
-  private Map<String, String> foreignKeyByPrimKey;
+  private final Map<String, String> foreignKeyByPrimKey = new HashMap<>();
 
-  public TypeBasedEnumWithForeignKey(String name, String foreignKey, int matchValue, Flag[] flags)
+  public TypeBasedEnumWithForeignKey(String name, String foreignKey, int matchValue, Flag... flags)
   {
     super(name, matchValue, flags);
     this.foreignKey = foreignKey;
-
+    setupForeignKey();
   }
 
   @Override
@@ -30,20 +31,30 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     String foreignKeyValue = realValue(context.getAttributes().get(foreignKey));
     if (foreignKeyValue != null)
     {
-      result.removeIf(v -> !foreignKeyValue.equals(foreignKeyByPrimKey.get(v)));
+      result.removeIf(v -> !foreignKeyValue.equals(foreignKeyByPrimKey.get(toKey(v))));
     }
     return result;
   }
 
   @Override
-  protected void registerObject(DescribedObject obj)
+  public void refresh()
   {
-    super.registerObject(obj);
-    foreignKeyByPrimKey.put(obj.getPrimKey(), obj.getAttributes().get(foreignKey));
+    super.refresh();
+    foreignKeyByPrimKey.clear();
+    setupForeignKey();
+  }
+
+  private void setupForeignKey()
+  {
+    for ( String key : persistence.getKeyValues(getName()) )
+    {
+      DescribedObject obj = persistence.find(getName(), key);
+      foreignKeyByPrimKey.put(key, obj.getAttributes().get(foreignKey));
+    }
   }
 
   @Override
-  protected String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     String primKey = primKeyByName.get(value);
     if (primKey == null)
@@ -55,6 +66,6 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     {
       return null;
     }
-    return "msg.error.optionMismatches" + foreignKey;
+    return "msg.error.optionMismatches." + foreignKey;
   }
 }

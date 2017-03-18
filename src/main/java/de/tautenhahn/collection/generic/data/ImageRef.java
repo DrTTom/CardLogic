@@ -20,7 +20,7 @@ public class ImageRef extends AttributeInterpreter
   }
 
   @Override
-  public String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     return value == null || ApplicationContext.getInstance().getPersistence().binObjectExists(value) ? null
       : "msg.error.missingReferenceImage";

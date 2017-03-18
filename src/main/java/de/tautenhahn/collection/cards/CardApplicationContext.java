@@ -57,6 +57,10 @@ public class CardApplicationContext extends ApplicationContext
 
   public static void register(String initialCollectionName)
   {
+    if (ApplicationContext.getInstance() instanceof CardApplicationContext)
+    {
+      return;
+    }
     new CardApplicationContext(initialCollectionName);
   }
 

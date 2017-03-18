@@ -76,25 +76,14 @@ public abstract class AttributeInterpreter
   }
 
   /**
-   * Returns null if value is OK and message otherwise.
+   * Returns null if value is OK and message otherwise. System will call this method only if values is
+   * present.
    *
    * @param value
    * @param context provide a described object as context to allow the following methods changing behavior.
    *          For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish suits.
    */
-  public final String checkValue(String value, DescribedObject context)
-  {
-    if (value == null)
-    {
-      return isOptional() ? null : "msg.error.missingValue";
-    }
-    return checkSpecific(value, context);
-  }
-
-  /**
-   * Same as {@link #checkValue(String, DescribedObject)} but implementation may assume value is present.
-   */
-  protected abstract String checkSpecific(String value, DescribedObject context);
+  public abstract String check(String value, DescribedObject context);
 
   public final Similarity computeCorrellation(String thisValue, String otherValue, DescribedObject context)
   {

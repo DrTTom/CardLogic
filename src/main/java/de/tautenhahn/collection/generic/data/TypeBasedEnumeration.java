@@ -20,15 +20,15 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
 
   protected Persistence persistence;
 
-  protected static Map<String, String> primKeyByName = new HashMap<>();
+  protected Map<String, String> primKeyByName = new HashMap<>();
 
-  protected static Map<String, String> nameByPrimKey = new HashMap<>();
+  protected Map<String, String> nameByPrimKey = new HashMap<>();
 
   public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
   {
     super(name, matchValue, flags);
     persistence = ApplicationContext.getInstance().getPersistence();
-    refresh();
+    setupMaps();
   }
 
   @Override
@@ -60,7 +60,7 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
   }
 
   @Override
-  protected String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     return primKeyByName.containsKey(value) ? null : "msg.error.invalidOption";
   }
@@ -70,19 +70,19 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
   {
     primKeyByName.clear();
     nameByPrimKey.clear();
+    setupMaps();
+  }
+
+  private void setupMaps()
+  {
     for ( String key : persistence.getKeyValues(getName()) )
     {
       DescribedObject obj = persistence.find(getName(), key);
-      registerObject(obj);
+      String name = Optional.ofNullable(obj.getAttributes().get(DescribedObject.NAME_KEY))
+                            .orElse(obj.getPrimKey());
+      primKeyByName.put(name, obj.getPrimKey()); // TODO: handle alternative names here as well
+      nameByPrimKey.put(obj.getPrimKey(), name);
     }
   }
 
-  protected void registerObject(DescribedObject obj)
-  {
-    String name = Optional.ofNullable(obj.getAttributes().get(DescribedObject.NAME_KEY))
-                          .orElse(obj.getPrimKey());
-    primKeyByName.put(name, obj.getPrimKey()); // TODO: handle alternative names here as well
-    nameByPrimKey.put(obj.getPrimKey(), name);
-
-  }
 }

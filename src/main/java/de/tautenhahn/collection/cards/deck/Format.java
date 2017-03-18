@@ -16,7 +16,7 @@ public class Format extends AttributeInterpreter
   }
 
   @Override
-  public String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     return value.matches("[1-9][0-9]*x[1-9][0-9]*( \\(.*\\))?") ? null : "msg.error.invalidValue";
   }

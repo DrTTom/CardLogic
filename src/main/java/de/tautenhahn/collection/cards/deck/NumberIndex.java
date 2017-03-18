@@ -14,7 +14,7 @@ public class NumberIndex extends AttributeInterpreter
   }
 
   @Override
-  protected String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     return value.matches("[1-9][0-9]*") ? null : "msg.error.invalidValue";
   }

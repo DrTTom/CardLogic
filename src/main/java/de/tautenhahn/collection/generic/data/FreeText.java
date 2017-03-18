@@ -15,7 +15,7 @@ public class FreeText extends AttributeInterpreter
   }
 
   @Override
-  protected String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     return null;
   }

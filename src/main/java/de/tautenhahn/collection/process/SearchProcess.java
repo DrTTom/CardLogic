@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
@@ -52,15 +51,38 @@ public class SearchProcess
   private List<DescribedObject> lastCandidates;
 
   /**
+   * Executes a search, reporting inconsistent search values but no missing attributes.
+   */
+  public SearchResult search(Map<String, String> parameters)
+  {
+    return execute(parameters, null, false);
+  }
+
+  /**
+   * Executes a search interpreting the given data as object description. All possible errors are reported.
+   * 
+   * @param primKey optional, is returned with the result.
+   * @param parameters
+   */
+  public SearchResult checkValues(String primKey, Map<String, String> parameters)
+  {
+    return execute(parameters, primKey, true);
+  }
+
+
+  /**
    * Do the search. If too expensive, maybe cache old similarity values as well. However, current
    * implementation does not require the similarity to be additive.
+   * 
+   * @param parameters attribute values to match
+   * @param reportMissingValues true to create problem messages for missing mandatory values
+   * @return
    */
-  public SearchResult execute(Map<String, String> parameters)
+  private SearchResult execute(Map<String, String> parameters, String primKey, boolean checkStrict)
   {
     DescribedObject searchMask = translateInput(parameters);
 
     Stream<DescribedObject> candidates;
-    boolean enrichmentNecessary = false;
     synchronized (this)
     {
       if (lastCandidates != null && refinesLastSearch(parameters))
@@ -70,12 +92,11 @@ public class SearchProcess
       else
       {
         candidates = PERSISTENCE.findAll(type);
-        enrichmentNecessary = true;
       }
     }
 
     SearchResult result = createSearchQuestions(searchMask);
-    computeSearchResults(result, candidates, searchMask, enrichmentNecessary);
+    computeSearchResults(result, candidates, searchMask);
 
     return result;
   }
@@ -100,8 +121,7 @@ public class SearchProcess
 
   private void computeSearchResults(SearchResult result,
                                     Stream<DescribedObject> candidates,
-                                    DescribedObject searchMask,
-                                    boolean enrichmentNecessary)
+                                    DescribedObject searchMask)
   {
     Map<DescribedObject, Similarity> similars = new LinkedHashMap<>();
     List<DescribedObject> remainingCandidates = new ArrayList<>();
@@ -113,10 +133,7 @@ public class SearchProcess
         similars.put(d, sim);
       }
     });
-    if (enrichmentNecessary)
-    {
-      remainingCandidates.forEach(this::addTranslation);
-    }
+    remainingCandidates.forEach(c -> addTranslation(c, result));
 
     result.setNumberPossible(similars.size());
     result.setNumberMatching((int)similars.values().stream().filter(x -> x.probablyEqual()).count());
@@ -133,16 +150,20 @@ public class SearchProcess
     }
   }
 
-  private void addTranslation(DescribedObject d)
+  private void addTranslation(DescribedObject d, SearchResult result)
   {
     interpreter.getSupportedAttributes()
                .stream()
                .map(name -> interpreter.getAttributeInterpreter(name))
                .filter(ai -> ai instanceof AttributeTranslator)
-               .forEach(ai -> Optional.ofNullable(d.getAttributes().get(ai.getName()))
-                                      .map(v -> ((AttributeTranslator)ai).toName(v))
-                                      .ifPresent(v -> d.getAttributes().put("t_" + ai.getName(),
-                                                                            v)));
+               .forEach(ai -> {
+                 String attrName = ai.getName();
+                 String orig = d.getAttributes().get(attrName);
+                 if (orig != null && orig.length() > 0)
+                 {
+                   result.addTranslation(attrName, orig, ((AttributeTranslator)ai).toName(orig));
+                 }
+               });
   }
 
   private SearchResult createSearchQuestions(DescribedObject questionContext)
@@ -150,7 +171,7 @@ public class SearchProcess
     SearchResult result = new SearchResult();
     result.setType(type);
     result.setNumberTotal(PERSISTENCE.getNumberItems(type));
-    result.setQuestions(new ArrayList<>(interpreter.getQuestions(questionContext)));
+    result.setQuestions(new ArrayList<>(interpreter.getQuestions(questionContext, false)));
     result.getQuestions().removeIf(q -> "illustrate".equals(q.getForm()));
 
     return result;

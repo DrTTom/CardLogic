@@ -6,7 +6,7 @@ package de.tautenhahn.collection.process;
  * 
  * @author TT
  */
-public class SubmissionResult extends SearchResult
+public class SubmissionResult
 {
 
   private final String status;

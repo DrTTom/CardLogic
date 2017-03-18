@@ -37,6 +37,7 @@ public abstract class ApplicationContext
    */
   protected ApplicationContext()
   {
+    new Exception().printStackTrace();
     if (instance != null)
     {
       throw new RuntimeException("Application may instanciate only one factory");

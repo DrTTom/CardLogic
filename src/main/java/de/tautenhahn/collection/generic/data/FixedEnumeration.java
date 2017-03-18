@@ -32,7 +32,7 @@ public abstract class FixedEnumeration extends Enumeration
   }
 
   @Override
-  protected String checkSpecific(String value, DescribedObject context)
+  public String check(String value, DescribedObject context)
   {
     return getAllowedValues(context).contains(value) ? null : "msg.error.invalidOption";
   }

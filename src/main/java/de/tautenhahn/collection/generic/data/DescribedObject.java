@@ -24,6 +24,13 @@ public class DescribedObject
 
   private final Map<String, String> attributes = new Hashtable<>();
 
+  /**
+   * Creates instance.
+   * 
+   * @param type
+   * @param primKey
+   * @param attributes
+   */
   public DescribedObject(String type, String primKey, Map<String, String> attributes)
   {
     this.type = type;
@@ -31,27 +38,47 @@ public class DescribedObject
     this.attributes.putAll(attributes);
   }
 
+  /**
+   * Creates instance.
+   * 
+   * @param type
+   * @param primKey
+   */
   public DescribedObject(String type, String primKey)
   {
     this.type = type;
     this.primKey = primKey;
   }
 
+  /**
+   * Returns the type of object. The value indicates how to interpret the attributes.
+   */
   public String getType()
   {
     return type;
   }
 
+  /**
+   * Returns the key of the object unique among all objects of same type.
+   */
   public String getPrimKey()
   {
     return primKey;
   }
 
+  /**
+   * Returns the attribute map which may be manipulated.
+   */
   public Map<String, String> getAttributes()
   {
     return attributes;
   }
 
+  /**
+   * Creates a new object with different key but same attributes.
+   * 
+   * @param key
+   */
   public DescribedObject copyTo(String key)
   {
     DescribedObject result = new DescribedObject(type, key);
