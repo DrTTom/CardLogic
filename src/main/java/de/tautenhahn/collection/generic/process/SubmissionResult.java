@@ -1,8 +1,7 @@
-package de.tautenhahn.collection.process;
+package de.tautenhahn.collection.generic.process;
 
 /**
- * Result type of a submission (new object or edited). Since the search will remain always active, this class
- * inherits all the search stuff.
+ * Result type of a submission (new object or edited).
  * 
  * @author TT
  */

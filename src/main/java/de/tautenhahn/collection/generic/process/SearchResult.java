@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.process;
+package de.tautenhahn.collection.generic.process;
 
 import java.util.ArrayList;
 import java.util.HashMap;

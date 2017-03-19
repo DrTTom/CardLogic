@@ -130,4 +130,6 @@ public interface Persistence
    * @param ref
    */
   boolean binObjectExists(String ref);
+
+  void addListener(PersistenceChangeListener listener);
 }

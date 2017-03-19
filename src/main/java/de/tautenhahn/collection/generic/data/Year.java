@@ -11,7 +11,7 @@ public class Year extends AttributeInterpreter
   @Override
   public String check(String value, DescribedObject content)
   {
-    return value.matches("[12][0-9][0-9][0-9][0-9]") ? null : "msg.error.mustBeYear";
+    return value.matches("[12][0-9][0-9][0-9]") ? null : "msg.error.mustBeYear";
   }
 
   @Override

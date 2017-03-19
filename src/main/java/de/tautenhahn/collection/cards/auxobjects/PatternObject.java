@@ -16,6 +16,11 @@ public class PatternObject extends DescribedObjectInterpreter
 {
 
 
+  public PatternObject()
+  {
+    super("pattern");
+  }
+
   private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
   static
   {

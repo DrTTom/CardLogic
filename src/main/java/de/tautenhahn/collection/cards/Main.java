@@ -3,7 +3,8 @@ package de.tautenhahn.collection.cards;
 
 import java.io.IOException;
 
-import de.tautenhahn.collection.process.RestServer;
+import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.process.RestServer;
 
 
 /**
@@ -22,7 +23,8 @@ public class Main
    */
   public static void main(String[] args) throws IOException
   {
-    CardApplicationContext.register("cards");
+    CardApplicationContext.register();
+    ApplicationContext.getInstance().getPersistence().init("cards");
     RestServer.getInstance().start();
     System.out.println("Server started, point your browser to http://localhost:4567/search/deck");
   }

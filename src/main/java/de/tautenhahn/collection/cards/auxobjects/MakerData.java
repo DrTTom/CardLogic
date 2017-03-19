@@ -18,6 +18,11 @@ import de.tautenhahn.collection.generic.data.Year;
 public class MakerData extends DescribedObjectInterpreter
 {
 
+  public MakerData()
+  {
+    super("maker");
+  }
+
   private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
   {

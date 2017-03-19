@@ -1,7 +1,10 @@
 package de.tautenhahn.collection.generic.data;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -13,6 +16,17 @@ import java.util.stream.Collectors;
 public abstract class DescribedObjectInterpreter
 {
 
+  private final String type;
+
+  /**
+   * Creates new instance.
+   * 
+   * @param type
+   */
+  protected DescribedObjectInterpreter(String type)
+  {
+    this.type = type;
+  }
 
   /**
    * Returns the list of all supported attribute names.
@@ -80,4 +94,39 @@ public abstract class DescribedObjectInterpreter
     }
     return result;
   }
+
+  /**
+   * Returns a primary key value which is not used so far and suitable for given object.
+   * 
+   * @param candidate
+   */
+  public String proposeNewPrimKey(DescribedObject candidate)
+  {
+    return UUID.randomUUID().toString();
+  }
+
+  /**
+   * Creates an object with given values.
+   * 
+   * @param primKey
+   * @param parameters contains translations for some technical key values
+   */
+  public DescribedObject createObject(String primKey, Map<String, String> parameters)
+  {
+    Map<String, String> attribs = new HashMap<>();
+
+    for ( String key : getSupportedAttributes() )
+    {
+      String value = parameters.get(key);
+      if (value == null || value.trim().isEmpty())
+      {
+        continue;
+      }
+      AttributeInterpreter ai = getAttributeInterpreter(key);
+      attribs.put(key, ai instanceof AttributeTranslator ? ((AttributeTranslator)ai).toKey(value) : value);
+    }
+
+    return new DescribedObject(type, primKey, attribs);
+  }
+
 }

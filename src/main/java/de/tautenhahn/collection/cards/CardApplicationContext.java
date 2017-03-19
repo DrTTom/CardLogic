@@ -1,12 +1,13 @@
 package de.tautenhahn.collection.cards;
 
 import java.awt.Image;
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
 import de.tautenhahn.collection.cards.auxobjects.MakerData;
+import de.tautenhahn.collection.cards.auxobjects.MakerSignObject;
+import de.tautenhahn.collection.cards.auxobjects.PatternObject;
 import de.tautenhahn.collection.cards.deck.Deck;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
@@ -14,12 +15,18 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 
 
+/**
+ * Provides all the card-specific objects to make the generic collection application one which specificly
+ * supports playing card collections.
+ * 
+ * @author TT
+ */
 public class CardApplicationContext extends ApplicationContext
 {
 
   private final Persistence persistence;
 
-  ResourceBundle messages = ResourceBundle.getBundle("de.tautenhahn.collection.cards.CardMessages");
+  private final ResourceBundle messages = ResourceBundle.getBundle("de.tautenhahn.collection.cards.CardMessages");
 
   @Override
   public DescribedObjectInterpreter getInterpreter(String type)
@@ -30,6 +37,10 @@ public class CardApplicationContext extends ApplicationContext
         return new Deck();
       case "maker":
         return new MakerData();
+      case "makerSign":
+        return new MakerSignObject();
+      case "pattern":
+        return new PatternObject();
       default:
         throw new IllegalArgumentException("unsupported type " + type);
     }
@@ -55,27 +66,21 @@ public class CardApplicationContext extends ApplicationContext
     return null;
   }
 
-  public static void register(String initialCollectionName)
+  /**
+   * Make the current application a Card Collection.
+   */
+  public static void register()
   {
     if (ApplicationContext.getInstance() instanceof CardApplicationContext)
     {
       return;
     }
-    new CardApplicationContext(initialCollectionName);
+    new CardApplicationContext();
   }
 
-  private CardApplicationContext(String initialCollectionName)
+  private CardApplicationContext()
   {
     persistence = new WorkspacePersistence();
-    try
-    {
-      persistence.init(initialCollectionName);
-    }
-    catch (IOException e)
-    {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
 
   @Override

@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.process;
+package de.tautenhahn.collection.generic.process;
 
 import static spark.Spark.before;
 import static spark.Spark.exception;
@@ -117,7 +117,7 @@ public class RestServer
     });
   }
 
-  private SubmissionData submit(Request req, Response res)
+  private SubmissionResult submit(Request req, Response res)
   {
     Gson gson = new GsonBuilder().create();
     DescribedObject object = gson.fromJson(req.body(), DescribedObject.class);

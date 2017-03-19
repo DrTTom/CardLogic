@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.process;
+package de.tautenhahn.collection.generic.process;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;

@@ -17,6 +17,11 @@ import de.tautenhahn.collection.generic.data.Year;
 public class MakerSignObject extends DescribedObjectInterpreter
 {
 
+  public MakerSignObject()
+  {
+    super("makerSign");
+  }
+
   private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
   {

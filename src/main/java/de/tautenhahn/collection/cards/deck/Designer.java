@@ -10,7 +10,7 @@ public class Designer extends FreeText
 
   public Designer()
   {
-    super("designer");
+    super("designer", Flag.OPTIONAL);
   }
 
   @Override

@@ -16,6 +16,11 @@ import de.tautenhahn.collection.generic.data.Year;
 public class TaxStampObject extends DescribedObjectInterpreter
 {
 
+  public TaxStampObject()
+  {
+    super("taxStamp");
+  }
+
   private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
   {

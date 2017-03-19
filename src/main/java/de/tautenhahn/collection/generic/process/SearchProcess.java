@@ -1,19 +1,18 @@
-package de.tautenhahn.collection.process;
+package de.tautenhahn.collection.generic.process;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.AttributeTranslator;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Similarity;
 import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.persistence.PersistenceChangeListener;
 
 
 /**
@@ -25,7 +24,7 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
  *
  * @author TT
  */
-public class SearchProcess
+public class SearchProcess implements PersistenceChangeListener
 {
 
   private static final Persistence PERSISTENCE = ApplicationContext.getInstance().getPersistence();
@@ -43,6 +42,7 @@ public class SearchProcess
   {
     this.type = type;
     interpreter = ApplicationContext.getInstance().getInterpreter(type);
+    PERSISTENCE.addListener(this);
   }
 
   /**
@@ -80,7 +80,7 @@ public class SearchProcess
    */
   private SearchResult execute(Map<String, String> parameters, String primKey, boolean checkStrict)
   {
-    DescribedObject searchMask = translateInput(parameters);
+    DescribedObject searchMask = interpreter.createObject(null, parameters);
 
     Stream<DescribedObject> candidates;
     synchronized (this)
@@ -99,24 +99,6 @@ public class SearchProcess
     computeSearchResults(result, candidates, searchMask);
 
     return result;
-  }
-
-  private DescribedObject translateInput(Map<String, String> parameters)
-  {
-    Map<String, String> attribs = new HashMap<>();
-
-    for ( String key : interpreter.getSupportedAttributes() )
-    {
-      String value = parameters.get(key);
-      if (value == null)
-      {
-        continue;
-      }
-      AttributeInterpreter ai = interpreter.getAttributeInterpreter(key);
-      attribs.put(key, ai instanceof AttributeTranslator ? ((AttributeTranslator)ai).toKey(value) : value);
-    }
-
-    return new DescribedObject(type, null, attribs);
   }
 
   private void computeSearchResults(SearchResult result,
@@ -182,4 +164,12 @@ public class SearchProcess
     return lastSearch.entrySet().stream().allMatch(e -> e.getValue().equals(params.get(e.getKey())));
   }
 
+  @Override
+  public void onChange(String type)
+  {
+    synchronized (this)
+    {
+      lastCandidates = null;
+    }
+  }
 }

@@ -48,10 +48,13 @@ public class WorkspacePersistence implements Persistence
 
   private Path collectionBaseDir;
 
+  private final List<PersistenceChangeListener> listeners = new ArrayList<>();
+
   @Override
   public void store(DescribedObject item)
   {
     getTypeMap(item.getType()).put(item.getPrimKey(), item);
+    listeners.forEach(l -> l.onChange(item.getType()));
   }
 
   @Override
@@ -111,6 +114,7 @@ public class WorkspacePersistence implements Persistence
         importGson(reader);
       }
     }
+    listeners.forEach(l -> l.onChange(null));
   }
 
   private int importGson(Reader reader) throws IOException
@@ -190,7 +194,7 @@ public class WorkspacePersistence implements Persistence
   public void delete(String type, String name)
   {
     getTypeMap(type).remove(name);
-
+    listeners.forEach(l -> l.onChange(type));
   }
 
   @Override
@@ -356,4 +360,12 @@ public class WorkspacePersistence implements Persistence
   {
     return Files.exists(collectionBaseDir.resolve(ref));
   }
+
+  @Override
+  public void addListener(PersistenceChangeListener listener)
+  {
+    listeners.add(listener);
+  }
+
+
 }

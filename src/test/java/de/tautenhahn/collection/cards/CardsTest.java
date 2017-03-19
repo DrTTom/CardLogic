@@ -29,9 +29,11 @@ import de.tautenhahn.collection.generic.data.Question;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
-import de.tautenhahn.collection.process.ProcessScheduler;
-import de.tautenhahn.collection.process.SearchProcess;
-import de.tautenhahn.collection.process.SearchResult;
+import de.tautenhahn.collection.generic.process.ProcessScheduler;
+import de.tautenhahn.collection.generic.process.SearchProcess;
+import de.tautenhahn.collection.generic.process.SearchResult;
+import de.tautenhahn.collection.generic.process.SubmissionResult;
+import de.tautenhahn.collection.generic.process.SubmitProcess;
 
 
 /**
@@ -73,7 +75,8 @@ public class CardsTest
   @BeforeClass
   public static void setupStatic() throws IOException
   {
-    CardApplicationContext.register("testingCards");
+    CardApplicationContext.register();
+    ApplicationContext.getInstance().getPersistence().init("testingCards");
     try (InputStream ins = CardsTest.class.getResourceAsStream("/example.zip"))
     {
       ((WorkspacePersistence)ApplicationContext.getInstance().getPersistence()).importZip(ins);
@@ -135,7 +138,7 @@ public class CardsTest
   }
 
   /**
-   * Asserts that search process filters results, adapts option values and reports error. Note that error
+   * Asserts that search process filters results, adapts option values and reports errors. Note that error
    * reporting is for information only, process still works even if search criteria contain errors.
    * 
    * @throws Exception
@@ -159,6 +162,82 @@ public class CardsTest
 
     result = systemUnderTest.search(Collections.singletonMap("suits", "marsianisch"));
     assertThat(getQuestion(result, "suits").getProblem(), is("msg.error.invalidOption"));
+  }
+
+  /**
+   * Asserts that submission process creates new object which is returned with next search. Furthermore, make
+   * sure translated attributes are filled correctly.
+   */
+  @Test
+  public void submitPositive() throws Exception
+  {
+
+    DescribedObject newDeck = createValidDeck();
+
+    SubmissionResult result = doSubmit(newDeck, false, true);
+    assertThat("created primary key", result.getPrimKey(), not(nullValue()));
+    DescribedObject stored = ApplicationContext.getInstance().getPersistence().find("deck",
+                                                                                    result.getPrimKey());
+    assertThat(stored.getAttributes().get("pattern"), is("halle"));
+  }
+
+  /**
+   * Asserts that submission process aborts with error message in data is inconsistent.
+   */
+  @Test
+  public void submitInconsistentData() throws Exception
+  {
+    DescribedObject newDeck = createValidDeck();
+    newDeck.getAttributes().put("bought", "1417");
+    SubmissionResult result = doSubmit(newDeck, false, false);
+    assertThat("created primary key", result.getPrimKey(), nullValue());
+  }
+
+  /**
+   * Asserts that submission process stores inconsistent data if forced.
+   */
+  @Test
+  public void submitForce() throws Exception
+  {
+    DescribedObject newDeck = createValidDeck();
+    newDeck.getAttributes().put("bought", "1417");
+    newDeck.getAttributes().remove("format");
+    SubmissionResult result = doSubmit(newDeck, true, true);
+    assertThat("created primary key", result.getPrimKey(), not(nullValue()));
+  }
+
+  private SubmissionResult doSubmit(DescribedObject newDeck, boolean force, boolean expectSuccess)
+  {
+    SubmitProcess systemUnderTest = ProcessScheduler.getInstance().getSubmission("deck");
+    SearchProcess search = ProcessScheduler.getInstance().getSearch("deck");
+    SearchResult before = search.search(newDeck.getAttributes());
+    assertThat(before.getNumberMatching(), is(0));
+
+    SubmissionResult result = systemUnderTest.submit(newDeck, force);
+    assertThat("done (" + result.getStatus() + ")", result.isDone(), is(expectSuccess));
+
+
+    SearchResult after = search.search(newDeck.getAttributes());
+    assertThat(after.getNumberMatching(), is(expectSuccess ? 1 : 0));
+    assertThat(after.getNumberTotal(), is(before.getNumberTotal() + (expectSuccess ? 1 : 0)));
+    return result;
+  }
+
+  private DescribedObject createValidDeck()
+  {
+    DescribedObject newDeck = new DescribedObject("deck", null);
+    newDeck.getAttributes().put("suits", "deutsch");
+    newDeck.getAttributes().put("pattern", "Hallisches Bild");
+    newDeck.getAttributes().put("format", "35x105");
+    newDeck.getAttributes().put("specialMeasure", "12x19");
+    newDeck.getAttributes().put("index", "7-10UOK");
+    newDeck.getAttributes().put("numIndex", "4");
+    newDeck.getAttributes().put("numberCards", "32");
+    newDeck.getAttributes().put("name", "TestDeck");
+    newDeck.getAttributes().put("condition", "ungespielt");
+    newDeck.getAttributes().put("bought", "1998");
+    newDeck.getAttributes().put("location", "Vitrine");
+    return newDeck;
   }
 
   private Question getQuestion(SearchResult result, String paramName) throws AssertionError
