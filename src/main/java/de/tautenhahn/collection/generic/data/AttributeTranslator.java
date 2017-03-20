@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data;
 
+import de.tautenhahn.collection.generic.persistence.PersistenceChangeListener;
+
+
 /**
  * Indicates that an object is able to translate between internal data values and display values. In most
  * cases, it matches primKey and name values.
@@ -24,6 +27,9 @@ public interface AttributeTranslator
 
   /**
    * Refreshes any internally cached translation map.
+   * 
+   * @deprecated use {@link PersistenceChangeListener} instead!
    */
+  @Deprecated
   void refresh();
 }

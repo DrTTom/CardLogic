@@ -23,6 +23,12 @@ public class Year extends AttributeInterpreter
     return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
   }
 
+
+  protected void addNotBefore(String... attributeName)
+  {
+    // TODO
+  }
+
   /**
    * Returns <code>true</code> if the current value is before the year-typed attribute specified by
    * parameters. If that attribute is not given, return <code>false</code>.

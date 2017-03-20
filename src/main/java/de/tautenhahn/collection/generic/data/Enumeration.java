@@ -3,6 +3,11 @@ package de.tautenhahn.collection.generic.data;
 import java.util.List;
 
 
+/**
+ * Describes an attribute which has a well-defined number of possible values.
+ * 
+ * @author TT
+ */
 public abstract class Enumeration extends AttributeInterpreter
 {
 
@@ -14,6 +19,11 @@ public abstract class Enumeration extends AttributeInterpreter
 
   private final int matchValue;
 
+  /**
+   * Returns the list of legal attribute values as used in questions and front end input.
+   * 
+   * @param context
+   */
   public abstract List<String> getAllowedValues(DescribedObject context);
 
   @Override
