@@ -50,7 +50,7 @@ public class Deck extends DescribedObjectInterpreter
     ATTRIBS.put("refCat", new FreeText("refCat", Flag.OPTIONAL, Flag.SEARCHABLE));
     ATTRIBS.put("printedEarliest", new Year("printedEarliest", Flag.OPTIONAL));
     ATTRIBS.put("printedLatest", new Year("printedLatest", Flag.OPTIONAL));
-    ATTRIBS.put("bought", new Year("bought"));
+    ATTRIBS.put("bought", new Bought());
     ATTRIBS.put("location", new Location());
   }
 

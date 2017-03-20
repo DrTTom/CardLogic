@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.Message;
 import de.tautenhahn.collection.generic.data.Question;
 
 
@@ -23,7 +22,7 @@ public class SearchResult
 
   private List<Question> questions;
 
-  private List<Message> messages;
+  private String message;
 
   private int numberTotal;
 
@@ -62,14 +61,14 @@ public class SearchResult
   }
 
 
-  public List<Message> getMessages()
+  public String getMessage()
   {
-    return messages;
+    return message;
   }
 
-  public void setMessages(List<Message> messages)
+  public void setMessages(String message)
   {
-    this.messages = messages;
+    this.message = message;
   }
 
   public int getNumberTotal()

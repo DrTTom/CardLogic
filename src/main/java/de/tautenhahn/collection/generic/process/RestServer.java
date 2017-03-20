@@ -122,7 +122,7 @@ public class RestServer
     Gson gson = new GsonBuilder().create();
     DescribedObject object = gson.fromJson(req.body(), DescribedObject.class);
 
-    SubmitProcess proc = ProcessScheduler.getInstance().getSubmission(object.getType());
+    SubmissionProcess proc = ProcessScheduler.getInstance().getSubmission(object.getType());
     return proc.submit(object, false);
   }
 

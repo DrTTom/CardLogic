@@ -1,7 +1,5 @@
-1. add translations to search result
 2. refactor search and submission processes to execute search in
    case submission  is not successful
-3. Modify search process to produce messages about illegal fields
 4. add search to support free text fields
 5. integrate image upload
 6. Refactore frontend processes - re-design user stories

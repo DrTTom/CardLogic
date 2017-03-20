@@ -336,9 +336,9 @@ public class WorkspacePersistence implements Persistence
     File target = collectionBaseDir.resolve(relativePath).toFile();
     if (target.getCanonicalPath().startsWith(collectionBaseDir.toFile().getCanonicalPath()))
     {
-      if (!target.getParentFile().exists())
+      if (!target.getParentFile().exists() && !target.getParentFile().mkdirs())
       {
-        target.getParentFile().mkdirs();
+        throw new IOException("Cannot create directory " + target.getParentFile().getAbsolutePath());
       }
       try (OutputStream fos = new FileOutputStream(target))
       {
