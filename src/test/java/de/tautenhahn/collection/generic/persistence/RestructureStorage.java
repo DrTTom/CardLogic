@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,10 +34,11 @@ public class RestructureStorage
     source.init("cards");
     WorkspacePersistence dest = new WorkspacePersistence();
     dest.init("cards_new");
-
-    makerKeys.load(new InputStreamReader(getClass().getResourceAsStream("makerMapping"),
-                                         StandardCharsets.UTF_8));
-
+    try (Reader reader = new InputStreamReader(getClass().getResourceAsStream("makerMapping"),
+                                               StandardCharsets.UTF_8))
+    {
+      makerKeys.load(reader);
+    }
 
     migratePatterns(source, dest);
 
@@ -132,7 +134,7 @@ public class RestructureStorage
         makerSign.getAttributes().put("maker", keyFor(makerSign.getAttributes().get("maker"), makerKeys));
       }
 
-      makerSign.copyTo(toMakerSignKey(key));
+      makerSign = makerSign.copyTo(toMakerSignKey(key));
       if (makerSign.getAttributes().get("image") != null)
       {
         try (InputStream ins = source.find(makerSign.getAttributes().get("image")))
@@ -175,9 +177,11 @@ public class RestructureStorage
 
   private void migratePatterns(Persistence source, Persistence dest) throws IOException
   {
-
-    patternKeys.load(new InputStreamReader(getClass().getResourceAsStream("patternMapping"),
-                                           StandardCharsets.UTF_8));
+    try (Reader reader = new InputStreamReader(getClass().getResourceAsStream("patternMapping"),
+                                               StandardCharsets.UTF_8))
+    {
+      patternKeys.load(reader);
+    }
     for ( String key : source.getKeyValues("pattern") )
     {
       DescribedObject pattern = source.find("pattern", key);

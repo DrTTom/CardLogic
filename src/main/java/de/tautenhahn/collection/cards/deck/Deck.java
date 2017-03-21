@@ -5,26 +5,24 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter.Flag;
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.ImageRef;
+import de.tautenhahn.collection.generic.data.MapBasedDescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Year;
 
 
-public class Deck extends DescribedObjectInterpreter
+/**
+ * Represents a deck of playing cards, the primary object in a playing card collection.
+ * 
+ * @author TT
+ */
+public class Deck extends MapBasedDescribedObjectInterpreter
 {
-
-  public Deck()
-  {
-    super("deck");
-    // TODO Auto-generated constructor stub
-  }
 
   private static final Map<String, AttributeInterpreter> ATTRIBS = new LinkedHashMap<>();
   static
@@ -50,28 +48,22 @@ public class Deck extends DescribedObjectInterpreter
     ATTRIBS.put("refCat", new FreeText("refCat", Flag.OPTIONAL, Flag.SEARCHABLE));
     ATTRIBS.put("printedEarliest", new Year("printedEarliest", Flag.OPTIONAL));
     ATTRIBS.put("printedLatest", new Year("printedLatest", Flag.OPTIONAL));
-    ATTRIBS.put("bought", new Year("bought"));
+    ATTRIBS.put("bought", new Bought());
     ATTRIBS.put("location", new Location());
   }
 
-  @Override
-  public Collection<String> getSupportedAttributes()
+  /**
+   * Creates new instance.
+   */
+  public Deck()
   {
-    return ATTRIBS.keySet();
+    super("deck", ATTRIBS);
   }
 
   @Override
   public Collection<String> getBinaryValuedAttributes()
   {
     return Collections.singletonList("image");
-  }
-
-  @Override
-  public AttributeInterpreter getAttributeInterpreter(String name)
-  {
-    return Optional.ofNullable(ATTRIBS.get(name))
-                   .orElseThrow(() -> new IllegalArgumentException("unsupported attribute " + name));
-
   }
 
   @Override
@@ -85,6 +77,4 @@ public class Deck extends DescribedObjectInterpreter
     }
     return Integer.toString(i);
   }
-
-
 }

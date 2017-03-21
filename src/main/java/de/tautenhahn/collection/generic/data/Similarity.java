@@ -50,6 +50,27 @@ public class Similarity implements Comparable<Similarity>
     return value - o.value;
   }
 
+  @Override
+  public int hashCode()
+  {
+    return value;
+  }
+
+  @Override
+  public boolean equals(Object obj)
+  {
+    if (this == obj)
+    {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass())
+    {
+      return false;
+    }
+    Similarity other = (Similarity)obj;
+    return value == other.value;
+  }
+
   public boolean possiblyEqual()
   {
     return value >= 0;

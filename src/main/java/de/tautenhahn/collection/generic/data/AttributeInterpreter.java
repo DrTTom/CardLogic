@@ -15,23 +15,6 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 public abstract class AttributeInterpreter
 {
 
-  /**
-   * Type to determine display / handling. TODO: replace by subtypes which create questions.
-   */
-  public enum Type
-  {
-    /** free text */
-    TEXT,
-    /** number */
-    NUMERIC,
-    /** list of allowed values taken from persistence, values backed up by objects */
-    FOREIGN_KEY,
-    /** reference to an image to display */
-    IMAGE_REF,
-    /** reference to some file to download */
-    BLOB_REF
-  }
-
   /** makes the super() call easier */
   public enum Flag
   {
@@ -60,16 +43,26 @@ public abstract class AttributeInterpreter
     return name;
   }
 
+  /**
+   * Returns true if value may be omitted.
+   */
   public boolean isOptional()
   {
     return optional;
   }
 
+  /**
+   * Returns true if value should be added to a search index, thus enabling free text search. Otherwise, the
+   * attribute is searchable via its {@link #computeCorrellation(String, String, DescribedObject)} method.
+   */
   public boolean isSearchable()
   {
     return searchable;
   }
 
+  /**
+   * Returns true if for the object this attribute can always be determined with certainty.
+   */
   public boolean isExact()
   {
     return exact;
@@ -99,7 +92,7 @@ public abstract class AttributeInterpreter
   /**
    * Returns a default question for that attribute. Overwrite in case you want a more specific question. Note
    * that an empty String is filled in instead of a missing value because HTML and JavaScript front ends
-   * cannot recognize null values properly.
+   * cannot recognize null values properly and we do not want "undefined" pre-filled into input elements.
    *
    * @param object
    */

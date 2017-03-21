@@ -7,6 +7,11 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
+/**
+ * Format of a deck. Similarity accounts for possible errors in measurement.
+ * 
+ * @author TT
+ */
 public class Format extends AttributeInterpreter
 {
 
@@ -37,7 +42,6 @@ public class Format extends AttributeInterpreter
     {
       return Similarity.NO_STATEMENT;
     }
-
   }
 
   static class Rectangle

@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.Optional;
+
+
 public class Year extends AttributeInterpreter
 {
 
@@ -18,5 +21,35 @@ public class Year extends AttributeInterpreter
   protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
   {
     return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
+  }
+
+
+  protected void addNotBefore(String... attributeName)
+  {
+    // TODO
+  }
+
+  /**
+   * Returns <code>true</code> if the current value is before the year-typed attribute specified by
+   * parameters. If that attribute is not given, return <code>false</code>.
+   * 
+   * @param context
+   * @param attrib
+   */
+  protected boolean isBefore(String value, DescribedObject context, String attrib)
+  {
+    try
+    {
+      int other = Optional.ofNullable(context)
+                          .map(DescribedObject::getAttributes)
+                          .map(a -> a.get(attrib))
+                          .map(v -> Integer.parseInt(v))
+                          .orElse(0);
+      return Integer.parseInt(value) < other;
+    }
+    catch (NumberFormatException e)
+    {
+      return false;
+    }
   }
 }

@@ -1,22 +1,22 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.FreeText;
-import de.tautenhahn.collection.generic.data.Similarity;
 
 
+/**
+ * Designer of a deck, so far only a free text. Possibly use an auxiliary object in case there is enough data
+ * about playing card designers.
+ * 
+ * @author TT
+ */
 public class Designer extends FreeText
 {
 
+  /**
+   * Creates instance.
+   */
   public Designer()
   {
     super("designer", Flag.OPTIONAL);
   }
-
-  @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
-  {
-    return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
-  }
-
 }

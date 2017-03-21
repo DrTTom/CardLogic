@@ -17,6 +17,8 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
+import java.util.Random;
+import java.util.UUID;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -33,7 +35,7 @@ import de.tautenhahn.collection.generic.process.ProcessScheduler;
 import de.tautenhahn.collection.generic.process.SearchProcess;
 import de.tautenhahn.collection.generic.process.SearchResult;
 import de.tautenhahn.collection.generic.process.SubmissionResult;
-import de.tautenhahn.collection.generic.process.SubmitProcess;
+import de.tautenhahn.collection.generic.process.SubmissionProcess;
 
 
 /**
@@ -43,6 +45,8 @@ import de.tautenhahn.collection.generic.process.SubmitProcess;
  */
 public class CardsTest
 {
+
+  private static final Random MEASURE_SOURCE = new Random();
 
   /**
    * Do not require Apache library to remove a directory tree.
@@ -188,7 +192,7 @@ public class CardsTest
   public void submitInconsistentData() throws Exception
   {
     DescribedObject newDeck = createValidDeck();
-    newDeck.getAttributes().put("bought", "1417");
+    newDeck.getAttributes().put("printedEarliest", "2017");
     SubmissionResult result = doSubmit(newDeck, false, false);
     assertThat("created primary key", result.getPrimKey(), nullValue());
   }
@@ -200,15 +204,15 @@ public class CardsTest
   public void submitForce() throws Exception
   {
     DescribedObject newDeck = createValidDeck();
-    newDeck.getAttributes().put("bought", "1417");
-    newDeck.getAttributes().remove("format");
+    newDeck.getAttributes().put("printedEarliest", "2017");
+    newDeck.getAttributes().remove("bought");
     SubmissionResult result = doSubmit(newDeck, true, true);
     assertThat("created primary key", result.getPrimKey(), not(nullValue()));
   }
 
   private SubmissionResult doSubmit(DescribedObject newDeck, boolean force, boolean expectSuccess)
   {
-    SubmitProcess systemUnderTest = ProcessScheduler.getInstance().getSubmission("deck");
+    SubmissionProcess systemUnderTest = ProcessScheduler.getInstance().getSubmission("deck");
     SearchProcess search = ProcessScheduler.getInstance().getSearch("deck");
     SearchResult before = search.search(newDeck.getAttributes());
     assertThat(before.getNumberMatching(), is(0));
@@ -228,12 +232,13 @@ public class CardsTest
     DescribedObject newDeck = new DescribedObject("deck", null);
     newDeck.getAttributes().put("suits", "deutsch");
     newDeck.getAttributes().put("pattern", "Hallisches Bild");
-    newDeck.getAttributes().put("format", "35x105");
-    newDeck.getAttributes().put("specialMeasure", "12x19");
+    newDeck.getAttributes()
+           .put("format", (10 + MEASURE_SOURCE.nextInt(100)) + "x" + (50 + MEASURE_SOURCE.nextInt(200)));
+    newDeck.getAttributes().put("specialMeasure", "12x" + (10 + MEASURE_SOURCE.nextInt(40)));
     newDeck.getAttributes().put("index", "7-10UOK");
     newDeck.getAttributes().put("numIndex", "4");
     newDeck.getAttributes().put("numberCards", "32");
-    newDeck.getAttributes().put("name", "TestDeck");
+    newDeck.getAttributes().put("name", "TestDeck#" + UUID.randomUUID());
     newDeck.getAttributes().put("condition", "ungespielt");
     newDeck.getAttributes().put("bought", "1998");
     newDeck.getAttributes().put("location", "Vitrine");
