@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * Generic handling of enums bound by one foreign key restriction.
- * 
+ *
  * @author TT
  */
 public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
@@ -36,14 +36,6 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     return result;
   }
 
-  @Override
-  public void refresh()
-  {
-    super.refresh();
-    foreignKeyByPrimKey.clear();
-    setupForeignKey();
-  }
-
   private void setupForeignKey()
   {
     for ( String key : persistence.getKeyValues(getName()) )
@@ -67,5 +59,15 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
       return null;
     }
     return "msg.error.optionMismatches." + foreignKey;
+  }
+
+  @Override
+  public void onChange(String type)
+  {
+    super.onChange(type);
+    if (getName().equals(foreignKey) || "*".equals(type))
+    {
+      setupForeignKey();
+    }
   }
 }

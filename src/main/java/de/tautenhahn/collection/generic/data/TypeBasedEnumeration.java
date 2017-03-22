@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.persistence.PersistenceChangeListener;
 
 
 /**
@@ -15,7 +16,8 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
  *
  * @author TT
  */
-public abstract class TypeBasedEnumeration extends Enumeration implements AttributeTranslator
+public abstract class TypeBasedEnumeration extends Enumeration
+  implements AttributeTranslator, PersistenceChangeListener
 {
 
   protected Persistence persistence;
@@ -28,6 +30,7 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
   {
     super(name, matchValue, flags);
     persistence = ApplicationContext.getInstance().getPersistence();
+    persistence.addListener(this);
     setupMaps();
   }
 
@@ -65,14 +68,6 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
     return primKeyByName.containsKey(value) ? null : "msg.error.invalidOption";
   }
 
-  @Override
-  public void refresh()
-  {
-    primKeyByName.clear();
-    nameByPrimKey.clear();
-    setupMaps();
-  }
-
   private void setupMaps()
   {
     for ( String key : persistence.getKeyValues(getName()) )
@@ -82,6 +77,15 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Attrib
                             .orElse(obj.getPrimKey());
       primKeyByName.put(name, obj.getPrimKey()); // TODO: handle alternative names here as well
       nameByPrimKey.put(obj.getPrimKey(), name);
+    }
+  }
+
+  @Override
+  public void onChange(String type)
+  {
+    if (getName().equals(type) || "*".equals(type))
+    {
+      setupMaps();
     }
   }
 

@@ -1,5 +1,6 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class DescribedObject
 
   /**
    * Creates instance.
-   * 
+   *
    * @param type
    * @param primKey
    * @param attributes
@@ -40,7 +41,7 @@ public class DescribedObject
 
   /**
    * Creates instance.
-   * 
+   *
    * @param type
    * @param primKey
    */
@@ -72,17 +73,5 @@ public class DescribedObject
   public Map<String, String> getAttributes()
   {
     return attributes;
-  }
-
-  /**
-   * Creates a new object with different key but same attributes.
-   * 
-   * @param key
-   */
-  public DescribedObject copyTo(String key)
-  {
-    DescribedObject result = new DescribedObject(type, key);
-    result.getAttributes().putAll(attributes);
-    return result;
   }
 }

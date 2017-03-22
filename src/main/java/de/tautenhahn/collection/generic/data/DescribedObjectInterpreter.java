@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 
 
 /**
- * Information about supported features of certain type of {@link DescribedObject}.
+ * Information about supported features of certain type of {@link DescribedObject}. Instances must be
+ * thread-safe and state-less.
  *
  * @author TT
  */
@@ -20,7 +21,7 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Creates new instance.
-   * 
+   *
    * @param type
    */
   protected DescribedObjectInterpreter(String type)
@@ -67,7 +68,7 @@ public abstract class DescribedObjectInterpreter
    * value is already set, the value must occur in the allowed values even if false.
    * <li>contain messages in case there is a problem with the pre-set value.
    * </ul>
-   * 
+   *
    * @param context
    */
   public List<Question> getQuestions(DescribedObject context, boolean reportMissingValues)
@@ -97,7 +98,7 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Returns a primary key value which is not used so far and suitable for given object.
-   * 
+   *
    * @param candidate
    */
   public String proposeNewPrimKey(DescribedObject candidate)
@@ -107,7 +108,7 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Creates an object with given values.
-   * 
+   *
    * @param primKey
    * @param parameters contains translations for some technical key values
    */

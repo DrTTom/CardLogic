@@ -106,7 +106,8 @@ public class RestructureStorage
       DescribedObject taxStamp = source.find("taxStamp", key);
       String authority = key.startsWith("Deu") ? "Deutsches Reich" : "Österreich";
       taxStamp.getAttributes().put("issuer", authority);
-      taxStamp = taxStamp.copyTo(toTaxStampKey(key));
+      taxStamp = new DescribedObject(taxStamp.getType(), toTaxStampKey(key),
+                                     new HashMap<>(taxStamp.getAttributes()));
       taxStamp.getAttributes().put("name",
                                    authority + " " + taxStamp.getAttributes().get("from") + "-"
                                            + taxStamp.getAttributes().get("to"));
@@ -134,7 +135,8 @@ public class RestructureStorage
         makerSign.getAttributes().put("maker", keyFor(makerSign.getAttributes().get("maker"), makerKeys));
       }
 
-      makerSign = makerSign.copyTo(toMakerSignKey(key));
+      makerSign = new DescribedObject(makerSign.getType(), toMakerSignKey(key),
+                                      new HashMap<>(makerSign.getAttributes()));
       if (makerSign.getAttributes().get("image") != null)
       {
         try (InputStream ins = source.find(makerSign.getAttributes().get("image")))
@@ -170,7 +172,8 @@ public class RestructureStorage
         name = key;
       }
       maker.getAttributes().put("name", name);
-      maker = maker.copyTo(keyFor(key, makerKeys));
+      maker = new DescribedObject(maker.getType(), keyFor(key, makerKeys),
+                                  new HashMap<>(maker.getAttributes()));
       dest.store(maker);
     }
   }
@@ -186,7 +189,8 @@ public class RestructureStorage
     {
       DescribedObject pattern = source.find("pattern", key);
       pattern.getAttributes().put(DescribedObject.NAME_KEY, pattern.getPrimKey());
-      pattern = pattern.copyTo(keyFor(pattern.getPrimKey(), patternKeys));
+      pattern = new DescribedObject(pattern.getType(), keyFor(pattern.getPrimKey(), patternKeys),
+                                    new HashMap<>(pattern.getAttributes()));
       String imgRef = pattern.getAttributes().get("image");
       if (imgRef != null)
       {

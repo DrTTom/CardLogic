@@ -2,49 +2,30 @@ package de.tautenhahn.collection.cards.auxobjects;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 import de.tautenhahn.collection.cards.deck.Suits;
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
-import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.ImageRef;
+import de.tautenhahn.collection.generic.data.MapBasedDescribedObjectInterpreter;
 
 
-public class PatternObject extends DescribedObjectInterpreter
+/**
+ * Patterns are stored in persistence, name and primary key are i
+ *
+ * @author tautenhahn
+ */
+public class PatternObject extends MapBasedDescribedObjectInterpreter
 {
 
 
   public PatternObject()
   {
-    super("pattern");
-  }
-
-  private static final Map<String, AttributeInterpreter> ATTRIBS = new HashMap<>();
-  static
-  {
-    ATTRIBS.put("image", new ImageRef());
-    ATTRIBS.put("suits", new Suits());
-  }
-
-  @Override
-  public Collection<String> getSupportedAttributes()
-  {
-    return ATTRIBS.keySet();
+    super("pattern", new FreeText("name"), new ImageRef(), new Suits());
   }
 
   @Override
   public Collection<String> getBinaryValuedAttributes()
   {
     return Collections.singletonList("image");
-  }
-
-  @Override
-  public AttributeInterpreter getAttributeInterpreter(String name)
-  {
-    return Optional.ofNullable(ATTRIBS.get(name))
-                   .orElseThrow(() -> new IllegalArgumentException("unsupported attribute " + name));
-
   }
 }

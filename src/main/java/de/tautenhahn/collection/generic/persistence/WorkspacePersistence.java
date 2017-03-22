@@ -114,7 +114,6 @@ public class WorkspacePersistence implements Persistence
         importGson(reader);
       }
     }
-    listeners.forEach(l -> l.onChange(null));
   }
 
   private int importGson(Reader reader) throws IOException
@@ -126,11 +125,13 @@ public class WorkspacePersistence implements Persistence
       jr.beginArray();
       while (jr.hasNext())
       {
-        store(gson.fromJson(jr, DescribedObject.class));
+        DescribedObject item = gson.fromJson(jr, DescribedObject.class);
+        getTypeMap(item.getType()).put(item.getPrimKey(), item);
         result++;
       }
       jr.endArray();
     }
+    listeners.forEach(l -> l.onChange("*"));
     return result;
   }
 
@@ -367,5 +368,10 @@ public class WorkspacePersistence implements Persistence
     listeners.add(listener);
   }
 
-
+  @Override
+  public String toString()
+  {
+    return "WorksapcePesistence[" + collectionBaseDir.getFileName() + ", loaded " + objects.size()
+           + " types]";
+  }
 }
