@@ -34,13 +34,13 @@ import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import de.tautenhahn.collection.generic.process.ProcessScheduler;
 import de.tautenhahn.collection.generic.process.SearchProcess;
 import de.tautenhahn.collection.generic.process.SearchResult;
-import de.tautenhahn.collection.generic.process.SubmissionResult;
 import de.tautenhahn.collection.generic.process.SubmissionProcess;
+import de.tautenhahn.collection.generic.process.SubmissionResult;
 
 
 /**
  * Base class for testing with card application context and test data.
- * 
+ *
  * @author TT
  */
 public class CardsTest
@@ -73,7 +73,7 @@ public class CardsTest
 
   /**
    * Provides a context and some clean test data.
-   * 
+   *
    * @throws IOException
    */
   @BeforeClass
@@ -90,7 +90,7 @@ public class CardsTest
 
   /**
    * Removes workspace content provided by {@link #setupStatic()}.
-   * 
+   *
    * @throws IOException
    */
   @AfterClass
@@ -102,7 +102,7 @@ public class CardsTest
 
   /**
    * Assert that {@link TypeBasedEnumeration} can provide allowed values and translations.
-   * 
+   *
    * @throws IOException
    */
   @Test
@@ -118,7 +118,7 @@ public class CardsTest
   /**
    * Assert that {@link TypeBasedEnumWithForeignKey} provides allowed values in accordance with the respective
    * context.
-   * 
+   *
    * @throws IOException
    */
   @Test
@@ -144,9 +144,10 @@ public class CardsTest
   /**
    * Asserts that search process filters results, adapts option values and reports errors. Note that error
    * reporting is for information only, process still works even if search criteria contain errors.
-   * 
+   *
    * @throws Exception
    */
+  @SuppressWarnings("boxing")
   @Test
   public void search() throws Exception
   {
@@ -192,7 +193,7 @@ public class CardsTest
   public void submitInconsistentData() throws Exception
   {
     DescribedObject newDeck = createValidDeck();
-    newDeck.getAttributes().put("printedEarliest", "2017");
+    newDeck.getAttributes().put("printedLatest", "2017");
     SubmissionResult result = doSubmit(newDeck, false, false);
     assertThat("created primary key", result.getPrimKey(), nullValue());
   }
@@ -210,6 +211,7 @@ public class CardsTest
     assertThat("created primary key", result.getPrimKey(), not(nullValue()));
   }
 
+  @SuppressWarnings("boxing")
   private SubmissionResult doSubmit(DescribedObject newDeck, boolean force, boolean expectSuccess)
   {
     SubmissionProcess systemUnderTest = ProcessScheduler.getInstance().getSubmission("deck");
