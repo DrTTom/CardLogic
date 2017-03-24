@@ -60,7 +60,7 @@ public class SearchProcess implements PersistenceChangeListener
 
   /**
    * Executes a search interpreting the given data as object description. All possible errors are reported.
-   * 
+   *
    * @param primKey optional, is returned with the result.
    * @param parameters
    */
@@ -71,16 +71,15 @@ public class SearchProcess implements PersistenceChangeListener
 
 
   /**
-   * Do the search. If too expensive, maybe cache old similarity values as well. However, current
+   * Actually does the search. If too expensive, maybe cache old similarity values as well. However, current
    * implementation does not require the similarity to be additive.
-   * 
+   *
    * @param parameters attribute values to match
    * @param reportMissingValues true to create problem messages for missing mandatory values
-   * @return
    */
   private SearchResult execute(Map<String, String> parameters, String primKey, boolean checkStrict)
   {
-    DescribedObject searchMask = interpreter.createObject(null, parameters);
+    DescribedObject searchMask = interpreter.createObject(primKey, parameters);
 
     Stream<DescribedObject> candidates;
     synchronized (this)
@@ -95,7 +94,7 @@ public class SearchProcess implements PersistenceChangeListener
       }
     }
 
-    SearchResult result = createSearchQuestions(searchMask);
+    SearchResult result = createSearchQuestions(searchMask, checkStrict);
     computeSearchResults(result, candidates, searchMask);
 
     return result;
@@ -148,12 +147,11 @@ public class SearchProcess implements PersistenceChangeListener
                });
   }
 
-  private SearchResult createSearchQuestions(DescribedObject questionContext)
+  private SearchResult createSearchQuestions(DescribedObject questionContext, boolean checkStrict)
   {
-    SearchResult result = new SearchResult();
-    result.setType(type);
+    SearchResult result = new SearchResult(type, questionContext.getPrimKey(), checkStrict);
     result.setNumberTotal(PERSISTENCE.getNumberItems(type));
-    result.setQuestions(new ArrayList<>(interpreter.getQuestions(questionContext, false)));
+    result.setQuestions(new ArrayList<>(interpreter.getQuestions(questionContext, checkStrict)));
     result.getQuestions().removeIf(q -> "illustrate".equals(q.getForm()));
 
     return result;
@@ -165,7 +163,7 @@ public class SearchProcess implements PersistenceChangeListener
   }
 
   @Override
-  public void onChange(String type)
+  public void onChange(String changedType)
   {
     synchronized (this)
     {

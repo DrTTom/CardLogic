@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.persistence;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -64,6 +65,8 @@ public class TestWorkspaceStorage
     {
       assertThat(ins.available(), is(content.length));
     }
+    systemUnderTest.delete("cryptoUrl", "primary");
+    assertThat(systemUnderTest.find("cryptoUrl", "primary"), nullValue());
   }
 
   /**

@@ -10,15 +10,20 @@ import de.tautenhahn.collection.generic.data.Question;
 
 
 /**
- * Contains all data created by a search process. Note that search will also be active during submission or
- * modification of objects.
+ * Contains all data created by a search process. Note that search will be active whenever data is entered,
+ * namely
+ * <ul>
+ * <li>just browsing through the collection</li>
+ * <li>submitting a new object</li>
+ * <li>editing an existing object</li>
+ * </ul>
  *
  * @author TT
  */
 public class SearchResult
 {
 
-  private String type;
+  private final String type;
 
   private List<Question> questions;
 
@@ -34,20 +39,33 @@ public class SearchResult
 
   private Map<String, Map<String, String>> translations;
 
+  private final String primKeyOfEditedObject;
+
+  private final boolean forSubmit;
+
+
+  /**
+   * Creates new object setting some context data which allows state-free front ends.
+   *
+   * @param type type of described objects(s)
+   * @param primKeyOfEditedObject optional, if specified primKey value of the existing object which is
+   *          currently edited.
+   * @param forSubmit true in case user already requested submitting of entered data but had to do some
+   *          corrections before.
+   */
+  public SearchResult(String type, String primKeyOfEditedObject, boolean forSubmit)
+  {
+    this.type = type;
+    this.primKeyOfEditedObject = primKeyOfEditedObject;
+    this.forSubmit = forSubmit;
+  }
+
   /**
    * Returns type of searched objects.
    */
   public String getType()
   {
     return type;
-  }
-
-  /**
-   * @see #getType()
-   */
-  public void setType(String type)
-  {
-    this.type = type;
   }
 
   public List<Question> getQuestions()
@@ -118,6 +136,13 @@ public class SearchResult
     return translations;
   }
 
+  /**
+   * Declares how a String can be translated into human.readable text.
+   *
+   * @param attrName
+   * @param orig
+   * @param translation
+   */
   public void addTranslation(String attrName, String orig, String translation)
   {
     if (translations == null)
@@ -131,6 +156,24 @@ public class SearchResult
       translations.put(attrName, target);
     }
     target.put(orig, translation);
+  }
+
+  /**
+   * Returns primKey if input was done for editing an existing object, null if input was for other purpose
+   * (general search, creation of new objects).
+   */
+  public String getPrimKeyOfEditedObject()
+  {
+    return primKeyOfEditedObject;
+  }
+
+  /**
+   * Returns true if user is about to submit a new or changed object. More precisely, the user requested a
+   * submit but it failed and currently the user is correcting some data.
+   */
+  public boolean isForSubmit()
+  {
+    return forSubmit;
   }
 
 }

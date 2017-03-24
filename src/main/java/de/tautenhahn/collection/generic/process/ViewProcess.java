@@ -13,6 +13,13 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
 public class ViewProcess
 {
 
+  /**
+   * Maybe return all corresponding aux objects together with the main object?
+   * 
+   * @param type
+   * @param key
+   * @return
+   */
   public DescribedObject getData(String type, String key)
   {
     return ApplicationContext.getInstance().getPersistence().find(type, key);

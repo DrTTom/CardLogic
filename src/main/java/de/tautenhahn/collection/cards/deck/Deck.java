@@ -2,7 +2,6 @@ package de.tautenhahn.collection.cards.deck;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter.Flag;
@@ -10,6 +9,7 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.ImageRef;
 import de.tautenhahn.collection.generic.data.MapBasedDescribedObjectInterpreter;
+import de.tautenhahn.collection.generic.persistence.Persistence;
 
 
 /**
@@ -45,9 +45,9 @@ public class Deck extends MapBasedDescribedObjectInterpreter
   @Override
   public String proposeNewPrimKey(DescribedObject candidate)
   {
-    List<String> existingKeys = ApplicationContext.getInstance().getPersistence().getKeyValues("deck");
+    Persistence persistence = ApplicationContext.getInstance().getPersistence();
     int i = 1;
-    while (existingKeys.contains(Integer.toString(i)))
+    while (persistence.keyExists("deck", Integer.toString(i)))
     {
       i++;
     }

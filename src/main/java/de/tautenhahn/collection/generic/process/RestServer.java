@@ -15,12 +15,14 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import spark.Request;
 import spark.Response;
 import spark.ResponseTransformer;
@@ -58,63 +60,73 @@ public class RestServer
     // no other instances allowed
   }
 
+  /**
+   * Stops the server
+   */
   public void stop()
   {
     Spark.stop();
   }
 
+  /**
+   * Sets the supported routes.
+   */
   public void start()
   {
     staticFiles.location("frontend");
 
     allowCrossSiteCalls();
 
+    get("/search/:type", (req, resp) -> search(req, resp, false), new JsonTransformer());
+    get("/view/:type/:key", this::view, new JsonTransformer());
+    get("/download/*", this::download);
+
+    get("/check/:type", (req, resp) -> search(req, resp, false), new JsonTransformer());
     post("/submit", this::submit, new JsonTransformer());
 
-    get("/view/:type/:key",
-        (req, response) -> ProcessScheduler.getInstance().getView().getData(req.params(":type"),
-                                                                            req.params(":key")),
-        new JsonTransformer());
-
-    get("/search/:type", this::search, new JsonTransformer());
+    post("/import/:collectionName", this::importCollection);
+    get("/export/", this::export);
 
     // proof of concept for file upload:
-    get("/upload", (request, response) -> {
-      return "<html><body>" + "<form method='post' enctype='multipart/form-data' action='/upload/someRef' >"
+    get("/importDefault", (request, response) -> {
+      return "<html><body>"
+             + "<form method='post' enctype='multipart/form-data' action='/import/testImport' >"
              + "<input type='file' name='uploaded_file'>" + "<button>Upload file</button>" + "</form>"
-             + "<img src='http://localhost:4567/download/deck/0/88.jpg' alt='http://localhost:4567/download/deck/0/88.jpg'>"
              + "</body></html>";
-    });
-    post("/upload/:ref", (request, response) -> {
-      request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-      byte[] buf = new byte[100];
-      try (InputStream is = request.raw().getPart("uploaded_file").getInputStream())
-      {
-        is.read(buf);
-      }
-      return "File uploaded at " + request.params(":ref") + " started with " + new String(buf);
-    });
-
-    // proof of concept for file download:
-    get("/download/*", (request, response) -> {
-      StringBuffer refb = new StringBuffer();
-      Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
-      String ref = refb.substring(1);
-
-      response.header("Content-Type", "application/octet-stream");
-      response.header("Content-Disposition", "attachment");
-      try (OutputStream dest = response.raw().getOutputStream();
-        InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
-      {
-        copy(src, dest);
-        return null;
-      }
     });
 
     // exception handling during development
     exception(Exception.class, (exception, request, response) -> {
       exception.printStackTrace();
     });
+  }
+
+  private Object download(Request request, Response response) throws IOException
+  {
+
+    StringBuffer refb = new StringBuffer();
+    Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
+    String ref = refb.substring(1);
+    try (InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
+    {
+      return doDownload(src, response);
+    }
+  }
+
+  private Object doDownload(InputStream src, Response response) throws IOException
+  {
+    response.header("Content-Type", "application/octet-stream");
+    response.header("Content-Disposition", "attachment");
+    try (OutputStream dest = response.raw().getOutputStream();)
+    {
+      copy(src, dest);
+      return null;
+    }
+  }
+
+  private DescribedObject view(Request req, Response res)
+  {
+    return ProcessScheduler.getInstance().getView().getData(req.params(":type"), req.params(":key"));
   }
 
   private SubmissionResult submit(Request req, Response res)
@@ -124,6 +136,33 @@ public class RestServer
 
     SubmissionProcess proc = ProcessScheduler.getInstance().getSubmission(object.getType());
     return proc.submit(object, false);
+  }
+
+  private String importCollection(Request req, Response res) throws IOException, ServletException
+  {
+    WorkspacePersistence persistence = (WorkspacePersistence)ApplicationContext.getInstance()
+                                                                               .getPersistence();
+    persistence.close();
+    persistence.init(req.params("collectionName"));
+    req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+    try (InputStream ins = req.raw().getPart("uploaded_file").getInputStream())
+    {
+      persistence.importZip(ins);
+    }
+    return "OK";
+  }
+
+  private String export(Request req, Response res) throws IOException
+  {
+    WorkspacePersistence persistence = (WorkspacePersistence)ApplicationContext.getInstance()
+                                                                               .getPersistence();
+    persistence.close();
+    persistence.init(req.params("collectionName"));
+    try (InputStream ins = req.raw().getInputStream())
+    {
+      persistence.importZip(ins);
+    }
+    return "OK";
   }
 
   private void allowCrossSiteCalls()
@@ -155,7 +194,7 @@ public class RestServer
   }
 
 
-  private SearchResult search(Request req, Response res)
+  private SearchResult search(Request req, Response res, boolean strictCheck)
   {
     res.type("text/plain");
     res.header("Content-Type", "application/json; charset=UTF-8");
@@ -163,7 +202,7 @@ public class RestServer
     SearchProcess proc = ProcessScheduler.getInstance().getSearch(type);
     Map<String, String> allParams = new Hashtable<>();
     req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));
-    return proc.search(allParams);
+    return strictCheck ? proc.checkValues("TODO", allParams) : proc.search(allParams);
   }
 
   private static void copy(InputStream src, OutputStream dest) throws IOException

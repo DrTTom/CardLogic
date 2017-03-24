@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.cards;
 
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
@@ -10,6 +11,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +34,7 @@ import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import de.tautenhahn.collection.generic.process.ProcessScheduler;
+import de.tautenhahn.collection.generic.process.RestServer;
 import de.tautenhahn.collection.generic.process.SearchProcess;
 import de.tautenhahn.collection.generic.process.SearchResult;
 import de.tautenhahn.collection.generic.process.SubmissionProcess;
@@ -39,7 +42,8 @@ import de.tautenhahn.collection.generic.process.SubmissionResult;
 
 
 /**
- * Base class for testing with card application context and test data.
+ * Base class for testing with card application context and test data. Tests here may address generic
+ * functionality which works only with some present data.
  *
  * @author TT
  */
@@ -211,6 +215,34 @@ public class CardsTest
     assertThat("created primary key", result.getPrimKey(), not(nullValue()));
   }
 
+  /**
+   * Asserts that basic REST API provides something at most important URLs.
+   *
+   * @throws Exception
+   */
+  @SuppressWarnings("boxing")
+  @Test
+  public void callREST() throws Exception
+  {
+    try
+    {
+      RestServer.getInstance().start();
+      Thread.sleep(500);
+      for ( String url : new String[]{"http://localhost:4567/search/maker",
+                                      "http://localhost:4567/download/deck/e0/77.jpg"} )
+      {
+        try (InputStream ins = (InputStream)new URL(url).getContent())
+        {
+          assertThat(ins.available(), greaterThan(255));
+        }
+      }
+    }
+    finally
+    {
+      RestServer.getInstance().stop();
+    }
+  }
+
   @SuppressWarnings("boxing")
   private SubmissionResult doSubmit(DescribedObject newDeck, boolean force, boolean expectSuccess)
   {
@@ -255,5 +287,4 @@ public class CardsTest
                  .findAny()
                  .orElseThrow(() -> new AssertionError());
   }
-
 }
