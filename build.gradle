@@ -3,10 +3,12 @@ apply plugin: 'application'
 apply plugin: 'eclipse'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
+apply plugin: 'jacoco'
 
 repositories {
   mavenCentral()
 }
+check.dependsOn jacocoTestReport
 
 dependencies {
   compile "com.sparkjava:spark-core:2.5.4"

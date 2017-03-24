@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -157,21 +158,40 @@ public class CardsTest
   {
     SearchProcess systemUnderTest = ProcessScheduler.getInstance().getSearch("deck");
     SearchResult result = systemUnderTest.search(Collections.emptyMap());
-    Question suitQuestion = getQuestion(result, "suits");
+    Question suitQuestion = getQuestion(result.getQuestions(), "suits");
     assertThat(suitQuestion.getAllowedValues(), hasItem("deutsch"));
     int numberTotal = result.getNumberTotal();
     assertThat(result.getNumberPossible(), is(numberTotal));
-    assertThat(getQuestion(result, "pattern").getAllowedValues(), hasItem("Berliner Bild"));
+    assertThat(getQuestion(result.getQuestions(), "pattern").getAllowedValues(), hasItem("Berliner Bild"));
 
     result = systemUnderTest.search(Collections.singletonMap("suits", "deutsch"));
     assertThat(result.getNumberPossible(), lessThan(numberTotal));
-    assertThat(getQuestion(result, "pattern").getAllowedValues(), not(hasItem("Berliner Bild")));
-    assertThat(getQuestion(result, "suits").getProblem(), nullValue());
+    assertThat(getQuestion(result.getQuestions(), "pattern").getAllowedValues(),
+               not(hasItem("Berliner Bild")));
+    assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), nullValue());
     assertThat(result.getTranslations().get("maker").get("Scharff"), is("Walter Scharff"));
 
     result = systemUnderTest.search(Collections.singletonMap("suits", "marsianisch"));
-    assertThat(getQuestion(result, "suits").getProblem(), is("msg.error.invalidOption"));
+    assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), is("msg.error.invalidOption"));
   }
+
+  /**
+   * Asserts that a {@link TypeBasedEnumWithForeignKey} question returns correct error message and contains
+   * the "keep" and "delete" options.
+   */
+  @Test
+  public void foreignKeyViolated()
+  {
+    DescribedObject deck = new DescribedObject("deck", null);
+    deck.getAttributes().put("suits", "deutsch");
+    deck.getAttributes().put("pattern", "Französisches Bild");
+    DescribedObjectInterpreter interpreter = ApplicationContext.getInstance().getInterpreter(deck.getType());
+    Question pq = getQuestion(interpreter.getQuestions(deck, false), "pattern");
+    assertThat(pq.getProblem(), is("msg.error.optionMismatches.suits"));
+    assertThat(pq.getAllowedValues(), hasItem("Französisches Bild"));
+    assertThat(pq.getAllowedValues(), hasItem(""));
+  }
+
 
   /**
    * Asserts that submission process creates new object which is returned with next search. Furthermore, make
@@ -279,12 +299,11 @@ public class CardsTest
     return newDeck;
   }
 
-  private Question getQuestion(SearchResult result, String paramName) throws AssertionError
+  private Question getQuestion(List<Question> questions, String paramName) throws AssertionError
   {
-    return result.getQuestions()
-                 .stream()
-                 .filter(q -> q.getParamName().equals(paramName))
-                 .findAny()
-                 .orElseThrow(() -> new AssertionError());
+    return questions.stream()
+                    .filter(q -> q.getParamName().equals(paramName))
+                    .findAny()
+                    .orElseThrow(() -> new AssertionError());
   }
 }

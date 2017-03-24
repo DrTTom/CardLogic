@@ -3,6 +3,7 @@ package de.tautenhahn.collection.generic.data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -31,7 +32,11 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     String foreignKeyValue = realValue(context.getAttributes().get(foreignKey));
     if (foreignKeyValue != null)
     {
-      result.removeIf(v -> !foreignKeyValue.equals(foreignKeyByPrimKey.get(toKey(v))));
+      String chosenKey = Optional.ofNullable(context.getAttributes().get(getName()))
+                                 .map(this::toKey)
+                                 .orElse(null);
+      result.removeIf(v -> !("".equals(v) || foreignKeyValue.equals(foreignKeyByPrimKey.get(toKey(v)))
+                             || toKey(v).equals(chosenKey)));
     }
     return result;
   }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.persistence.Persistence;
@@ -22,7 +23,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
 
   protected Persistence persistence;
 
-  protected Map<String, String> primKeyByName = new HashMap<>();
+  protected Map<String, String> primKeyByName = new TreeMap<>();
 
   protected Map<String, String> nameByPrimKey = new HashMap<>();
 
@@ -37,7 +38,15 @@ public abstract class TypeBasedEnumeration extends Enumeration
   @Override
   public List<String> getAllowedValues(DescribedObject context)
   {
-    return new ArrayList<>(primKeyByName.keySet());
+    ArrayList<String> result = new ArrayList<>();
+    result.add("");
+    result.addAll(primKeyByName.keySet());
+    Optional.ofNullable(context)
+            .map(o -> o.getAttributes().get(getName()))
+            .map(key -> nameByPrimKey.get(key))
+            .filter(name -> !result.contains(name))
+            .ifPresent(name -> result.add(name));
+    return result;
   }
 
   @Override
