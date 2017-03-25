@@ -4,8 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import de.tautenhahn.collection.generic.ApplicationContext;
 
 
 /**
@@ -86,12 +89,14 @@ public abstract class DescribedObjectInterpreter
     {
       if (reportMissingValues && !ai.isOptional())
       {
-        result.setProblem("msg.error.missingValue");
+        result.setProblem(ApplicationContext.getInstance().getText("msg.error.missingValue"));
       }
     }
     else
     {
-      result.setProblem(ai.check(result.getValue(), context));
+      result.setProblem(Optional.ofNullable(ai.check(result.getValue(), context))
+                                .map(ApplicationContext.getInstance()::getText)
+                                .orElse(null));
     }
     return result;
   }

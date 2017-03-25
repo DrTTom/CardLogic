@@ -54,6 +54,7 @@ public class CardsTest
 
   private static final Random MEASURE_SOURCE = new Random();
 
+
   /**
    * Do not require Apache library to remove a directory tree.
    */
@@ -77,6 +78,8 @@ public class CardsTest
 
   private static DescribedObjectInterpreter deck;
 
+  private static ApplicationContext application;
+
   /**
    * Provides a context and some clean test data.
    *
@@ -86,12 +89,13 @@ public class CardsTest
   public static void setupStatic() throws IOException
   {
     CardApplicationContext.register();
-    ApplicationContext.getInstance().getPersistence().init("testingCards");
+    application = ApplicationContext.getInstance();
+    application.getPersistence().init("testingCards");
     try (InputStream ins = CardsTest.class.getResourceAsStream("/example.zip"))
     {
-      ((WorkspacePersistence)ApplicationContext.getInstance().getPersistence()).importZip(ins);
+      ((WorkspacePersistence)application.getPersistence()).importZip(ins);
     }
-    deck = ApplicationContext.getInstance().getInterpreter("deck");
+    deck = application.getInterpreter("deck");
   }
 
   /**
@@ -177,9 +181,10 @@ public class CardsTest
     params.put("pattern", "Französisches Bild");
 
     result = systemUnderTest.search(params);
-    assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), is("msg.error.invalidOption"));
+    assertThat(getQuestion(result.getQuestions(), "suits").getProblem(),
+               is(application.getText("msg.error.invalidOption")));
     Question pq = getQuestion(result.getQuestions(), "pattern");
-    assertThat(pq.getProblem(), is("msg.error.optionMismatches.suits"));
+    assertThat(pq.getProblem(), is(application.getText("msg.error.optionMismatches.suits")));
     assertThat(pq.getValue(), is("Französisches Bild"));
   }
 
@@ -193,9 +198,9 @@ public class CardsTest
     DescribedObject deck = new DescribedObject("deck", null);
     deck.getAttributes().put("suits", "deutsch");
     deck.getAttributes().put("pattern", "Französisches Bild");
-    DescribedObjectInterpreter interpreter = ApplicationContext.getInstance().getInterpreter(deck.getType());
+    DescribedObjectInterpreter interpreter = application.getInterpreter(deck.getType());
     Question pq = getQuestion(interpreter.getQuestions(deck, false), "pattern");
-    assertThat(pq.getProblem(), is("msg.error.optionMismatches.suits"));
+    assertThat(pq.getProblem(), is(application.getText("msg.error.optionMismatches.suits")));
     assertThat(pq.getValue(), is("Französisches Bild"));
     assertThat(pq.getAllowedValues(), hasItem("Französisches Bild"));
     assertThat(pq.getAllowedValues(), hasItem(""));
@@ -214,8 +219,7 @@ public class CardsTest
 
     SubmissionResult result = doSubmit(newDeck, false, true);
     assertThat("created primary key", result.getPrimKey(), not(nullValue()));
-    DescribedObject stored = ApplicationContext.getInstance().getPersistence().find("deck",
-                                                                                    result.getPrimKey());
+    DescribedObject stored = application.getPersistence().find("deck", result.getPrimKey());
     assertThat(stored.getAttributes().get("pattern"), is("halle"));
   }
 
