@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -116,8 +117,8 @@ public class CardsTest
     TypeBasedEnumeration systemUnderTest = (TypeBasedEnumeration)deck.getAttributeInterpreter("maker");
     assertThat("allowed values", systemUnderTest.getAllowedValues(null), hasItem("Alf Cooke"));
     assertThat("error code", systemUnderTest.check("wrong", null), is("msg.error.invalidOption"));
-    assertThat("name", systemUnderTest.toName("Cooke"), is("Alf Cooke"));
-    assertThat("key", systemUnderTest.toKey("Alf Cooke"), is("Cooke"));
+    assertThat("name", systemUnderTest.toDisplayValue("Cooke"), is("Alf Cooke"));
+    assertThat("key", systemUnderTest.toInternalValue("Alf Cooke"), is("Cooke"));
   }
 
   /**
@@ -171,8 +172,15 @@ public class CardsTest
     assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), nullValue());
     assertThat(result.getTranslations().get("maker").get("Scharff"), is("Walter Scharff"));
 
-    result = systemUnderTest.search(Collections.singletonMap("suits", "marsianisch"));
+    HashMap<String, String> params = new HashMap<>();
+    params.put("suits", "marsianisch");
+    params.put("pattern", "Französisches Bild");
+
+    result = systemUnderTest.search(params);
     assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), is("msg.error.invalidOption"));
+    Question pq = getQuestion(result.getQuestions(), "pattern");
+    assertThat(pq.getProblem(), is("msg.error.optionMismatches.suits"));
+    assertThat(pq.getValue(), is("Französisches Bild"));
   }
 
   /**
@@ -188,6 +196,7 @@ public class CardsTest
     DescribedObjectInterpreter interpreter = ApplicationContext.getInstance().getInterpreter(deck.getType());
     Question pq = getQuestion(interpreter.getQuestions(deck, false), "pattern");
     assertThat(pq.getProblem(), is("msg.error.optionMismatches.suits"));
+    assertThat(pq.getValue(), is("Französisches Bild"));
     assertThat(pq.getAllowedValues(), hasItem("Französisches Bild"));
     assertThat(pq.getAllowedValues(), hasItem(""));
   }

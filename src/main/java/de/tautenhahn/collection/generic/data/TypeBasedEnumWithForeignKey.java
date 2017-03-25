@@ -33,10 +33,11 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     if (foreignKeyValue != null)
     {
       String chosenKey = Optional.ofNullable(context.getAttributes().get(getName()))
-                                 .map(this::toKey)
+                                 .map(this::toInternalValue)
                                  .orElse(null);
-      result.removeIf(v -> !("".equals(v) || foreignKeyValue.equals(foreignKeyByPrimKey.get(toKey(v)))
-                             || toKey(v).equals(chosenKey)));
+      result.removeIf(v -> !("".equals(v)
+                             || foreignKeyValue.equals(foreignKeyByPrimKey.get(toInternalValue(v)))
+                             || toInternalValue(v).equals(chosenKey)));
     }
     return result;
   }

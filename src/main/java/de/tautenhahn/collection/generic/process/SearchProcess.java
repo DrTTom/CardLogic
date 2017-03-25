@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.data.AttributeTranslator;
+import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Similarity;
@@ -136,13 +136,13 @@ public class SearchProcess implements PersistenceChangeListener
     interpreter.getSupportedAttributes()
                .stream()
                .map(name -> interpreter.getAttributeInterpreter(name))
-               .filter(ai -> ai instanceof AttributeTranslator)
+               .filter(ai -> ai instanceof AttributeInterpreter.Translating)
                .forEach(ai -> {
                  String attrName = ai.getName();
-                 String orig = d.getAttributes().get(attrName);
-                 if (orig != null && orig.length() > 0)
+                 String internalValue = d.getAttributes().get(attrName);
+                 if (internalValue != null && internalValue.length() > 0)
                  {
-                   result.addTranslation(attrName, orig, ((AttributeTranslator)ai).toName(orig));
+                   result.addTranslation(attrName, internalValue, ai.toDisplayValue(internalValue));
                  }
                });
   }

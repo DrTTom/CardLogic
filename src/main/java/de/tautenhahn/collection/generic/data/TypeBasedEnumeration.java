@@ -18,7 +18,7 @@ import de.tautenhahn.collection.generic.persistence.PersistenceChangeListener;
  * @author TT
  */
 public abstract class TypeBasedEnumeration extends Enumeration
-  implements AttributeTranslator, PersistenceChangeListener
+  implements PersistenceChangeListener, AttributeInterpreter.Translating
 {
 
   protected Persistence persistence;
@@ -59,16 +59,16 @@ public abstract class TypeBasedEnumeration extends Enumeration
 
 
   @Override
-  public String toName(String primKey)
+  public String toDisplayValue(String primKey)
   {
-    return nameByPrimKey.getOrDefault(primKey, primKey);
+    return Optional.ofNullable(primKey).map(k -> nameByPrimKey.getOrDefault(k, k)).orElse(null);
   }
 
 
   @Override
-  public String toKey(String name)
+  public String toInternalValue(String name)
   {
-    return primKeyByName.getOrDefault(name, name);
+    return Optional.ofNullable(name).map(k -> primKeyByName.getOrDefault(k, k)).orElse(null);
   }
 
   @Override

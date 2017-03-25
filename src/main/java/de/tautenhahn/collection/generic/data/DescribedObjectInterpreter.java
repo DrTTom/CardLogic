@@ -124,7 +124,7 @@ public abstract class DescribedObjectInterpreter
         continue;
       }
       AttributeInterpreter ai = getAttributeInterpreter(key);
-      attribs.put(key, ai instanceof AttributeTranslator ? ((AttributeTranslator)ai).toKey(value) : value);
+      attribs.put(key, ai.toInternalValue(value));
     }
 
     return new DescribedObject(type, primKey, attribs);

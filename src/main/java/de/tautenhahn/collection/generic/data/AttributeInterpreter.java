@@ -15,6 +15,12 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 public abstract class AttributeInterpreter
 {
 
+  /**
+   * Marker interface to indicate that internal and display values may differ.
+   */
+  public interface Translating
+  {}
+
   /** makes the super() call easier */
   public enum Flag
   {
@@ -102,13 +108,34 @@ public abstract class AttributeInterpreter
     Question result = new Question(name, ctx.getText(name + ".question.text"),
                                    ctx.getText(name + ".question.group"));
     result.setHelptext(ctx.getText(name + ".question.help"));
-    result.setValue(Optional.ofNullable(object.getAttributes().get(name)).orElse(""));
+    result.setValue(Optional.ofNullable(toDisplayValue(object.getAttributes().get(name))).orElse(""));
     return result;
   }
 
   protected String realValue(String value)
   {
     return value == null ? null : value.trim().isEmpty() ? null : value;
+  }
+
+  /**
+   * Returns the value to display for representing given internal value. Values may be different if internal
+   * value is some artificial key or display value may contain characters not suitable for internal use.
+   * 
+   * @param internalValue
+   */
+  public String toDisplayValue(String internalValue)
+  {
+    return internalValue;
+  }
+
+  /**
+   * Inverse of {@link #toDisplayValue(String)}
+   * 
+   * @param displayValue
+   */
+  public String toInternalValue(String displayValue)
+  {
+    return displayValue;
   }
 
 }
