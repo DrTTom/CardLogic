@@ -5,37 +5,30 @@ Vue.component('cardlist', {
     },
     props: {
         allCards: {
-        	type: Array,
-            required: false,
+            type: Array,
             default: []
         },
-        numberMatching: 
-    	{
-    	type: Number,
-        required: true
-    	},    
-        numberPossible: 
-    	{
-    	type: Number,
-        required: true
-    	},
+        numberMatching: {
+            type: Number,
+        },
+        numberPossible: {
+            type: Number,
+        },
         itemClass: {
-        type: String,
-        required: false,
-        default: 'smallTile'
+            type: String,
+            default: 'smallTile'
         }
     },
     methods: {
-      updateCards: function(response){
-        this.numberMatching = response.numberMatching;
-        this.numberPossible = response.numberPossible;
-        if (this.numberPossible<24)
-        {
-         this.itemClass='bigTile';
-         } else {
-         this.itemClass='smallTile';
-         }
-         this.allCards = response.matches;
-      }
+        updateCards: function(response) {
+            this.numberMatching = response.numberMatching;
+            this.numberPossible = response.numberPossible;
+            if (this.numberPossible < 24) {
+                this.itemClass = 'bigTile';
+            } else {
+                this.itemClass = 'smallTile';
+            }
+            this.allCards = response.matches;
+        }
     }
 })
