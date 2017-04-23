@@ -20,6 +20,11 @@ Vue.component('questions', {
             type: Boolean,
             default: false
         },
+        nextAction: 
+        	{
+        	type: String, 
+        	default: "check"
+        	},
     },
     methods: {
         updateQuestions: function(response) {
@@ -57,6 +62,12 @@ Vue.component('questions', {
             this.groupVisible.push(true); // total nonsense but must make Vue notice the change
             this.groupVisible.pop();
         },
+        check: function(event) 
+        {
+            this.nextAction="submit";
+            searchMode="check";
+            CollectionEvents.answersChanged.send(this.allQuestions);
+        },
         store: function(event) {
             var newDeck = {
                 "type": "deck",
@@ -65,15 +76,16 @@ Vue.component('questions', {
             for (i = 0; i < this.allQuestions.length; i++) {
                 newDeck.attributes[this.allQuestions[i].paramName] = this.allQuestions[i].value;
             }
-            this.$http.post(url + '/submit', newDeck).then((response) => {
-                var result = response.body;
-                console.log(result.done);
-                console.log(result.questions[0].problem);
-
-                if (!result.done) {
-                    CollectionEvents.questionsLoaded.send(response.body);
-                }
-            });
+            alert("if ready, add POST request here!");
+//            this.$http.post(url + '/submit', newDeck).then((response) => {
+//                var result = response.body;
+//                console.log(result.done);
+//                console.log(result.questions[0].problem);
+//
+//                if (!result.done) {
+//                    CollectionEvents.questionsLoaded.send(response.body);
+//                }
+//            });
         }
     }
 })

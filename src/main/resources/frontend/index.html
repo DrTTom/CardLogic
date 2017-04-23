@@ -50,7 +50,8 @@
              <div class="clear"/>
           </div>
          <input v-if="index+1<questionGroups.length" class="c-button c-button--brand" type="submit" value="Weiter" v-on:click="next(index)"/>
-         <input v-if="index+1==questionGroups.length" class="c-button c-button--brand" type="submit" value="Prüfen und neu anlegen" v-on:click="store"/>
+         <input v-if="index+1==questionGroups.length && nextAction=='check'" class="c-button c-button--brand" type="submit" value="Prüfen und neu anlegen" v-on:click="check"/>
+         <input v-if="index+1==questionGroups.length && nextAction=='submit'" class="c-button c-button--brand" type="submit" value="Speichern" v-on:click="store"/>
        </div>
      </div>
      </div>
