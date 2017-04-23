@@ -1,7 +1,7 @@
 Vue.component('cardlist', {
     template: '#cardListTemplate',
     mounted: function() {
-        CardEvents.cardsLoaded.on(this.updateCards);
+        CollectionEvents.searchUpdated.on(this.updateCards);
     },
     props: {
         allCards: {

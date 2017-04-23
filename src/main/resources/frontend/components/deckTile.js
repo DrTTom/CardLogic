@@ -12,7 +12,7 @@ Vue.component('deck_tile', {
     },
     methods: {
         showFullDetails: function(response) {
-            CardEvents.showDeck.send(this.data);
+            CollectionEvents.showDeck.send(this.data);
         }
     }
 })

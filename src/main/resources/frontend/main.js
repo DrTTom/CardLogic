@@ -1,20 +1,25 @@
-var answeredQuestions = [];
 var url = 'http://localhost:4567';
+var currentType = 'deck';
+var searchMode = 'search';
+
 var app = new Vue({
     el: '#app',
     mounted: function() {
-        CardEvents.getCards.on(this.getCards);
-        CardEvents.answerQuestion.on(this.answerQuestion);
-        this.getQuestions();
+        CollectionEvents.answersChanged.on(this.executeSearch);
+        this.executeSearch([]);
     },
     methods: {
-        answerQuestion: function(updatedQuestions) {
-            answeredQuestions = updatedQuestions;
-            this.getCards();
+        executeSearch: function(questions) {
+            var query = url + '/' + searchMode + '/' + currentType + this.extractQueryParams(questions);
+            this.$http.get(query).then((response) => {
+                CollectionEvents.searchUpdated.send(response.body);
+            }, (response) => {
+                alert("Problem communicating with " + url + "\nResponse is:\n" + response.body);
+            });
         },
-        buildQueryParamsByAnsweredQuestions: function() {
+        extractQueryParams: function(questions) {
             var queryParams = '';
-            answeredQuestions.forEach(function(answer, index) {
+            questions.forEach(function(answer, index) {
                 if (answer.value != '') {
                     if (queryParams) {
                         queryParams += '&';
@@ -32,22 +37,6 @@ var app = new Vue({
                 keys.push(key);
             }
             return keys;
-        },
-        getQuestions: function() {
-            this.$http.get(url + '/search/deck').then((response) => {
-                CardEvents.questionsLoaded.send(response.body);
-                CardEvents.cardsLoaded.send(response.body);
-            }, (response) => {
-                alert('Error');
-            });
-        },
-        getCards: function() {
-            var queryParams = this.buildQueryParamsByAnsweredQuestions();
-            this.$http.get(url + '/search/deck' + queryParams).then((response) => {
-                CardEvents.cardsLoaded.send(response.body);
-            }, (response) => {
-                // error callback
-            });
         }
     }
 })

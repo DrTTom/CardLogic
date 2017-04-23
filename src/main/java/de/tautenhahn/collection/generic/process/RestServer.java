@@ -81,7 +81,7 @@ public class RestServer
     get("/view/:type/:key", this::view, new JsonTransformer());
     get("/download/*", this::download);
 
-    get("/check/:type", (req, resp) -> search(req, resp, false), new JsonTransformer());
+    get("/check/:type", (req, resp) -> search(req, resp, true), new JsonTransformer());
     post("/submit", this::submit, new JsonTransformer());
 
     post("/import/:collectionName", this::importCollection);

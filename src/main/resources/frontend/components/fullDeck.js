@@ -1,7 +1,7 @@
 Vue.component('deck_full', {
     template: '#deck_fullTemplate',
     mounted: function() {
-        CardEvents.showDeck.on(this.updateDeckView);
+        CollectionEvents.showDeck.on(this.updateDeckView);
     },
     props: {
         data: {

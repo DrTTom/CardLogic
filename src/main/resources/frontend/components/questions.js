@@ -1,8 +1,7 @@
 Vue.component('questions', {
     template: '#questionsTemplate',
     mounted: function() {
-        CardEvents.cardsLoaded.on(this.updateQuestions);
-        CardEvents.questionsLoaded.on(this.updateQuestions);
+        CollectionEvents.searchUpdated.on(this.updateQuestions);
     },
     props: {
         allQuestions: {
@@ -45,7 +44,7 @@ Vue.component('questions', {
             if (actorUser == true) {
                 actorUser = false;
                 if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {
-                    CardEvents.answerQuestion.send(this.allQuestions);
+                    CollectionEvents.answersChanged.send(this.allQuestions);
                 }
             }
         },
@@ -72,7 +71,7 @@ Vue.component('questions', {
                 console.log(result.questions[0].problem);
 
                 if (!result.done) {
-                    CardEvents.questionsLoaded.send(response.body);
+                    CollectionEvents.questionsLoaded.send(response.body);
                 }
             });
         }

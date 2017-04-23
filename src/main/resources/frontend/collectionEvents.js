@@ -1,10 +1,11 @@
-var CardEvents = (function() {
+var CollectionEvents = (function() {
 
     var bus = new Vue(); // own Vue to enable access from all components
 
     var createEvent = function(name) {
         return {
             send: function(payload) {
+                console.log("Event: "+name+"(" +typeof payload+")");
                 bus.$emit(name, typeof payload == 'undefined' ? {} : payload)
             },
             on: function(callback) {
@@ -20,10 +21,6 @@ var CardEvents = (function() {
         searchUpdated: createEvent('searchUpdated'),
 
         // old events, refactor!
-        getCards: createEvent('getCards'),
-        cardsLoaded: createEvent('cardsLoaded'),
-        answerQuestion: createEvent('answerQuestion'),
-        questionsLoaded: createEvent('questionsLoaded'),
         showDeck: createEvent('showDeck')
     };
 
