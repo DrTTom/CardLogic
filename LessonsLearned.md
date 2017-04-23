@@ -20,3 +20,21 @@ VUEJS und update von gebundenen Elementen
 
 Wenn z.B. eine Checkbox an eine Variable von Vue gebunden ist und sich die Variable ändert, erfolgt manchmal kein Update. 
 VUE triggert den Update nicht, wenn es sich bei der Variable um ein Attribut in einem Attribut handelt. Anhilfe: irgendein _direktes_ Attribut der VUE Komponente ändern 
+
+CSS Frameworks: z.B. Blaze CSS
+==============================
+
+CSS Frameworks versprechen, eine Web-Anwendung mit minimalem Aufwand mehr oder weniger gut aussehen zu lassen, einfach durch Einbinden eines fertigen Stylesheets. Dass dabei natürlich keinerlei speziellen Anforderungen oder gar Corporate Design berücksichtigt werden können, versteht sich von selbst. Stattdessen werden Grundaufgaben angegangen:
+
+- Mehrspaltige Ansichten, die auf &lt;table&gt; verzichten
+- Styling von allerlei Formlular-Elementen (Buttons, Tooltips, ...), oft mitgelieferte Icons
+- Vorgefertigte Ordnungselemente wie Tabs, Drop-Down-Menues, Akkordions, modale Dialoge usw. oft mit durchaus eindrucksvollen Funktionen und Animationen.
+
+Es gibt eine große Anzahl mehr oder weniger ausgereifter CSS-Frameworks mit hoher Fluktuation. Blaze hat gegenüber einigen anderen den Vorteil, nur eigene Stil-Klassen zu definieren und keine Standards mal eben umzudefinieren. Die Benutzung ist einfach: auf der Beschreibungsseite http://blazecss.com/ eine Formatierung aussuchen und die Klassen an die Elemente auf der eigenen Seite schrieben. 
+Leider passt vieles eben doch nicht so ganz und manches (wie die modalen Dialoge, neben denen man eben doch die Element im Hintergrund klicken kann) bedarf auch kleinerer Reparaturen. 
+
+_Fazit:_
+
+- Ein CSS-Framework kann niemals mit einem professionell für eine Anwendung designten CSS konkurrieren.
+- Die Dinger sind aber extrem nützlich, wenn man selbst ein CSS schreibt und kein CSS-Guru ist. Allein zu erfahren, was 
+  alles rein mit CSS zu machen ist, lohnt die Beschäftigung.
