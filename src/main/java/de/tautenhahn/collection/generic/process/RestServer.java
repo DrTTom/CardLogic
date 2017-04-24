@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.MultipartConfigElement;
@@ -109,13 +110,18 @@ public class RestServer
     String ref = refb.substring(1);
     try (InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
     {
-      return doDownload(src, response);
+      return doDownload(src, response, ref);
     }
   }
 
-  private Object doDownload(InputStream src, Response response) throws IOException
+  private Object doDownload(InputStream src, Response response, String ref) throws IOException
   {
-    response.header("Content-Type", "application/octet-stream");
+    String type = "application/octet-stream";
+    if (ref.toLowerCase(Locale.ENGLISH).endsWith(".jpg"))
+    {
+      type = "image/jpeg";
+    }
+    response.header("Content-Type", type);
     response.header("Content-Disposition", "attachment");
     try (OutputStream dest = response.raw().getOutputStream();)
     {

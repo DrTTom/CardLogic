@@ -3,6 +3,7 @@ package de.tautenhahn.collection.cards;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
@@ -149,6 +150,21 @@ public class CardsTest
     assertThat("error code",
                systemUnderTest.check("Berliner Bild", germanDeck),
                is("msg.error.optionMismatches.suits"));
+  }
+
+  /**
+   * Assert that maker sign choice is update with maker.
+   *
+   * @throws IOException
+   */
+  @Test
+  public void imageChoice() throws IOException
+  {
+    TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter("makerSign");
+    DescribedObject deck = new DescribedObject("deck", "1");
+    assertThat(systemUnderTest.getAllowedValues(deck), hasSize(37));
+    deck.getAttributes().put("maker", "AS");
+    assertThat(systemUnderTest.getAllowedValues(deck), hasSize(7));
   }
 
   /**

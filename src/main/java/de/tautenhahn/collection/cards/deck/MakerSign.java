@@ -1,14 +1,22 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
+import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 
 
-public class MakerSign extends TypeBasedEnumeration
+/**
+ * Defines the makers logo on the playing cards.
+ * 
+ * @author TT
+ */
+public class MakerSign extends TypeBasedEnumWithForeignKey
 {
 
+  /**
+   * Creates immutable instance.
+   */
   public MakerSign()
   {
-    super("makerSign", 50, Flag.OPTIONAL, Flag.EXACT);
+    super("makerSign", "maker", 50, Flag.OPTIONAL, Flag.EXACT);
   }
 
 }

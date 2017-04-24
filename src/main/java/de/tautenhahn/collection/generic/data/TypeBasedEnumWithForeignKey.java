@@ -18,6 +18,16 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
 
   private final Map<String, String> foreignKeyByPrimKey = new HashMap<>();
 
+  /**
+   * Constructs new instance.
+   *
+   * @param name name of the described attribute
+   * @param foreignKey name of attribute which restricts the allowed values. More precisely, the context
+   *          object and the object represented by this attribute both have an attribute of that name and the
+   *          values must match.
+   * @param matchValue indicates significance of matched values.
+   * @param flags
+   */
   public TypeBasedEnumWithForeignKey(String name, String foreignKey, int matchValue, Flag... flags)
   {
     super(name, matchValue, flags);
