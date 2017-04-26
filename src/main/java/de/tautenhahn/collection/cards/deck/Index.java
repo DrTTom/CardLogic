@@ -5,9 +5,17 @@ import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
+/**
+ * Describes the index of a deck.
+ *
+ * @author TT
+ */
 public class Index extends FreeText
 {
 
+  /**
+   * Creates immutable instance.
+   */
   protected Index()
   {
     super("index");

@@ -5,9 +5,17 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
+/**
+ * Number of index characters on each card.
+ * 
+ * @author TT
+ */
 public class NumberIndex extends AttributeInterpreter
 {
 
+  /**
+   * Creates immutable instance.
+   */
   protected NumberIndex()
   {
     super("numIndex", Flag.EXACT);

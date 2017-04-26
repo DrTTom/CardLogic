@@ -235,19 +235,6 @@ public class WorkspacePersistence implements Persistence
     return Files.newInputStream(collectionBaseDir.resolve(ref));
   }
 
-  @Override
-  public String search(String type, String query)
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public void addToIndex(String type, String key, String data)
-  {
-    // TODO Auto-generated method stub
-
-  }
 
   private Map<String, DescribedObject> getTypeMap(String type)
   {
@@ -260,6 +247,13 @@ public class WorkspacePersistence implements Persistence
     return result;
   }
 
+  /**
+   * Writes filtered contents as ZIP into given output stream.
+   *
+   * @param binRefs
+   * @param outs
+   * @throws IOException
+   */
   public void exportZip(Map<String, List<String>> binRefs, OutputStream outs) throws IOException
   {
     close();
@@ -304,6 +298,12 @@ public class WorkspacePersistence implements Persistence
 
   }
 
+  /**
+   * Imports contents of given ZIP file, avoids security problems.
+   * 
+   * @param ins
+   * @throws IOException
+   */
   public void importZip(InputStream ins) throws IOException
   {
     try (ZipInputStream zip = new ZipInputStream(ins))

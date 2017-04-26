@@ -27,7 +27,8 @@ public interface Persistence
   /**
    * Returns object specified by primary key
    *
-   * @param primkey
+   * @param type
+   * @param primKey
    */
   DescribedObject find(String type, String primKey);
 
@@ -74,7 +75,8 @@ public interface Persistence
   /**
    * Removes an object. Throw Exception if object is referenced.
    *
-   * @param object
+   * @param type
+   * @param name
    */
   void delete(String type, String name);
 
@@ -83,7 +85,6 @@ public interface Persistence
    *
    * @param type
    * @param name
-   * @return
    */
   boolean isReferenced(String type, String name, String... referencingType);
 
@@ -115,18 +116,13 @@ public interface Persistence
    * Returns a binary object
    *
    * @param ref
-   * @return
    * @throws IOException
    */
   InputStream find(String ref) throws IOException;
 
-  String search(String type, String query);
-
-  void addToIndex(String type, String key, String data);
-
   /**
    * Returns true if a binary content is stored under the specified reference.
-   * 
+   *
    * @param ref
    */
   boolean binObjectExists(String ref);

@@ -87,8 +87,6 @@ public class Question
 
   /**
    * Returns name of a form this question belongs to. Should match some view template.
-   *
-   * @return
    */
   public String getForm()
   {
@@ -97,8 +95,6 @@ public class Question
 
   /**
    * Returns name of parameter to return the answer in.
-   *
-   * @return
    */
   public String getParamName()
   {
@@ -107,8 +103,6 @@ public class Question
 
   /**
    * Returns question text.
-   *
-   * @return
    */
   public String getText()
   {

@@ -9,7 +9,7 @@ import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 
 /**
  * Creates a new object in storage.
- * 
+ *
  * @author TT
  */
 public class SubmissionProcess
@@ -19,6 +19,11 @@ public class SubmissionProcess
 
   String type;
 
+  /**
+   * Creates an instance for one time use.
+   *
+   * @param type
+   */
   public SubmissionProcess(String type)
   {
     interpreter = ApplicationContext.getInstance().getInterpreter(type);
@@ -27,10 +32,9 @@ public class SubmissionProcess
 
   /**
    * Creates and stores new object
-   * 
-   * @param attributes
+   *
+   * @param candidate
    * @param force
-   * @return
    */
   public SubmissionResult submit(DescribedObject candidate, boolean force)
   {

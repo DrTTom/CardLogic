@@ -9,12 +9,15 @@ import de.tautenhahn.collection.generic.data.Similarity;
 
 /**
  * Format of a deck. Similarity accounts for possible errors in measurement.
- * 
+ *
  * @author TT
  */
 public class Format extends AttributeInterpreter
 {
 
+  /**
+   * Creates new immutable instance.
+   */
   protected Format()
   {
     super("format");

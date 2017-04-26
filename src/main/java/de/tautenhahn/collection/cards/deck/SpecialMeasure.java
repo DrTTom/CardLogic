@@ -5,9 +5,17 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
+/**
+ * A special 2-dimensional measurement helping to distinguish decks.
+ *
+ * @author TT
+ */
 public class SpecialMeasure extends AttributeInterpreter
 {
 
+  /**
+   * Creates immutable instance
+   */
   protected SpecialMeasure()
   {
     super("specialMeasure");

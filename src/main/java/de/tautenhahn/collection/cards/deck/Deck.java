@@ -27,6 +27,7 @@ public class Deck extends MapBasedDescribedObjectInterpreter
   {
     super("deck", // identify deck:
           new Suits(), new Index(), new NumberIndex(), new Format(), new SpecialMeasure(), new NumberCards(),
+          new TaxStamp(),
           // interpretation:
           new FreeText("name", Flag.SEARCHABLE), new Pattern(), new Maker(), new MakerSign(),
           new FreeText("refMaker", Flag.OPTIONAL), new Designer(),

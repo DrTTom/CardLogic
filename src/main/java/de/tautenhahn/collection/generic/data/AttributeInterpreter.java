@@ -19,7 +19,9 @@ public abstract class AttributeInterpreter
    * Marker interface to indicate that internal and display values may differ.
    */
   public interface Translating
-  {}
+  {
+    // marker interface only
+  }
 
   /** makes the super() call easier */
   public enum Flag
@@ -120,7 +122,7 @@ public abstract class AttributeInterpreter
   /**
    * Returns the value to display for representing given internal value. Values may be different if internal
    * value is some artificial key or display value may contain characters not suitable for internal use.
-   * 
+   *
    * @param internalValue
    */
   public String toDisplayValue(String internalValue)
@@ -130,7 +132,7 @@ public abstract class AttributeInterpreter
 
   /**
    * Inverse of {@link #toDisplayValue(String)}
-   * 
+   *
    * @param displayValue
    */
   public String toInternalValue(String displayValue)

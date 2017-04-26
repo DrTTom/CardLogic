@@ -8,14 +8,29 @@ package de.tautenhahn.collection.generic.data;
 public class Similarity implements Comparable<Similarity>
 {
 
+  /**
+   * Object are surely not equal.
+   */
   public static final Similarity DIFFERENT = new Similarity(-1);
 
+  /**
+   * No hint whether objects are equal or not,
+   */
   public static final Similarity NO_STATEMENT = new Similarity(0);
 
+  /**
+   * Weak hint that objects may be equal.
+   */
   public static final Similarity HINT = new Similarity(1);
 
+  /**
+   * Objects match better than best 10% of randomly choosen objects
+   */
   public static final Similarity SIMILAR = new Similarity(100);
 
+  /**
+   * half as good as {@link #SIMILAR}
+   */
   public static final Similarity ALMOST_SIMILAR = new Similarity(50);
 
   private final int value;
@@ -31,6 +46,9 @@ public class Similarity implements Comparable<Similarity>
     this.value = value;
   }
 
+  /**
+   * Returns a combined Similarity guess.
+   */
   public Similarity add(Similarity other)
   {
     if (value < 0 || other.value < 0)
@@ -71,11 +89,17 @@ public class Similarity implements Comparable<Similarity>
     return value == other.value;
   }
 
+  /**
+   * Returns true if objects may be equal.
+   */
   public boolean possiblyEqual()
   {
     return value >= 0;
   }
 
+  /**
+   * Returns true if there is a certain probability that the objects are equal.
+   */
   public boolean probablyEqual()
   {
     return value >= 50;

@@ -2,7 +2,7 @@ package de.tautenhahn.collection.generic.process;
 
 /**
  * Result type of a submission (new object or edited).
- * 
+ *
  * @author TT
  */
 public class SubmissionResult
@@ -14,6 +14,13 @@ public class SubmissionResult
 
   private final boolean done;
 
+  /**
+   * Creates immutable instance.
+   *
+   * @param status
+   * @param primKey
+   * @param done
+   */
   public SubmissionResult(String status, String primKey, boolean done)
   {
     super();

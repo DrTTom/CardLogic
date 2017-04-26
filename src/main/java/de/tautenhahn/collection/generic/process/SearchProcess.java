@@ -75,7 +75,8 @@ public class SearchProcess implements PersistenceChangeListener
    * implementation does not require the similarity to be additive.
    *
    * @param parameters attribute values to match
-   * @param reportMissingValues true to create problem messages for missing mandatory values
+   * @param primKey
+   * @param checkStrict to create problem messages for missing mandatory values
    */
   private SearchResult execute(Map<String, String> parameters, String primKey, boolean checkStrict)
   {

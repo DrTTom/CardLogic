@@ -19,6 +19,11 @@ import org.junit.Test;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 
 
+/**
+ * Temporary tool to migrate old data content.
+ *
+ * @author TT
+ */
 public class RestructureStorage
 {
 
@@ -26,6 +31,11 @@ public class RestructureStorage
 
   Properties patternKeys = new Properties();
 
+  /**
+   * Inserts artificial keys where necessary.
+   *
+   * @throws IOException
+   */
   @Test
   @Ignore("this is a tool")
   public void test() throws IOException
@@ -161,7 +171,7 @@ public class RestructureStorage
 
   }
 
-  private void migrateMaker(Persistence source, Persistence dest) throws IOException
+  private void migrateMaker(Persistence source, Persistence dest)
   {
     for ( String key : source.getKeyValues("maker") )
     {
@@ -206,14 +216,14 @@ public class RestructureStorage
     }
   }
 
-  private String keyFor(String primKey, Properties patternKeys)
+  private String keyFor(String primKey, Properties props)
   {
-    return (String)patternKeys.entrySet()
-                              .stream()
-                              .filter(e -> e.getValue().equals(primKey))
-                              .findAny()
-                              .map(e -> e.getKey())
-                              .orElseThrow(() -> new RuntimeException());
+    return (String)props.entrySet()
+                        .stream()
+                        .filter(e -> e.getValue().equals(primKey))
+                        .findAny()
+                        .map(e -> e.getKey())
+                        .orElseThrow(() -> new RuntimeException());
 
   }
 

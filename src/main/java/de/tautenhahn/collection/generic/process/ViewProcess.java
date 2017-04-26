@@ -15,10 +15,9 @@ public class ViewProcess
 
   /**
    * Maybe return all corresponding aux objects together with the main object?
-   * 
+   *
    * @param type
    * @param key
-   * @return
    */
   public DescribedObject getData(String type, String key)
   {

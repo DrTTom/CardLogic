@@ -5,9 +5,17 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
+/**
+ * Number of cards in a deck - same deck may be marketed with different numbers of cards.
+ * 
+ * @author TT
+ */
 public class NumberCards extends AttributeInterpreter
 {
 
+  /**
+   * Creates immutable instance.
+   */
   protected NumberCards()
   {
     super("numberCards");

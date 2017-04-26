@@ -68,9 +68,7 @@ public abstract class ApplicationContext
 
 
   /**
-   * return the primary persistence wrapper of the application.
-   *
-   * @return
+   * Returns the primary persistence wrapper of the application.
    */
   public abstract Persistence getPersistence();
 

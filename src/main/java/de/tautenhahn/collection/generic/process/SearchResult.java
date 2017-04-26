@@ -68,12 +68,15 @@ public class SearchResult
     return type;
   }
 
+  /**
+   * Returns the list of questions which is context sensitive.
+   */
   public List<Question> getQuestions()
   {
     return questions;
   }
 
-  public void setQuestions(List<Question> questions)
+  void setQuestions(List<Question> questions)
   {
     this.questions = questions;
   }
@@ -84,27 +87,34 @@ public class SearchResult
     return message;
   }
 
-  public void setMessages(String message)
+  void setMessage(String message)
   {
     this.message = message;
   }
 
+  /**
+   * Returns the total number of objects of current type.
+   */
   public int getNumberTotal()
   {
     return numberTotal;
   }
 
-  public void setNumberTotal(int numberTotal)
+  void setNumberTotal(int numberTotal)
   {
     this.numberTotal = numberTotal;
   }
 
+  /**
+   * Returns a list of the best results. The list may be truncated or even empty if there are too many
+   * results.
+   */
   public List<DescribedObject> getMatches()
   {
     return matches;
   }
 
-  public void setMatches(List<DescribedObject> matches)
+  void setMatches(List<DescribedObject> matches)
   {
     this.matches = matches;
   }

@@ -59,7 +59,7 @@ public class CardsTest
   /**
    * Do not require Apache library to remove a directory tree.
    */
-  private static final class DeleteDirTree extends SimpleFileVisitor<Path>
+  static final class DeleteDirTree extends SimpleFileVisitor<Path>
   {
 
     @Override
@@ -161,10 +161,11 @@ public class CardsTest
   public void imageChoice() throws IOException
   {
     TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter("makerSign");
-    DescribedObject deck = new DescribedObject("deck", "1");
-    assertThat(systemUnderTest.getAllowedValues(deck), hasSize(37));
-    deck.getAttributes().put("maker", "AS");
-    assertThat(systemUnderTest.getAllowedValues(deck), hasSize(7));
+    DescribedObject myDeck = new DescribedObject("deck", "1");
+    assertThat(systemUnderTest.getAllowedValues(myDeck), hasSize(37));
+    myDeck.getAttributes().put("maker", "AS");
+    assertThat(systemUnderTest.getAllowedValues(myDeck), hasSize(7));
+    // TODO: check that question describes images
   }
 
   /**
@@ -211,11 +212,11 @@ public class CardsTest
   @Test
   public void foreignKeyViolated()
   {
-    DescribedObject deck = new DescribedObject("deck", null);
-    deck.getAttributes().put("suits", "deutsch");
-    deck.getAttributes().put("pattern", "Französisches Bild");
-    DescribedObjectInterpreter interpreter = application.getInterpreter(deck.getType());
-    Question pq = getQuestion(interpreter.getQuestions(deck, false), "pattern");
+    DescribedObject myDeck = new DescribedObject("deck", null);
+    myDeck.getAttributes().put("suits", "deutsch");
+    myDeck.getAttributes().put("pattern", "Französisches Bild");
+    DescribedObjectInterpreter interpreter = application.getInterpreter(myDeck.getType());
+    Question pq = getQuestion(interpreter.getQuestions(myDeck, false), "pattern");
     assertThat(pq.getProblem(), is(application.getText("msg.error.optionMismatches.suits")));
     assertThat(pq.getValue(), is("Französisches Bild"));
     assertThat(pq.getAllowedValues(), hasItem("Französisches Bild"));
