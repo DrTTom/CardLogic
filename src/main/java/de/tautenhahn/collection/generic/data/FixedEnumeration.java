@@ -15,6 +15,12 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 public abstract class FixedEnumeration extends Enumeration
 {
 
+  /**
+   * Returns array of translated values based on given message keys.
+   *
+   * @param paramName
+   * @param keys
+   */
   protected static String[] resolveKeys(String paramName, String... keys)
   {
     String[] result = new String[keys.length];
@@ -25,6 +31,14 @@ public abstract class FixedEnumeration extends Enumeration
     return result;
   }
 
+  /**
+   * Creates new instance.
+   *
+   * @param name
+   * @param matchValue
+   * @param allowed
+   * @param flags
+   */
   protected FixedEnumeration(String name, int matchValue, String[] allowed, Flag... flags)
   {
     super(name, matchValue, flags);
@@ -44,6 +58,5 @@ public abstract class FixedEnumeration extends Enumeration
   {
     return allowedValues;
   }
-
 
 }

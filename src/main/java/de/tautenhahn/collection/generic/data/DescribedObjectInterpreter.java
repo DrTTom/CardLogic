@@ -50,6 +50,12 @@ public abstract class DescribedObjectInterpreter
    */
   public abstract AttributeInterpreter getAttributeInterpreter(String name);
 
+  /**
+   * Returns a value indicating whether two descriptions may mean the same object.
+   * 
+   * @param searchMask
+   * @param candidate
+   */
   public Similarity countSimilarity(DescribedObject searchMask, DescribedObject candidate)
   {
     Similarity result = Similarity.NO_STATEMENT;

@@ -7,20 +7,28 @@ import java.util.Map;
 /**
  * Provides process instances.
  *
- * @author jean
+ * @author TT
  */
-public class ProcessScheduler
+public class ProcessFactory
 {
 
-  private static final ProcessScheduler INSTANCE = new ProcessScheduler();
+  private static final ProcessFactory INSTANCE = new ProcessFactory();
 
   private final Map<String, SearchProcess> searches = new HashMap<>();
 
-  public static ProcessScheduler getInstance()
+  /**
+   * Singleton getter.
+   */
+  public static ProcessFactory getInstance()
   {
     return INSTANCE;
   }
 
+  /**
+   * Returns the search process for specified type.
+   *
+   * @param type
+   */
   public SearchProcess getSearch(String type)
   {
     SearchProcess result = searches.get(type);
@@ -32,11 +40,17 @@ public class ProcessScheduler
     return result;
   }
 
+  /**
+   * Returns the view process.
+   */
   public ViewProcess getView()
   {
     return new ViewProcess();
   }
 
+  /**
+   * Returns the submission process.
+   */
   public SubmissionProcess getSubmission(String type)
   {
     return new SubmissionProcess(type);

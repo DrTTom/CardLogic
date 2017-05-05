@@ -81,7 +81,9 @@ public class SearchResult
     this.questions = questions;
   }
 
-
+  /**
+   * May return an error message if search was not performed.
+   */
   public String getMessage()
   {
     return message;
@@ -119,28 +121,35 @@ public class SearchResult
     this.matches = matches;
   }
 
+  /**
+   * Returns the number of objects which have a certain minimal similarity to the search criteria.
+   */
   public int getNumberMatching()
   {
     return numberMatching;
   }
 
-
-  public void setNumberMatching(int numberMatching)
+  void setNumberMatching(int numberMatching)
   {
     this.numberMatching = numberMatching;
   }
 
-
+  /**
+   * Returns the number of objects which could possibly match the search criteria.
+   */
   public int getNumberPossible()
   {
     return numberPossible;
   }
 
-  public void setNumberPossible(int numberPossible)
+  void setNumberPossible(int numberPossible)
   {
     this.numberPossible = numberPossible;
   }
 
+  /**
+   * Returns human-readable translations for attribute values by key attribute name and value.
+   */
   public Map<String, Map<String, String>> getTranslations()
   {
     return translations;

@@ -9,6 +9,11 @@ import de.tautenhahn.collection.generic.data.MapBasedDescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.data.Year;
 
 
+/**
+ * Describes the tax stamp occurring on a deck.
+ * 
+ * @author TT
+ */
 public class TaxStampObject extends MapBasedDescribedObjectInterpreter
 {
 

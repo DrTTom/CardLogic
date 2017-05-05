@@ -4,12 +4,14 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.awt.image.ImageProducer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -36,7 +38,7 @@ import de.tautenhahn.collection.generic.data.Question;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
-import de.tautenhahn.collection.generic.process.ProcessScheduler;
+import de.tautenhahn.collection.generic.process.ProcessFactory;
 import de.tautenhahn.collection.generic.process.RestServer;
 import de.tautenhahn.collection.generic.process.SearchProcess;
 import de.tautenhahn.collection.generic.process.SearchResult;
@@ -178,7 +180,7 @@ public class CardsTest
   @Test
   public void search() throws Exception
   {
-    SearchProcess systemUnderTest = ProcessScheduler.getInstance().getSearch("deck");
+    SearchProcess systemUnderTest = ProcessFactory.getInstance().getSearch("deck");
     SearchResult result = systemUnderTest.search(Collections.emptyMap());
     Question suitQuestion = getQuestion(result.getQuestions(), "suits");
     assertThat(suitQuestion.getAllowedValues(), hasItem("deutsch"));
@@ -278,14 +280,12 @@ public class CardsTest
     {
       RestServer.getInstance().start();
       Thread.sleep(500);
-      for ( String url : new String[]{"http://localhost:4567/search/maker",
-                                      "http://localhost:4567/download/deck/e0/77.jpg"} )
+      try (InputStream ins = (InputStream)new URL("http://localhost:4567/search/maker").getContent())
       {
-        try (InputStream ins = (InputStream)new URL(url).getContent())
-        {
-          assertThat(ins.available(), greaterThan(255));
-        }
+        assertThat(ins.available(), greaterThan(255));
       }
+      assertThat(new URL("http://localhost:4567/download/deck/e0/77.jpg").getContent(),
+                 instanceOf(ImageProducer.class));
     }
     finally
     {
@@ -296,8 +296,8 @@ public class CardsTest
   @SuppressWarnings("boxing")
   private SubmissionResult doSubmit(DescribedObject newDeck, boolean force, boolean expectSuccess)
   {
-    SubmissionProcess systemUnderTest = ProcessScheduler.getInstance().getSubmission("deck");
-    SearchProcess search = ProcessScheduler.getInstance().getSearch("deck");
+    SubmissionProcess systemUnderTest = ProcessFactory.getInstance().getSubmission("deck");
+    SearchProcess search = ProcessFactory.getInstance().getSearch("deck");
     SearchResult before = search.search(newDeck.getAttributes());
     assertThat(before.getNumberMatching(), is(0));
 

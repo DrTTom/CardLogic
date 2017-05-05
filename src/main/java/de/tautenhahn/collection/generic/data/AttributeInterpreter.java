@@ -26,9 +26,21 @@ public abstract class AttributeInterpreter
   /** makes the super() call easier */
   public enum Flag
   {
-    OPTIONAL, SEARCHABLE, EXACT
+    /** value may be missing */
+    OPTIONAL,
+    /** value contributes to search index */
+    SEARCHABLE,
+
+    /** value can be exactly determined by given object, i.e. equal objects have always same value */
+    EXACT
   }
 
+  /**
+   * Creates new instance.
+   *
+   * @param name
+   * @param flags
+   */
   protected AttributeInterpreter(String name, Flag... flags)
   {
     this.name = name;
@@ -46,6 +58,9 @@ public abstract class AttributeInterpreter
 
   private final boolean exact;
 
+  /**
+   * Returns the attribute name.
+   */
   public String getName()
   {
     return name;
@@ -86,6 +101,13 @@ public abstract class AttributeInterpreter
    */
   public abstract String check(String value, DescribedObject context);
 
+  /**
+   * Returns a value indicating whether two values could be for the same object.
+   *
+   * @param thisValue
+   * @param otherValue
+   * @param context
+   */
   public final Similarity computeCorrellation(String thisValue, String otherValue, DescribedObject context)
   {
     if (otherValue == null || thisValue == null)
@@ -95,6 +117,10 @@ public abstract class AttributeInterpreter
     return correllateValue(thisValue, otherValue, context);
   }
 
+  /**
+   * Same as {@link #computeCorrellation(String, String, DescribedObject)} but never called with null
+   * arguments.
+   */
   protected abstract Similarity correllateValue(String thisValue, String otherValue, DescribedObject context);
 
   /**
@@ -114,7 +140,10 @@ public abstract class AttributeInterpreter
     return result;
   }
 
-  protected String realValue(String value)
+  /**
+   * Translates empty Strings to null (value not given).
+   */
+  protected String dropEmptyString(String value)
   {
     return value == null ? null : value.trim().isEmpty() ? null : value;
   }

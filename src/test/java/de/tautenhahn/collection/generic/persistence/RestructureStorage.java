@@ -7,9 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -100,7 +100,7 @@ public class RestructureStorage
 
     try (OutputStream out = new FileOutputStream("example.zip"))
     {
-      Map<String, List<String>> binRefs = new HashMap<>();
+      Map<String, Collection<String>> binRefs = new HashMap<>();
       binRefs.put("deck", Collections.singletonList("image"));
       binRefs.put("makerSign", Collections.singletonList("image"));
       binRefs.put("pattern", Collections.singletonList("image"));

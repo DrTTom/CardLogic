@@ -5,12 +5,19 @@ import java.util.List;
 
 /**
  * Describes an attribute which has a well-defined number of possible values.
- * 
+ *
  * @author TT
  */
 public abstract class Enumeration extends AttributeInterpreter
 {
 
+  /**
+   * Creates new instance.
+   *
+   * @param name
+   * @param matchValue describes how strong the hint is that equal values mean equal objects.
+   * @param flags
+   */
   protected Enumeration(String name, int matchValue, Flag[] flags)
   {
     super(name, flags);
@@ -21,7 +28,7 @@ public abstract class Enumeration extends AttributeInterpreter
 
   /**
    * Returns the list of legal attribute values as used in questions and front end input.
-   * 
+   *
    * @param context
    */
   public abstract List<String> getAllowedValues(DescribedObject context);

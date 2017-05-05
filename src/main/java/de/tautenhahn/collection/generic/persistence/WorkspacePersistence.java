@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -254,7 +255,7 @@ public class WorkspacePersistence implements Persistence
    * @param outs
    * @throws IOException
    */
-  public void exportZip(Map<String, List<String>> binRefs, OutputStream outs) throws IOException
+  public void exportZip(Map<String, Collection<String>> binRefs, OutputStream outs) throws IOException
   {
     close();
     List<String> relPathes = new ArrayList<>();
@@ -300,7 +301,7 @@ public class WorkspacePersistence implements Persistence
 
   /**
    * Imports contents of given ZIP file, avoids security problems.
-   * 
+   *
    * @param ins
    * @throws IOException
    */

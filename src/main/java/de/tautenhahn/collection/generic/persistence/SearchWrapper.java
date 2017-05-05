@@ -15,14 +15,14 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSLockFactory;
 import org.apache.lucene.store.SimpleFSDirectory;
-import org.apache.lucene.util.QueryBuilder;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
@@ -59,11 +59,19 @@ public class SearchWrapper
     analyzer = new StandardAnalyzer();
   }
 
+  /**
+   * Returns the primary keys of found objects.
+   *
+   * @param phrase
+   * @param field
+   * @throws IOException
+   */
   public List<String> search(String phrase, String field) throws IOException
   {
     try (DirectoryReader reader = DirectoryReader.open(index))
     {
-      Query q = new QueryBuilder(analyzer).createPhraseQuery(field, phrase);
+      Term term = new Term(field, phrase);
+      WildcardQuery q = new WildcardQuery(term);
       IndexSearcher searcher = new IndexSearcher(reader);
       TopDocs searchResult = searcher.search(q, 100);
       List<String> result = new ArrayList<>();
@@ -77,6 +85,12 @@ public class SearchWrapper
     }
   }
 
+  /**
+   * Adds a given object to the search index.
+   * 
+   * @param obj
+   * @throws IOException
+   */
   public void addToIndex(DescribedObject... obj) throws IOException
   {
     try (IndexWriter writer = getWriter())
@@ -90,10 +104,10 @@ public class SearchWrapper
     }
   }
 
-  // public void removeFromIndex(String key)
-  // {
-  //
-  // }
+  public void removeFromIndex(String key)
+  {
+    
+  }
 
   private IndexWriter getWriter() throws IOException
   {

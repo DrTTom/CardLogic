@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.persistence;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -28,6 +29,11 @@ public class TestSearchWrapper
 
   private SearchWrapper systemUnderTest;
 
+  /**
+   * Provides a search wrapper and registers an application context.
+   *
+   * @throws IOException
+   */
   @Before
   public void setUp() throws IOException
   {
@@ -35,6 +41,11 @@ public class TestSearchWrapper
     systemUnderTest = new SearchWrapper(directory);
   }
 
+  /**
+   * Deletes the search index created by the test.
+   *
+   * @throws IOException
+   */
   @After
   public void tearDown() throws IOException
   {
@@ -66,6 +77,9 @@ public class TestSearchWrapper
     deck2.getAttributes().put("remark", "Another text with some other content");
     systemUnderTest.addToIndex(deck1, deck2);
     assertThat(systemUnderTest.search("something", "remark"), contains("1"));
-    assertThat(systemUnderTest.search("some*", "remark"), contains("2", "1"));
+    assertThat(systemUnderTest.search("some*", "remark"), contains("1", "2"));
+    assertThat(systemUnderTest.search("*other", "remark"), contains("2"));
+    assertThat(systemUnderTest.search("??other", "remark"), contains("2"));
+    assertThat(systemUnderTest.search("?other", "remark"), empty());
   }
 }

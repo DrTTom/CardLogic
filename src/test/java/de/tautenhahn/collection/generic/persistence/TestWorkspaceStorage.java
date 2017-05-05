@@ -11,9 +11,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Ignore;
@@ -22,6 +22,11 @@ import org.junit.Test;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 
 
+/**
+ * Unit tests for the work space storage.
+ *
+ * @author TT
+ */
 public class TestWorkspaceStorage
 {
 
@@ -104,7 +109,7 @@ public class TestWorkspaceStorage
     systemUnderTest.close();
     try (OutputStream out = new FileOutputStream("example.zip"))
     {
-      Map<String, List<String>> binRefs = new HashMap<>();
+      Map<String, Collection<String>> binRefs = new HashMap<>();
       binRefs.put("deck", Collections.singletonList("image"));
       binRefs.put("makerSign", Collections.singletonList("image"));
       binRefs.put("pattern", Collections.singletonList("image"));

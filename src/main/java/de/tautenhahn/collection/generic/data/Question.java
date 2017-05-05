@@ -60,7 +60,7 @@ public class Question
   }
 
 
-  public void setHelptext(String helptext)
+  void setHelptext(String helptext)
   {
     this.helptext = helptext;
   }
@@ -124,25 +124,29 @@ public class Question
     this.form = form;
   }
 
+  /**
+   * Returns the answer if already known
+   */
   public String getValue()
   {
     return value;
   }
 
-
-  public void setValue(String value)
+  void setValue(String value)
   {
     this.value = value;
   }
 
-
+  /**
+   * Returns a human-readable message in case the value is wrong, null if OK.
+   */
   public String getProblem()
   {
     return problem;
   }
 
 
-  public void setProblem(String problem)
+  void setProblem(String problem)
   {
     this.problem = problem;
   }
@@ -175,7 +179,5 @@ public class Question
   {
     this.uploadStatus = uploadStatus;
   }
-
-
 
 }

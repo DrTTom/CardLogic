@@ -60,9 +60,14 @@ public abstract class ApplicationContext
       : Optional.ofNullable(getSpecificText(key)).orElse(key);
   }
 
+  /**
+   * Returns application specific textr for given key.
+   */
   protected abstract String getSpecificText(String key);
 
-
+  /**
+   * Returns
+   */
   public abstract Icon getApplicationIcon();
 
 

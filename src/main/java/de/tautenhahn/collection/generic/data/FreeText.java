@@ -9,6 +9,12 @@ package de.tautenhahn.collection.generic.data;
 public class FreeText extends AttributeInterpreter
 {
 
+  /**
+   * Creates new instance
+   * 
+   * @param name
+   * @param flags
+   */
   public FreeText(String name, Flag... flags)
   {
     super(name, flags);

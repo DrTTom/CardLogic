@@ -21,12 +21,24 @@ public abstract class TypeBasedEnumeration extends Enumeration
   implements PersistenceChangeListener, AttributeInterpreter.Translating
 {
 
+  /**
+   * Persistence holding the auxiliary objects the foreign key points to.
+   */
   protected Persistence persistence;
 
+  /** For all auxiliary objects of current type: key is name of object, value is its primary key. */
   protected Map<String, String> primKeyByName = new TreeMap<>();
 
+  /** Inverse map to {@link #primKeyByName} */
   protected Map<String, String> nameByPrimKey = new HashMap<>();
 
+  /**
+   * Creates new instance.
+   * 
+   * @param name attribute name, must be equal to the type
+   * @param matchValue
+   * @param flags
+   */
   public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
   {
     super(name, matchValue, flags);

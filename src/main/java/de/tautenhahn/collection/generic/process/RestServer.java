@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
@@ -130,20 +132,34 @@ public class RestServer
     }
   }
 
+  /**
+   * @param req
+   * @param res not needed
+   */
   private DescribedObject view(Request req, Response res)
   {
-    return ProcessScheduler.getInstance().getView().getData(req.params(":type"), req.params(":key"));
+    return ProcessFactory.getInstance().getView().getData(req.params(":type"), req.params(":key"));
   }
 
+  /**
+   * @param req
+   * @param res not needed
+   */
   private SubmissionResult submit(Request req, Response res)
   {
     Gson gson = new GsonBuilder().create();
     DescribedObject object = gson.fromJson(req.body(), DescribedObject.class);
 
-    SubmissionProcess proc = ProcessScheduler.getInstance().getSubmission(object.getType());
+    SubmissionProcess proc = ProcessFactory.getInstance().getSubmission(object.getType());
     return proc.submit(object, false);
   }
 
+  /**
+   * @param req
+   * @param res not needed
+   * @throws IOException
+   * @throws ServletException
+   */
   private String importCollection(Request req, Response res) throws IOException, ServletException
   {
     WorkspacePersistence persistence = (WorkspacePersistence)ApplicationContext.getInstance()
@@ -158,17 +174,26 @@ public class RestServer
     return "OK";
   }
 
+  /**
+   * @param req not needed
+   * @param res
+   * @throws IOException
+   */
   private String export(Request req, Response res) throws IOException
   {
-    WorkspacePersistence persistence = (WorkspacePersistence)ApplicationContext.getInstance()
-                                                                               .getPersistence();
+    ApplicationContext app = ApplicationContext.getInstance();
+    WorkspacePersistence persistence = (WorkspacePersistence)app.getPersistence();
     persistence.close();
-    persistence.init(req.params("collectionName"));
-    try (InputStream ins = req.raw().getInputStream())
+    res.header("Content-Type", "application/zip");
+    res.header("Content-Disposition", "attachment");
+    Map<String, Collection<String>> binRefs = new HashMap<>();
+    persistence.getObjectTypes()
+               .forEach(t -> binRefs.put(t, app.getInterpreter(t).getBinaryValuedAttributes()));
+    try (OutputStream dest = res.raw().getOutputStream();)
     {
-      persistence.importZip(ins);
+      persistence.exportZip(binRefs, dest);
+      return null;
     }
-    return "OK";
   }
 
   private void allowCrossSiteCalls()
@@ -205,7 +230,7 @@ public class RestServer
     res.type("text/plain");
     res.header("Content-Type", "application/json; charset=UTF-8");
     String type = req.params(":type");
-    SearchProcess proc = ProcessScheduler.getInstance().getSearch(type);
+    SearchProcess proc = ProcessFactory.getInstance().getSearch(type);
     Map<String, String> allParams = new Hashtable<>();
     req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));
     return strictCheck ? proc.checkValues("TODO", allParams) : proc.search(allParams);
@@ -221,6 +246,9 @@ public class RestServer
     }
   }
 
+  /**
+   * Singleton getter.
+   */
   public static RestServer getInstance()
   {
     return INSTANCE;

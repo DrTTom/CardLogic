@@ -39,7 +39,7 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
   public List<String> getAllowedValues(DescribedObject context)
   {
     List<String> result = super.getAllowedValues(context);
-    String foreignKeyValue = realValue(context.getAttributes().get(foreignKey));
+    String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
     if (foreignKeyValue != null)
     {
       String chosenKey = Optional.ofNullable(context.getAttributes().get(getName()))
@@ -69,7 +69,7 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     {
       return "msg.error.invalidOption";
     }
-    String foreignKeyValue = realValue(context.getAttributes().get(foreignKey));
+    String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
     if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(primKey)))
     {
       return null;
