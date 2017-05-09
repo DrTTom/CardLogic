@@ -2,8 +2,8 @@ package de.tautenhahn.collection.cards.deck;
 
 import java.util.StringTokenizer;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
@@ -12,7 +12,7 @@ import de.tautenhahn.collection.generic.data.Similarity;
  *
  * @author TT
  */
-public class Format extends AttributeInterpreter
+public class Format extends FreeText
 {
 
   /**
@@ -20,7 +20,7 @@ public class Format extends AttributeInterpreter
    */
   protected Format()
   {
-    super("format");
+    super("format", 40, 1);
   }
 
   @Override
@@ -41,7 +41,7 @@ public class Format extends AttributeInterpreter
       return new Rectangle(thisValue).similar(new Rectangle(otherValue)) ? Similarity.ALMOST_SIMILAR
         : Similarity.DIFFERENT;
     }
-    catch (IllegalArgumentException e)
+    catch (@SuppressWarnings("unused") IllegalArgumentException e)
     {
       return Similarity.NO_STATEMENT;
     }
@@ -77,4 +77,5 @@ public class Format extends AttributeInterpreter
       return Math.abs(width - other.width) < 2 && Math.abs(height - other.height) < 2;
     }
   }
+
 }

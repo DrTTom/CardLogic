@@ -153,8 +153,6 @@ public class SearchProcess implements PersistenceChangeListener
     SearchResult result = new SearchResult(type, questionContext.getPrimKey(), checkStrict);
     result.setNumberTotal(PERSISTENCE.getNumberItems(type));
     result.setQuestions(new ArrayList<>(interpreter.getQuestions(questionContext, checkStrict)));
-    result.getQuestions().removeIf(q -> "illustrate".equals(q.getForm()));
-
     return result;
   }
 

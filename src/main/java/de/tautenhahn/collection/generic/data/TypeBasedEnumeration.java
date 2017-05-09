@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.ObjectChoiceQuestion;
+import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.persistence.PersistenceChangeListener;
 
@@ -34,7 +36,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
 
   /**
    * Creates new instance.
-   * 
+   *
    * @param name attribute name, must be equal to the type
    * @param matchValue
    * @param flags
@@ -64,8 +66,10 @@ public abstract class TypeBasedEnumeration extends Enumeration
   @Override
   public Question getQuestion(DescribedObject object)
   {
-    Question result = super.getQuestion(object);
-    result.setAuxObjectBase("/view/" + getName());
+    ObjectChoiceQuestion result = createQuestion(object,
+                                                 (text, group) -> new ObjectChoiceQuestion(getName(), text,
+                                                                                           group, getName()));
+    result.setAllowedValues(getAllowedValues(object));
     return result;
   }
 

@@ -29,12 +29,12 @@ public class Deck extends MapBasedDescribedObjectInterpreter
           new Suits(), new Index(), new NumberIndex(), new Format(), new SpecialMeasure(), new NumberCards(),
           new TaxStamp(),
           // interpretation:
-          new FreeText("name", Flag.SEARCHABLE), new Pattern(), new Maker(), new MakerSign(),
-          new FreeText("refMaker", Flag.OPTIONAL), new Designer(),
-          new FreeText("remark", Flag.SEARCHABLE, Flag.OPTIONAL),
+          new FreeText("name", 80, 1, Flag.SEARCHABLE), new Pattern(), new Maker(), new MakerSign(),
+          new FreeText("refMaker", 40, 1, Flag.OPTIONAL), new Designer(),
+          new FreeText("remark", 80, 4, Flag.SEARCHABLE, Flag.OPTIONAL),
           // add to collection:
-          new FreeText("refCat", Flag.OPTIONAL, Flag.SEARCHABLE), new PrintedEarliest(), new PrintedLatest(),
-          new Bought(), new Condition(), new ImageRef(Flag.OPTIONAL), new Location());
+          new FreeText("refCat", 80, 1, Flag.OPTIONAL, Flag.SEARCHABLE), new PrintedEarliest(),
+          new PrintedLatest(), new Bought(), new Condition(), new ImageRef(Flag.OPTIONAL), new Location());
   }
 
   @Override

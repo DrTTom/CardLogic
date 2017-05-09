@@ -1,16 +1,16 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
 /**
  * Number of cards in a deck - same deck may be marketed with different numbers of cards.
- * 
+ *
  * @author TT
  */
-public class NumberCards extends AttributeInterpreter
+public class NumberCards extends FreeText
 {
 
   /**
@@ -18,7 +18,7 @@ public class NumberCards extends AttributeInterpreter
    */
   protected NumberCards()
   {
-    super("numberCards");
+    super("numberCards", 4, 1);
   }
 
   @Override

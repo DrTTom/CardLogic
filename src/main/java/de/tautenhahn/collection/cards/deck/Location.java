@@ -5,7 +5,7 @@ import de.tautenhahn.collection.generic.data.FreeText;
 
 /**
  * Free string telling where the collected object is.
- * 
+ *
  * @author TT
  */
 public class Location extends FreeText
@@ -16,7 +16,7 @@ public class Location extends FreeText
    */
   protected Location()
   {
-    super("location");
+    super("location", 40, 1);
   }
 
 }

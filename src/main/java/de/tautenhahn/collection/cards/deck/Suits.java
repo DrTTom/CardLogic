@@ -3,6 +3,11 @@ package de.tautenhahn.collection.cards.deck;
 import de.tautenhahn.collection.generic.data.FixedEnumeration;
 
 
+/**
+ * Kind of suits of the cards.
+ *
+ * @author TT
+ */
 public class Suits extends FixedEnumeration
 {
 
@@ -15,6 +20,9 @@ public class Suits extends FixedEnumeration
                                                      "mixed",
                                                      "other");
 
+  /**
+   * creates immutable instance
+   */
   public Suits()
   {
     super("suits", 10, VALUES, Flag.EXACT);

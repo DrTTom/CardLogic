@@ -5,10 +5,13 @@ import java.util.Collections;
 import java.util.List;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.Question;
+import de.tautenhahn.collection.generic.data.question.TextChoiceQuestion;
 
 
 /**
- * Enumeration with fixed set of allowed values.
+ * Enumeration with fixed set of allowed String values. Values of other types require a
+ * {@link TypeBasedEnumeration}.
  *
  * @author TT
  */
@@ -59,4 +62,13 @@ public abstract class FixedEnumeration extends Enumeration
     return allowedValues;
   }
 
+  @Override
+  public Question getQuestion(DescribedObject object)
+  {
+    TextChoiceQuestion result = createQuestion(object,
+                                               (text, group) -> new TextChoiceQuestion(getName(), text,
+                                                                                       group));
+    result.setAllowedValues(getAllowedValues(object));
+    return result;
+  }
 }

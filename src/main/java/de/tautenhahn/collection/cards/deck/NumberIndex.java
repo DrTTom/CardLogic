@@ -1,16 +1,16 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
 /**
  * Number of index characters on each card.
- * 
+ *
  * @author TT
  */
-public class NumberIndex extends AttributeInterpreter
+public class NumberIndex extends FreeText
 {
 
   /**
@@ -18,13 +18,13 @@ public class NumberIndex extends AttributeInterpreter
    */
   protected NumberIndex()
   {
-    super("numIndex", Flag.EXACT);
+    super("numIndex", 40, 1);
   }
 
   @Override
   public String check(String value, DescribedObject context)
   {
-    return value.matches("[1-9][0-9]*") ? null : "msg.error.invalidValue";
+    return value.matches("[1-9][0-9]*(/[1-9][0-9]*)*") ? null : "msg.error.invalidValue";
   }
 
   @Override

@@ -42,18 +42,14 @@ public class SubmissionProcess
     {
       return new SubmissionResult("msg.error.illegalCall", null, false);
     }
-    interpreter.getQuestions(candidate, true)
-               .stream()
-               .filter(q -> q.getProblem() != null)
-               .forEach(q -> System.out.println(q.getParamName() + " " + q.getAllowedValues()));
     if (!force && interpreter.getQuestions(candidate, true).stream().anyMatch(q -> q.getProblem() != null))
     {
       return new SubmissionResult("msg.error.remainingProblems", null, false);
     }
     String newPrimKey = interpreter.proposeNewPrimKey(candidate);
-    candidate = interpreter.createObject(newPrimKey, candidate.getAttributes());
-
-    ApplicationContext.getInstance().getPersistence().store(candidate);
+    ApplicationContext.getInstance()
+                      .getPersistence()
+                      .store(interpreter.createObject(newPrimKey, candidate.getAttributes()));
     return new SubmissionResult("msg.ok.objectStored", newPrimKey, true);
   }
 

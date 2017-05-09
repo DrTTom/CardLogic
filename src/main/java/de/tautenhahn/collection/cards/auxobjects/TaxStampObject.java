@@ -11,15 +11,19 @@ import de.tautenhahn.collection.generic.data.Year;
 
 /**
  * Describes the tax stamp occurring on a deck.
- * 
+ *
  * @author TT
  */
 public class TaxStampObject extends MapBasedDescribedObjectInterpreter
 {
 
+  /**
+   * Creates immutable instance
+   */
   public TaxStampObject()
   {
-    super("taxStamp", new Year("usedFrom"), new Year("usedTo"), new ImageRef(), new FreeText("remark"));
+    super("taxStamp", new Year("usedFrom"), new Year("usedTo"), new ImageRef(),
+          new FreeText("remark", 80, 2));
   }
 
   @Override

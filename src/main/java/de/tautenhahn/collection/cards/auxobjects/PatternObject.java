@@ -12,15 +12,17 @@ import de.tautenhahn.collection.generic.data.MapBasedDescribedObjectInterpreter;
 /**
  * Patterns are stored in persistence, name and primary key are i
  *
- * @author tautenhahn
+ * @author TT
  */
 public class PatternObject extends MapBasedDescribedObjectInterpreter
 {
 
-
+  /**
+   * Creates immutable instance.
+   */
   public PatternObject()
   {
-    super("pattern", new FreeText("name"), new ImageRef(), new Suits());
+    super("pattern", new FreeText("name", 40, 1), new ImageRef(), new Suits());
   }
 
   @Override

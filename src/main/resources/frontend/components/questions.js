@@ -68,6 +68,16 @@ Vue.component('questions', {
             searchMode="check";
             CollectionEvents.answersChanged.send(this.allQuestions);
         },
+        uploadFile: function(event)
+        {
+        	console.log(event.target.files);
+        	var data = new FormData();
+        	 data.set('file', event.target.files[0]);
+        	 this.$http.post('/upload/image', data).then((response) => {
+        	  // result
+        	 }, (error) => { console.log (error)})
+        },
+        
         store: function(event) {
             var newDeck = {
                 "type": "deck",

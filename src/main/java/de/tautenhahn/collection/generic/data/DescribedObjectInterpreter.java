@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.Question;
 
 
 /**
@@ -39,7 +40,7 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Returns a list of all attributes backed up by binary objects. <br>
-   * TODO: this information should be fed from attribute interpreters.
+   * TODO: remove this method, just look at the question type the attribute interpreter asks.
    */
   public abstract Collection<String> getBinaryValuedAttributes();
 
@@ -52,7 +53,7 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Returns a value indicating whether two descriptions may mean the same object.
-   * 
+   *
    * @param searchMask
    * @param candidate
    */

@@ -3,8 +3,10 @@ package de.tautenhahn.collection.generic.data;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.Question;
 
 
 /**
@@ -124,17 +126,25 @@ public abstract class AttributeInterpreter
   protected abstract Similarity correllateValue(String thisValue, String otherValue, DescribedObject context);
 
   /**
-   * Returns a default question for that attribute. Overwrite in case you want a more specific question. Note
-   * that an empty String is filled in instead of a missing value because HTML and JavaScript front ends
-   * cannot recognize null values properly and we do not want "undefined" pre-filled into input elements.
+   * Returns the question for that attribute already knowing something about the object asked for.
    *
    * @param object
    */
-  public Question getQuestion(DescribedObject object)
+  public abstract Question getQuestion(DescribedObject object);
+
+
+  /**
+   * Note that an empty String is filled in instead of a missing value because HTML and JavaScript front ends
+   * cannot recognize null values properly and we do not want "undefined" pre-filled into input elements.
+   *
+   * @param object
+   * @param constructor returns the question, expects text and group
+   */
+  protected <T extends Question> T createQuestion(DescribedObject object,
+                                                  BiFunction<String, String, T> constructor)
   {
     ApplicationContext ctx = ApplicationContext.getInstance();
-    Question result = new Question(name, ctx.getText(name + ".question.text"),
-                                   ctx.getText(name + ".question.group"));
+    T result = constructor.apply(ctx.getText(name + ".question.text"), ctx.getText(name + ".question.group"));
     result.setHelptext(ctx.getText(name + ".question.help"));
     result.setValue(Optional.ofNullable(toDisplayValue(object.getAttributes().get(name))).orElse(""));
     return result;

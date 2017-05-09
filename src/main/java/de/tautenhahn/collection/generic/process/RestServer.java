@@ -35,7 +35,7 @@ import spark.Spark;
 /**
  * Feeds the RestServer with content.
  *
- * @author jean
+ * @author TT
  */
 public class RestServer
 {
@@ -92,10 +92,22 @@ public class RestServer
 
     // proof of concept for file upload:
     get("/importDefault", (request, response) -> {
-      return "<html><body>"
-             + "<form method='post' enctype='multipart/form-data' action='/import/testImport' >"
-             + "<input type='file' name='uploaded_file'>" + "<button>Upload file</button>" + "</form>"
+      response.header("content-type", "text/html");
+      return "<html><body>" + "<form method='post' enctype='multipart/form-data' action='/upload/test' >"
+             + "<input type='file' name='file'>" + "<button>Upload file</button>" + "</form>"
              + "</body></html>";
+    });
+
+    post("/upload/:ref", (request, response) -> {
+      System.out.println("got upload ");
+      request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+      byte[] buf = new byte[100];
+      try (InputStream is = request.raw().getPart("file").getInputStream())
+      {
+        is.read(buf);
+      }
+      System.out.println("File uploaded at " + request.params(":ref") + " started with " + new String(buf));
+      return "File uploaded at " + request.params(":ref") + " started with " + new String(buf);
     });
 
     // exception handling during development

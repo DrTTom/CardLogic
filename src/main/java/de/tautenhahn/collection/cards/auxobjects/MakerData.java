@@ -16,10 +16,13 @@ import de.tautenhahn.collection.generic.data.Year;
 public class MakerData extends MapBasedDescribedObjectInterpreter
 {
 
+  /**
+   * Creates new instance.
+   */
   public MakerData()
   {
-    super("maker", new FreeText("fullName"), new Year("from"), new Year("to"), new FreeText("place"),
-          new Domain(), new FreeText("remark"));
+    super("maker", new FreeText("fullName", 80, 1), new Year("from"), new Year("to"),
+          new FreeText("place", 80, 1), new Domain(), new FreeText("remark", 80, 4));
   }
 
   @Override

@@ -5,13 +5,26 @@ import java.util.List;
 import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.Question;
+import de.tautenhahn.collection.generic.data.question.TextQuestion;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 import javafx.util.Pair;
 
 
+/**
+ * A year when something happened, providing restrictions to put events in correct chronological order.
+ *
+ * @author TT
+ */
 public class Year extends AttributeInterpreter
 {
 
+  /**
+   * Creates new instance.
+   * 
+   * @param name
+   * @param flags
+   */
   public Year(String name, Flag... flags)
   {
     super(name, flags);
@@ -109,6 +122,11 @@ public class Year extends AttributeInterpreter
     notBefore.add(attribName);
   }
 
+  /**
+   * Same as {@link #addNotBeforeRestriction(String...)} but value may not be later that the other one.
+   *
+   * @param attribName
+   */
   protected void addNotAfterRestriction(String... attribName)
   {
     if (attribName.length == 0)
@@ -116,5 +134,13 @@ public class Year extends AttributeInterpreter
       throw new IllegalArgumentException("attribute name must be given");
     }
     notAfter.add(attribName);
+  }
+
+  @Override
+  public Question getQuestion(DescribedObject object)
+  {
+    TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
+    result.setFormat(1, 4);
+    return result;
   }
 }

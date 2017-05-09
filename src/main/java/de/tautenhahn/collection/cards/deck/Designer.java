@@ -6,7 +6,7 @@ import de.tautenhahn.collection.generic.data.FreeText;
 /**
  * Designer of a deck, so far only a free text. Possibly use an auxiliary object in case there is enough data
  * about playing card designers.
- * 
+ *
  * @author TT
  */
 public class Designer extends FreeText
@@ -17,6 +17,6 @@ public class Designer extends FreeText
    */
   public Designer()
   {
-    super("designer", Flag.OPTIONAL);
+    super("designer", 40, 1, Flag.OPTIONAL);
   }
 }

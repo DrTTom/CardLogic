@@ -34,9 +34,10 @@ import org.junit.Test;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
-import de.tautenhahn.collection.generic.data.Question;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 import de.tautenhahn.collection.generic.data.TypeBasedEnumeration;
+import de.tautenhahn.collection.generic.data.question.ChoiceQuestion;
+import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import de.tautenhahn.collection.generic.process.ProcessFactory;
 import de.tautenhahn.collection.generic.process.RestServer;
@@ -182,16 +183,17 @@ public class CardsTest
   {
     SearchProcess systemUnderTest = ProcessFactory.getInstance().getSearch("deck");
     SearchResult result = systemUnderTest.search(Collections.emptyMap());
-    Question suitQuestion = getQuestion(result.getQuestions(), "suits");
+    ChoiceQuestion suitQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), "suits");
     assertThat(suitQuestion.getAllowedValues(), hasItem("deutsch"));
     int numberTotal = result.getNumberTotal();
     assertThat(result.getNumberPossible(), is(numberTotal));
-    assertThat(getQuestion(result.getQuestions(), "pattern").getAllowedValues(), hasItem("Berliner Bild"));
+    ChoiceQuestion patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), "pattern");
+    assertThat(patternQuestion.getAllowedValues(), hasItem("Berliner Bild"));
 
     result = systemUnderTest.search(Collections.singletonMap("suits", "deutsch"));
     assertThat(result.getNumberPossible(), lessThan(numberTotal));
-    assertThat(getQuestion(result.getQuestions(), "pattern").getAllowedValues(),
-               not(hasItem("Berliner Bild")));
+    patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), "pattern");
+    assertThat(patternQuestion.getAllowedValues(), not(hasItem("Berliner Bild")));
     assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), nullValue());
     assertThat(result.getTranslations().get("maker").get("Scharff"), is("Walter Scharff"));
 
@@ -218,7 +220,7 @@ public class CardsTest
     myDeck.getAttributes().put("suits", "deutsch");
     myDeck.getAttributes().put("pattern", "Französisches Bild");
     DescribedObjectInterpreter interpreter = application.getInterpreter(myDeck.getType());
-    Question pq = getQuestion(interpreter.getQuestions(myDeck, false), "pattern");
+    ChoiceQuestion pq = (ChoiceQuestion)getQuestion(interpreter.getQuestions(myDeck, false), "pattern");
     assertThat(pq.getProblem(), is(application.getText("msg.error.optionMismatches.suits")));
     assertThat(pq.getValue(), is("Französisches Bild"));
     assertThat(pq.getAllowedValues(), hasItem("Französisches Bild"));

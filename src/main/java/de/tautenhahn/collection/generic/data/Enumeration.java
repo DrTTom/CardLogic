@@ -42,12 +42,4 @@ public abstract class Enumeration extends AttributeInterpreter
     }
     return isExact() ? Similarity.DIFFERENT : Similarity.NO_STATEMENT;
   }
-
-  @Override
-  public Question getQuestion(DescribedObject object)
-  {
-    Question result = super.getQuestion(object);
-    result.setAllowedValues(getAllowedValues(object));
-    return result;
-  }
 }

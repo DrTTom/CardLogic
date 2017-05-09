@@ -1,7 +1,7 @@
 package de.tautenhahn.collection.cards.deck;
 
-import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
@@ -10,7 +10,7 @@ import de.tautenhahn.collection.generic.data.Similarity;
  *
  * @author TT
  */
-public class SpecialMeasure extends AttributeInterpreter
+public class SpecialMeasure extends FreeText
 {
 
   /**
@@ -18,7 +18,7 @@ public class SpecialMeasure extends AttributeInterpreter
    */
   protected SpecialMeasure()
   {
-    super("specialMeasure");
+    super("specialMeasure", 40, 1);
   }
 
   @Override
@@ -36,14 +36,14 @@ public class SpecialMeasure extends AttributeInterpreter
     }
     if ("0".equals(thisValue) || "0".equals(otherValue))
     {
-      return Similarity.NO_STATEMENT; // cannot decide uniquely if eye is visible and has unique position
+      return Similarity.NO_STATEMENT; // cannot decide uniquely whether eye is visible and has unique position
     }
     try
     {
       return new Format.Rectangle(thisValue).similar(new Format.Rectangle(otherValue))
         ? Similarity.ALMOST_SIMILAR : Similarity.DIFFERENT;
     }
-    catch (IllegalArgumentException e)
+    catch (@SuppressWarnings("unused") IllegalArgumentException e)
     {
       return Similarity.NO_STATEMENT;
     }

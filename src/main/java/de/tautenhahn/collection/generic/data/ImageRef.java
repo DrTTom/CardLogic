@@ -1,19 +1,23 @@
 package de.tautenhahn.collection.generic.data;
 
-import java.io.IOException;
-
 import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.data.question.FileQuestion;
+import de.tautenhahn.collection.generic.data.question.Question;
 
 
 /**
  * Basic image illustrating the object.
  *
- * @author jean
+ * @author TT
  */
 public class ImageRef extends AttributeInterpreter
 {
 
+  /**
+   * Creates instance for image property.
+   *
+   * @param flags
+   */
   public ImageRef(Flag... flags)
   {
     super("image", flags);
@@ -36,33 +40,8 @@ public class ImageRef extends AttributeInterpreter
   @Override
   public Question getQuestion(DescribedObject object)
   {
-    Question result = super.getQuestion(object);
-    Persistence persistence = ApplicationContext.getInstance().getPersistence();
-    if (result.getValue() == null || result.getValue().isEmpty())
-    {
-      if (object.getPrimKey() == null)
-      {
-        result.setUploadStatus("UNAVAILABLE");
-      }
-      else
-      {
-        try
-        {
-          result.setUploadStatus(persistence.createNewBinRef(object.getPrimKey(), object.getType(), "jpg"));
-          // TODO: file extension should reflect file type.
-        }
-        catch (IOException e)
-        {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
-      }
-    }
-    else
-    {
-      result.setUploadStatus(persistence.binObjectExists(result.getValue()) ? "COMPLETE" : "MISSING");
-    }
-
+    FileQuestion result = createQuestion(object, (text, form) -> new FileQuestion(getName(), text, form));
+    result.setAccept(".jpg,.gif,.png,.tiff");
     return result;
   }
 }

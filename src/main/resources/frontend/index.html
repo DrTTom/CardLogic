@@ -45,6 +45,7 @@
                         v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
+                <input type="file" v-if="currentQuestion.type=='File'" v-on:change="uploadFile" />
                 <label v-if="currentQuestion.problem" style="color: darkred;">{{currentQuestion.problem}}</label>
              </div>
              <div class="clear"/>
@@ -57,6 +58,23 @@
      </div>
     </script>
 
+	<script type="text/x-template" id="questionTemplate">
+      <div>
+          <div class="left">{{data.text}}</div>
+             <div class="right">
+                <input v-if="typeof data.allowedValues =='undefined'" type="text" v-model="data.value" 
+                       v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:mouseout="enableUpdate" v-on:keypress="enableUpdate" 
+                       v-bind:title="data.helptext"/>
+                <select v-if="typeof data.allowedValues !='undefined'"  v-model="data.value" 
+                        v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
+                   <option v-for="val in data.allowedValues">{{val}}</option>
+                </select>
+                <label v-if="data.problem" style="color: darkred;">{{data.problem}}</label>
+             </div>
+             <div class="clear"/>
+      </div>
+    </script>
+    
 	<!-- HTML for components/cardList.js <cardlist> (Overview over all found cards)-->
 	<script type="text/x-template" id="cardListTemplate">
         <div>
@@ -166,6 +184,7 @@
 	<script src="components/cardList.js"></script>
 	<script src="components/deckTile.js"></script>
 	<script src="components/fullDeck.js"></script>
+	<script src="components/test.js"></script>
 
 	<!-- Main Application -->
 	<script src="main.js"></script>

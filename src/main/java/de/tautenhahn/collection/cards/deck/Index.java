@@ -18,7 +18,7 @@ public class Index extends FreeText
    */
   protected Index()
   {
-    super("index");
+    super("index", 40, 1);
   }
 
   @Override

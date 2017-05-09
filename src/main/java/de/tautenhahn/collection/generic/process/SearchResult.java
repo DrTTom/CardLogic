@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.Question;
+import de.tautenhahn.collection.generic.data.question.Question;
 
 
 /**
