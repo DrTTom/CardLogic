@@ -35,21 +35,25 @@
        <input type="checkbox" v-bind:id="'group'+index" v-model="groupVisible[index]"/>
        <label class="c-card__item" v-bind:for="'group'+index">{{group.name}}</label>
        <div class="c-card__item">
-          <div v-for="currentQuestion in group.elements"> 
+          <span v-for="currentQuestion in group.elements">
+             <div v-if="!currentQuestion.alignWithPrevious" class="newLine"> </div>
+             <div class="questionBlock">
              <div class="left">{{currentQuestion.text}}</div>
-             <div class="right">
-                <input v-if="typeof currentQuestion.allowedValues =='undefined'" type="text" v-model="currentQuestion.value" 
+             <div>
+                <input v-if="currentQuestion.type=='Text'" type="text" v-model="currentQuestion.value" 
+                       v-bind:size="currentQuestion.cols"
                        v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:mouseout="enableUpdate" v-on:keypress="enableUpdate" 
                        v-bind:title="currentQuestion.helptext"/>
-                <select v-if="typeof currentQuestion.allowedValues !='undefined'"  v-model="currentQuestion.value" 
+                <select v-if="currentQuestion.type=='TextChoice'"  v-model="currentQuestion.value" 
                         v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
                 <input type="file" v-if="currentQuestion.type=='File'" v-on:change="uploadFile" />
                 <label v-if="currentQuestion.problem" style="color: darkred;">{{currentQuestion.problem}}</label>
              </div>
-             <div class="clear"/>
-          </div>
+             </div>
+          </span>
+          <div class="newLine"> </div>
          <input v-if="index+1<questionGroups.length" class="c-button c-button--brand" type="submit" value="Weiter" v-on:click="next(index)"/>
          <input v-if="index+1==questionGroups.length && nextAction=='check'" class="c-button c-button--brand" type="submit" value="Prüfen und neu anlegen" v-on:click="check"/>
          <input v-if="index+1==questionGroups.length && nextAction=='submit'" class="c-button c-button--brand" type="submit" value="Speichern" v-on:click="store"/>

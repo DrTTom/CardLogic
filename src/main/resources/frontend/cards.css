@@ -3,85 +3,84 @@ body {
 	color: #0F0000;
 	font-family: sans;
 }
-    ul {
-        list-style: none;
-    }
-    
-    li {
-        margin-bottom: 5px;
-    }
-    
-    ul[id=cardContainer] {
-    	width: 100%;
-        float: left;
-    }
-    
-h2 {
-padding-left: 0.5em;
-color: white;
-}
-    .c-card
-    {
-		border-radius: 10px !important;
-    }
-    
-    .bigTile {
-        	margin: 5px !important;
-        display: inline-block;
-        width: 500px;
-        height: 280px;
-	}
-    .smallTile {
-        	margin: 5px !important;
-        display: inline-block;
-        width: 333px;
-        height: 140px;
-    }
-    
-    
 
-    .bigTile img {
-    	float: right;
-    	margin-top: 7px;
-        max-width: 250px;
-        max-height: 230px;
-    }
-    
-    .c-overlay img{
-        max-width: 320px;
-        max-height: 400px;
-    }
-    
-    .smaller
-    {font-size: 0.85em
-    }
-    
-    .answered {
-        color:red;
-    }
-    
-    .width300
-    {
-    	max-width: 350px;
-    	padding-left: 5px
-    }
-    
-        .o-modal {
-position: fixed !important;
-		border-radius: 10px !important;
+ul {
+	list-style: none;
 }
+
+li {
+	margin-bottom: 5px;
+}
+
+ul[id=cardContainer] {
+	width: 100%;
+	float: left;
+}
+
+h2 {
+	padding-left: 0.5em;
+	color: white;
+}
+
+.c-card {
+	border-radius: 10px !important;
+}
+
+.bigTile {
+	margin: 5px !important;
+	display: inline-block;
+	width: 500px;
+	height: 280px;
+}
+
+.smallTile {
+	margin: 5px !important;
+	display: inline-block;
+	width: 333px;
+	height: 140px;
+}
+
+.bigTile img {
+	float: right;
+	margin-top: 7px;
+	max-width: 250px;
+	max-height: 230px;
+}
+
+.c-overlay img {
+	max-width: 320px;
+	max-height: 400px;
+}
+
+.smaller {
+	font-size: 0.85em
+}
+
+.answered {
+	color: red;
+}
+
+.width300 {
+	max-width: 350px;
+	padding-left: 5px
+}
+
+.o-modal {
+	position: fixed !important;
+	border-radius: 10px !important;
+}
+
 .c-overlay {
-position: fixed !important;
-background-color: hsla(0,0%,7%,.7) !important;
+	position: fixed !important;
+	background-color: hsla(0, 0%, 7%, .7) !important;
 }
-    
-.c-card--accordion
-{
-  border-radius: 0px !important;
-  margin: 0px !important;
+
+.c-card--accordion {
+	border-radius: 0px !important;
+	margin: 0px !important;
 }
-.c-card--accordion > input  + .c-card__item+ .c-card__item
-{
+
+.c-card--accordion>input+.c-card__item+.c-card__item {
 	max-height: 0px;
 	display: block;
 	overflow: hidden;
@@ -92,57 +91,62 @@ background-color: hsla(0,0%,7%,.7) !important;
 	transition: max-height 0.3s;
 }
 
-.c-card--accordion > input:checked + .c-card__item+ .c-card__item
-{
-    max-height: 500px;
+.c-card--accordion>input:checked+.c-card__item+.c-card__item {
+	max-height: 500px;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 	transition: padding-top 0.3s;
 	transition: padding-bottom 0.3s;
-    transition: max-height 0.3s;
+	transition: max-height 0.3s;
 }
 
-.left {
-      width: 50%;
-      float: left;
-            vertical-align: bottom;
-    }
-.right {
-      margin-left: 50%;
-      vertical-align: bottom;
-    }
-    .clear {
-      clear: both;
-      padding-bottom: 0.5em;
-    }
-
-.taxStamp
-{
-padding-left:1em;
-padding-right:1em;
-float: right;
-}
-.makerSign
-{
-padding-left:1em;
-padding-right:1em;
-float: right;
-max-height: 60px !important;
+.taxStamp {
+	padding-left: 1em;
+	padding-right: 1em;
+	float: right;
 }
 
-.centerbox
-{
-background-color: lightgray;
-display: -webkit-flex;
-display: -webkit-box;
-display: -ms-flexbox;
-display: flex;
--webkit-align-items: center;
--webkit-box-align: center;
--ms-flex-align: center;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-height:100%;
-width: 100%;
+.makerSign {
+	padding-left: 1em;
+	padding-right: 1em;
+	float: right;
+	max-height: 60px !important;
+}
+
+.newLine {
+	clear: line;
+}
+
+.newLine+.questionBlock div:first-child {
+	display: inline-block;
+	width: 24em;
+	max-width: 24em;
+}
+
+.questionBlock {
+	display: inline-block;
+}
+
+.questionBlock div {
+	display: inline-block;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	padding-bottom: 0.5em;
+	vertical-align: bottom;
+}
+
+.centerbox {
+	background-color: lightgray;
+	display: -webkit-flex;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-align-items: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
 }

@@ -3,6 +3,7 @@ package de.tautenhahn.collection.cards.deck;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
+import de.tautenhahn.collection.generic.data.question.Question;
 
 
 /**
@@ -18,7 +19,7 @@ public class NumberIndex extends FreeText
    */
   protected NumberIndex()
   {
-    super("numIndex", 40, 1);
+    super("numIndex", 4, 1);
   }
 
   @Override
@@ -33,6 +34,12 @@ public class NumberIndex extends FreeText
     return thisValue.equals(otherValue) ? Similarity.SIMILAR
       : (thisValue.endsWith(otherValue) || otherValue.endsWith(thisValue)) ? Similarity.HINT
         : Similarity.DIFFERENT;
+  }
+
+  @Override
+  public Question getQuestion(DescribedObject object)
+  {
+    return super.getQuestion(object).alignWithPrevious();
   }
 
 }

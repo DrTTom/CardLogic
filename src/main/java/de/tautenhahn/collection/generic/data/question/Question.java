@@ -35,6 +35,8 @@ public class Question
 
   private final String form;
 
+  private boolean alignWithPrevious;
+
   private String problem;
 
   private final Type type;
@@ -137,6 +139,24 @@ public class Question
   public void setProblem(String problem)
   {
     this.problem = problem;
+  }
+
+
+  /**
+   * Returns true if question should displayed together with previous one.
+   */
+  public boolean isAlignWithPrevious()
+  {
+    return alignWithPrevious;
+  }
+
+  /**
+   * Declares the question to be displayed together with the previous one.
+   */
+  public Question alignWithPrevious()
+  {
+    alignWithPrevious = true;
+    return this;
   }
 
 }
