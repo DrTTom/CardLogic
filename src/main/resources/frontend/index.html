@@ -48,6 +48,7 @@
                         v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
+                <imagechoice :question="currentQuestion" v-if="currentQuestion.type=='ImageChoice'"></imagechoice>
                 <input type="file" v-if="currentQuestion.type=='File'" v-on:change="uploadFile" />
                 <label v-if="currentQuestion.problem" style="color: darkred;">{{currentQuestion.problem}}</label>
              </div>
@@ -188,7 +189,7 @@
 	<script src="components/cardList.js"></script>
 	<script src="components/deckTile.js"></script>
 	<script src="components/fullDeck.js"></script>
-	<script src="components/test.js"></script>
+	<script src="components/imageChoice.js"></script>
 
 	<!-- Main Application -->
 	<script src="main.js"></script>

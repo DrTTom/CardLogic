@@ -22,6 +22,11 @@ public class DescribedObject
    */
   public static final String NAME_KEY = "name";
 
+  /**
+   * Default key to store an image (relative URL) in. Supports image choices.
+   */
+  public static final String IMAGE_KEY = "image";
+
   private final Map<String, String> attributes = new Hashtable<>();
 
   /**

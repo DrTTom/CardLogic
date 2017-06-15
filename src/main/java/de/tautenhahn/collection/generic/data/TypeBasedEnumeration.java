@@ -34,6 +34,8 @@ public abstract class TypeBasedEnumeration extends Enumeration
   /** Inverse map to {@link #primKeyByName} */
   protected Map<String, String> nameByPrimKey = new HashMap<>();
 
+  protected Map<String, String> imageByName = new HashMap<>();
+
   /**
    * Creates new instance.
    *
@@ -95,6 +97,9 @@ public abstract class TypeBasedEnumeration extends Enumeration
 
   private void setupMaps()
   {
+    primKeyByName.clear();
+    nameByPrimKey.clear();
+    imageByName.clear();
     for ( String key : persistence.getKeyValues(getName()) )
     {
       DescribedObject obj = persistence.find(getName(), key);
@@ -102,6 +107,8 @@ public abstract class TypeBasedEnumeration extends Enumeration
                             .orElse(obj.getPrimKey());
       primKeyByName.put(name, obj.getPrimKey()); // TODO: handle alternative names here as well
       nameByPrimKey.put(obj.getPrimKey(), name);
+      Optional.ofNullable(obj.getAttributes().get(DescribedObject.IMAGE_KEY))
+              .ifPresent(img -> imageByName.put(name, img));
     }
   }
 
