@@ -150,3 +150,8 @@ h2 {
 	height: 100%;
 	width: 100%;
 }
+.chooseMe 
+{
+	display: inline-block;
+	width: 10em !important;
+}

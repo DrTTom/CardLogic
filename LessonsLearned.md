@@ -18,8 +18,11 @@ klar.
 VUEJS und update von gebundenen Elementen
 =========================================
 
-Wenn z.B. eine Checkbox an eine Variable von Vue gebunden ist und sich die Variable ändert, erfolgt manchmal kein Update. 
+- Wenn z.B. eine Checkbox an eine Variable von Vue gebunden ist und sich die Variable ändert, erfolgt manchmal kein Update. 
 VUE triggert den Update nicht, wenn es sich bei der Variable um ein Attribut in einem Attribut handelt. Anhilfe: irgendein _direktes_ Attribut der VUE Komponente ändern 
+- Arrays als properties einer Komponente funktionieren nicht wie beschrieben. Alle Instanzen einer Vue-Komponente teilen sich das selbe Array, 
+überschreiben also ihre Werte gegenseitig.
+Benötigt man ein Array als property einer Komponente, muss man es in ein künstliches Object einpacken. 
 
 CSS Frameworks: z.B. Blaze CSS
 ==============================
@@ -38,3 +41,5 @@ _Fazit:_
 - Ein CSS-Framework kann niemals mit einem professionell für eine Anwendung designten CSS konkurrieren.
 - Die Dinger sind aber extrem nützlich, wenn man selbst ein CSS schreibt und kein CSS-Guru ist. Allein zu erfahren, was 
   alles rein mit CSS zu machen ist, lohnt die Beschäftigung.
+
+Außerdem hat sich in diesem Zusammenhang die Webseite https://jsfiddle.net/ als recht nützlich erwiesen. Dort kann man das Zusamenspiel von CSS, HTML und JS-Schnipselns schnell und einfach ausprobieren.

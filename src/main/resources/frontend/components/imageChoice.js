@@ -1,13 +1,11 @@
 Vue.component('imagechoice', {
-    template: '<div><ul><li v-for="text in antivue.values"><img v-bind:src="text.image"/><input type="radio" v-bind:name="name"/></li></ul></div>',
+    template: '<div v-if="visible"><div v-for="item in antivue.values" class="chooseMe">'
+    	+'<img v-bind:src="item.image"/> <br>{{item.name}}'+
+    	' <input type="radio" v-bind:name="question.paramName" v-bind:value="item.name"/></div></div>',
     mounted: function() {
     	   this.populate();
         },
     props: {
-    	name: {
-    		type: String,
-    		default: "changeMe"
-    	},
         question:{
         	type: Object,
         	default: {}
@@ -15,7 +13,11 @@ Vue.component('imagechoice', {
     	antivue: {
     		type: Object,
     		default: {values: []}
-    	}
+    	},
+        visible:{
+        	type:Boolean,
+        	default: true
+        }
     	    },
     methods: {
     	populate: function()
