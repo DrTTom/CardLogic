@@ -1,7 +1,8 @@
 Vue.component('questions', {
     template: '#questionsTemplate',
     mounted: function() {
-        CollectionEvents.searchUpdated.on(this.updateQuestions);
+    	CollectionEvents.searchUpdated.on(this.updateQuestions);
+    	CollectionEvents.valueChanged.on(this.valueChanged);
     },
     props: {
         allQuestions: {
@@ -45,11 +46,23 @@ Vue.component('questions', {
                 currentGroup.elements.push(this.allQuestions[i]);
             }
         },
+        valueChanged: function(event)
+        {
+           for (i = 0; i < this.allQuestions.length; i++) {
+        	   console.log(this.allQuestions[i].paramName + "--> "+event.key)
+        	   if (this.allQuestions[i].paramName==event.key)
+        		   {
+        		   this.allQuestions[i].value=event.value;
+        		   CollectionEvents.answersChanged.send(this.allQuestions);
+        		   return;
+        		   }
+           }
+        },
         answerQuestion: function(event) {
             if (actorUser == true) {
                 actorUser = false;
                 if (event.which == 13 || event.keyCode == 13 || event.type == 'change') {
-                    CollectionEvents.answersChanged.send(this.allQuestions);
+                	 CollectionEvents.answersChanged.send(this.allQuestions);
                 }
             }
         },

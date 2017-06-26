@@ -1,33 +1,46 @@
 Vue.component('imagechoice', {
-    template: '<div v-if="visible"><div v-for="item in antivue.values" class="chooseMe">'
-    	+'<img v-bind:src="item.image"/> <br>{{item.name}}'+
-    	' <input type="radio" v-bind:name="question.paramName" v-bind:value="item.name"/></div></div>',
+    template: '<span><input type="button" v-on:click="openChoice" v-bind:value="question.value"/></span>',
     mounted: function() {
-    	   this.populate();
-        },
+        this.populate();
+        CollectionEvents.valueChanged.on(this.update);
+    },
     props: {
-        question:{
-        	type: Object,
-        	default: {}
+        question: {
+            type: Object,
+            default: {}
         },
-    	antivue: {
-    		type: Object,
-    		default: {values: []}
-    	},
-        visible:{
-        	type:Boolean,
-        	default: true
-        }
-    	    },
+        data: {
+            type: Object,
+            default: {
+                values: [],
+                key: "",
+                selected: ""
+            }
+        },
+    },
     methods: {
-    	populate: function()
-    	{
-    		this.antivue={values: []};
-    		var that=this;
-    		Object.keys(this.question.urls).forEach( function add(key)
-    		{
-    			that.antivue.values.push( { name: key, image: "http://localhost:4567/download/"+that.question.urls[key], radio:false})
-    		});		
-    	}
+        populate: function() {
+            this.data = {
+                values: []
+            };
+            var that = this;
+            Object.keys(this.question.urls).forEach(function add(key) {
+                that.data.values.push({
+                    name: key,
+                    image: url + "/download/" + that.question.urls[key]
+                })
+            });
+            this.data.key = this.question.paramName;
+            this.data.selected = this.question.value;
+        },
+        openChoice: function() {
+            CollectionEvents.imageChoiceOpened.send(this.data);
+        },
+        update: function(entry) {
+            if (this.question.key == entry.key) {
+                this.question.value = entry.value;
+                console.log(entry.value);
+            }
+        }
     }
 })

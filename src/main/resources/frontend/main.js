@@ -8,6 +8,10 @@ var app = new Vue({
         CollectionEvents.answersChanged.on(this.executeSearch);
         this.executeSearch([]);
     },
+    data:
+    {
+        showOverlay:false
+    },
     methods: {
         executeSearch: function(questions) {
             var query = url + '/' + searchMode + '/' + currentType + this.extractQueryParams(questions);
