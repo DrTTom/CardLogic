@@ -22,6 +22,10 @@ h2 {
 	color: white;
 }
 
+textarea {
+	font-family: sans;
+}
+
 .c-card {
 	border-radius: 10px !important;
 }
@@ -114,7 +118,7 @@ h2 {
 }
 
 .newLine {
-	clear: line;
+	clear: both;
 }
 
 .newLine+.questionBlock div:first-child {

@@ -26,6 +26,13 @@ public class Main
     CardApplicationContext.register();
     ApplicationContext.getInstance().getPersistence().init("cards");
     RestServer.getInstance().start();
-    System.out.println("Server started, point your browser to http://localhost:4567/search/deck");
+    try
+    {
+      Runtime.getRuntime().exec("firefox http://localhost:4567/index.html");
+    }
+    catch (Throwable t)
+    {
+      System.out.println("Server started, point your browser to http://localhost:4567/index.html");
+    }
   }
 }

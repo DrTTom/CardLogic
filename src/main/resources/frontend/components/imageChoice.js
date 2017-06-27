@@ -14,6 +14,7 @@ Vue.component('imagechoice', {
             default: {
                 values: [],
                 key: "",
+                name: "",
                 selected: ""
             }
         },
@@ -31,9 +32,12 @@ Vue.component('imagechoice', {
                 })
             });
             this.data.key = this.question.paramName;
+            this.data.name = this.question.text;
             this.data.selected = this.question.value;
         },
         openChoice: function() {
+            this.populate(); // TODO: inline!
+            console.log("sending options " + this.data.values.length)
             CollectionEvents.imageChoiceOpened.send(this.data);
         },
         update: function(entry) {

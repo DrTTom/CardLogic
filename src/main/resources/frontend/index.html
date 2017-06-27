@@ -41,16 +41,18 @@
              <div class="questionBlock">
              <div class="left">{{currentQuestion.text}}</div>
              <div>
-                <input v-if="currentQuestion.type=='Text'" type="text" v-model="currentQuestion.value" 
+                <input v-if="currentQuestion.type=='Text' && currentQuestion.lines<2" type="text" v-model="currentQuestion.value" 
                        v-bind:size="currentQuestion.cols"
                        v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:mouseout="enableUpdate" v-on:keypress="enableUpdate" 
                        v-bind:title="currentQuestion.helptext"/>
-                <select v-if="currentQuestion.type=='TextChoice'"  v-model="currentQuestion.value" 
+                <select v-if="currentQuestion.type=='TextChoice' || currentQuestion.type=='ObjectChoice'"   v-model="currentQuestion.value" 
                         v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
                 <imagechoice :question="currentQuestion" v-if="currentQuestion.type=='ImageChoice'"></imagechoice>
                 <input type="file" v-if="currentQuestion.type=='File'" v-on:change="uploadFile" />
+                <textarea v-if="currentQuestion.type=='Text' && currentQuestion	.lines>1" v-model="currentQuestion.value"
+                     v-bind:cols="currentQuestion.cols" v-bind:rows="currentQuestion.lines"> </textarea>
                 <label v-if="currentQuestion.problem" style="color: darkred;">{{currentQuestion.problem}}</label>
              </div>
              </div>

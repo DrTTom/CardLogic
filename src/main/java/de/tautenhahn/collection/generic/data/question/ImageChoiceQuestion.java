@@ -69,7 +69,7 @@ public class ImageChoiceQuestion extends ChoiceQuestion
    * @param w
    * @param h
    */
-  public void setForamt(int w, int h)
+  public void setFormat(int w, int h)
   {
     width = w;
     height = h;
