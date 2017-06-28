@@ -121,7 +121,7 @@ public class RestServer
 
     StringBuffer refb = new StringBuffer();
     Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
-    String ref = refb.substring(1);
+    String ref = refb.length() == 0 ? "" : refb.substring(1);
     try (InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
     {
       return doDownload(src, response, ref);

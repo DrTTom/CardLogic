@@ -39,6 +39,7 @@ public class MakerSign extends TypeBasedEnumWithForeignKey
     System.out.println(result.getAllowedValues());
     System.out.println(urlByValue);
     result.setUrls(urlByValue);
+    result.setFormat("auto", "90");
     return result;
   }
 

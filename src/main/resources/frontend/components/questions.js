@@ -49,7 +49,6 @@ Vue.component('questions', {
         valueChanged: function(event)
         {
            for (i = 0; i < this.allQuestions.length; i++) {
-        	   console.log(this.allQuestions[i].paramName + "--> "+event.key)
         	   if (this.allQuestions[i].paramName==event.key)
         		   {
         		   this.allQuestions[i].value=event.value;

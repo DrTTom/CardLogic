@@ -14,9 +14,9 @@ public class ImageChoiceQuestion extends ChoiceQuestion
 
   private Map<String, String> urls;
 
-  private int width;
+  private String width;
 
-  private int height;
+  private String height;
 
   /**
    * Creates instance.
@@ -50,26 +50,26 @@ public class ImageChoiceQuestion extends ChoiceQuestion
   /**
    * Returns width to display images with.
    */
-  public int getWidth()
+  public String getWidth()
   {
     return width;
   }
 
   /**
-   * Returns height to display images with. May be -1 if ratio is to be preserved.
+   * Returns height to display images with.
    */
-  public int getHeight()
+  public String getHeight()
   {
     return height;
   }
 
   /**
-   * specifies how to scale the images.
-   * 
+   * Specifies how to scale the images. Allowed values are numbers or "auto".
+   *
    * @param w
    * @param h
    */
-  public void setFormat(int w, int h)
+  public void setFormat(String w, String h)
   {
     width = w;
     height = h;

@@ -10,6 +10,8 @@ public class FileQuestion extends Question
 
   private String accept;
 
+  private String proposedRef;
+
   /**
    * Creates instance.
    *
@@ -21,6 +23,8 @@ public class FileQuestion extends Question
   {
     super(Type.File, paramName, text, form);
   }
+
+
 
   /**
    * Specifies filtered file extensions
@@ -38,5 +42,22 @@ public class FileQuestion extends Question
   public String getAccept()
   {
     return accept;
+  }
+
+  /**
+   * Returns the reference to use for uploading some new content. It is only a proposal, the front end may
+   * choose another reference and write it into the answer.
+   */
+  public String getProposedRef()
+  {
+    return proposedRef;
+  }
+
+  /**
+   * @see #getProposedRef()
+   */
+  public void setProposedRef(String proposedRef)
+  {
+    this.proposedRef = proposedRef;
   }
 }

@@ -233,7 +233,12 @@ public class WorkspacePersistence implements Persistence
   @Override
   public InputStream find(String ref) throws IOException
   {
-    return Files.newInputStream(collectionBaseDir.resolve(ref));
+    Path path = collectionBaseDir.resolve(ref);
+    if (!Files.isRegularFile(path) || !Files.isReadable(path))
+    {
+      throw new IOException("No readable file for reference " + ref + ", resolved to path " + path);
+    }
+    return Files.newInputStream(path);
   }
 
 

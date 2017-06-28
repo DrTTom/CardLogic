@@ -37,6 +37,7 @@ public class TaxStamp extends TypeBasedEnumeration
     result.getAllowedValues().stream().sorted().forEach(v -> urlByValue.put(v, imageByName.get(v)));
     System.out.println(urlByValue);
     result.setUrls(urlByValue);
+    result.setFormat("auto", "120");
     return result;
   }
 }
