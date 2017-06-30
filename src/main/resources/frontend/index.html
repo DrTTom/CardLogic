@@ -50,7 +50,7 @@
                    <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
                 </select>
                 <imagechoice :question="currentQuestion" v-if="currentQuestion.type=='ImageChoice'"></imagechoice>
-                <input type="file" v-if="currentQuestion.type=='File'" v-on:change="uploadFile" />
+                <imageupload :question="currentQuestion" v-if="currentQuestion.type=='File'"></imageupload>
                 <textarea v-if="currentQuestion.type=='Text' && currentQuestion	.lines>1" v-model="currentQuestion.value"
                      v-bind:cols="currentQuestion.cols" v-bind:rows="currentQuestion.lines"> </textarea>
                 <label v-if="currentQuestion.problem" style="color: darkred;">{{currentQuestion.problem}}</label>
@@ -193,6 +193,7 @@
 	<script src="components/deckTile.js"></script>
 	<script src="components/fullDeck.js"></script>
 	<script src="components/imageChoice.js"></script>
+	<script src="components/imageUpload.js"></script>
 	<script src="components/imageChoiceOverlay.js"></script>
 
 	<!-- Main Application -->

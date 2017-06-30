@@ -99,7 +99,7 @@ public class RestServer
     });
 
     post("/upload/:ref", (request, response) -> {
-      System.out.println("got upload ");
+      System.out.println("\n\n got upload ");
       request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
       byte[] buf = new byte[100];
       try (InputStream is = request.raw().getPart("file").getInputStream())
