@@ -116,7 +116,6 @@ public class SearchProcess implements PersistenceChangeListener
       }
     });
     remainingCandidates.forEach(c -> addTranslation(c, result));
-
     result.setNumberPossible(similars.size());
     result.setNumberMatching((int)similars.values().stream().filter(x -> x.probablyEqual()).count());
     if (result.getNumberMatching() > 0 || similars.size() < 100)

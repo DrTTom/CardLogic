@@ -83,6 +83,7 @@ public class RestServer
     get("/search/:type", (req, resp) -> search(req, resp, false), new JsonTransformer());
     get("/view/:type/:key", this::view, new JsonTransformer());
     get("/download/*", this::download);
+    post("/upload/*", this::doUpload);
 
     get("/check/:type", (req, resp) -> search(req, resp, true), new JsonTransformer());
     post("/submit", this::submit, new JsonTransformer());
@@ -90,42 +91,47 @@ public class RestServer
     post("/import/:collectionName", this::importCollection);
     get("/export/", this::export);
 
-    // proof of concept for file upload:
-    get("/importDefault", (request, response) -> {
-      response.header("content-type", "text/html");
-      return "<html><body>" + "<form method='post' enctype='multipart/form-data' action='/upload/test' >"
-             + "<input type='file' name='file'>" + "<button>Upload file</button>" + "</form>"
-             + "</body></html>";
-    });
-
-    post("/upload/:ref", (request, response) -> {
-      System.out.println("\n\n got upload ");
-      request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-      byte[] buf = new byte[100];
-      try (InputStream is = request.raw().getPart("file").getInputStream())
-      {
-        is.read(buf);
-      }
-      System.out.println("File uploaded at " + request.params(":ref") + " started with " + new String(buf));
-      return "File uploaded at " + request.params(":ref") + " started with " + new String(buf);
-    });
-
     // exception handling during development
     exception(Exception.class, (exception, request, response) -> {
       exception.printStackTrace();
     });
   }
 
+  /**
+   * @param request
+   * @param response not needed
+   * @return message
+   * @throws IOException
+   * @throws ServletException
+   */
+  private Object doUpload(Request request, Response response) throws IOException, ServletException
+  {
+    String ref = splatParam(request);
+    System.out.println("\n\n got upload to " + ref);
+    request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+    try (InputStream ins = request.raw().getPart("file").getInputStream())
+    {
+      ApplicationContext.getInstance().getPersistence().store(ins, ref);
+    }
+    return "File uploaded to " + ref;
+  }
+
   private Object download(Request request, Response response) throws IOException
   {
 
-    StringBuffer refb = new StringBuffer();
-    Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
-    String ref = refb.length() == 0 ? "" : refb.substring(1);
+    String ref = splatParam(request);
     try (InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
     {
       return doDownload(src, response, ref);
     }
+  }
+
+  private String splatParam(Request request)
+  {
+    StringBuffer refb = new StringBuffer();
+    Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
+    String ref = refb.length() == 0 ? "" : refb.substring(1);
+    return ref;
   }
 
   private Object doDownload(InputStream src, Response response, String ref) throws IOException

@@ -2,12 +2,14 @@ package de.tautenhahn.collection.generic.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.ImageChoiceQuestion;
 import de.tautenhahn.collection.generic.data.question.ObjectChoiceQuestion;
 import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.persistence.Persistence;
@@ -34,6 +36,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
   /** Inverse map to {@link #primKeyByName} */
   protected Map<String, String> nameByPrimKey = new HashMap<>();
 
+  /** URLs of some images to display (if any) */
   protected Map<String, String> imageByName = new HashMap<>();
 
   /**
@@ -71,7 +74,10 @@ public abstract class TypeBasedEnumeration extends Enumeration
     ObjectChoiceQuestion result = createQuestion(object,
                                                  (text, group) -> new ObjectChoiceQuestion(getName(), text,
                                                                                            group, getName()));
-    result.setAllowedValues(getAllowedValues(object));
+    List<String> options = new ArrayList<>();
+    options.add(NULL_PLACEHOLDER);
+    getAllowedValues(object).forEach(v -> options.add(toDisplayValue(v)));
+    result.setOptions(options);
     return result;
   }
 
@@ -92,7 +98,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
   @Override
   public String check(String value, DescribedObject context)
   {
-    return primKeyByName.containsKey(value) ? null : "msg.error.invalidOption";
+    return nameByPrimKey.containsKey(value) ? null : "msg.error.invalidOption";
   }
 
   private void setupMaps()
@@ -119,6 +125,33 @@ public abstract class TypeBasedEnumeration extends Enumeration
     {
       setupMaps();
     }
+  }
+
+  /**
+   * Returns an image choice question. To be called from {@link #getQuestion(DescribedObject)} in case the
+   * type this attribute is based upon mainly constists of an image.
+   *
+   * @param object
+   * @param width
+   * @param height
+   */
+  protected ImageChoiceQuestion getImageQuestion(DescribedObject object, String width, String height)
+  {
+    ImageChoiceQuestion result = createQuestion(object,
+                                                (text, group) -> new ImageChoiceQuestion(getName(), text,
+                                                                                         group));
+    Map<String, String> urlByValue = new LinkedHashMap<>();
+    urlByValue.put(NULL_PLACEHOLDER, "");
+    List<String> options = new ArrayList<>();
+    options.add(NULL_PLACEHOLDER);
+    getAllowedValues(object).stream().map(v -> toDisplayValue(v)).sorted().forEach(dv -> {
+      urlByValue.put(dv, imageByName.get(dv));
+      options.add(dv);
+    });
+    result.setOptions(options);
+    result.setUrls(urlByValue);
+    result.setFormat(width, height);
+    return result;
   }
 
 }

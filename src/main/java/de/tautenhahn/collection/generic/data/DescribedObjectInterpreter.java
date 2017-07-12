@@ -92,7 +92,8 @@ public abstract class DescribedObjectInterpreter
   private Question fillQuestion(AttributeInterpreter ai, DescribedObject context, boolean reportMissingValues)
   {
     Question result = ai.getQuestion(context);
-    if ("".equals(result.getValue()))
+    String value = context.getAttributes().get(ai.getName());
+    if (value == null)
     {
       if (reportMissingValues && !ai.isOptional())
       {
@@ -101,7 +102,7 @@ public abstract class DescribedObjectInterpreter
     }
     else
     {
-      result.setProblem(Optional.ofNullable(ai.check(result.getValue(), context))
+      result.setProblem(Optional.ofNullable(ai.check(value, context))
                                 .map(ApplicationContext.getInstance()::getText)
                                 .orElse(null));
     }

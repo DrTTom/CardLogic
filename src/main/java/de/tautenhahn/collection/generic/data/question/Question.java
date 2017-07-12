@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import de.tautenhahn.collection.generic.data.AttributeInterpreter;
+
+
 /**
  * Defines how to get information from the front end / how to ask the user.
  *
@@ -108,7 +111,8 @@ public class Question
   }
 
   /**
-   * Returns the answer if already known
+   * Returns the answer if already known. Not that the value is a display value which must be translated by an
+   * {@link AttributeInterpreter} to obtain the internal value to check and store.
    */
   public String getValue()
   {

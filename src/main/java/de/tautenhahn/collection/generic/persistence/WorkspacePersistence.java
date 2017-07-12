@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -227,7 +228,7 @@ public class WorkspacePersistence implements Persistence
   @Override
   public void store(InputStream ins, String ref) throws IOException
   {
-    Files.copy(ins, collectionBaseDir.resolve(ref));
+    Files.copy(ins, collectionBaseDir.resolve(ref), StandardCopyOption.REPLACE_EXISTING);
   }
 
   @Override

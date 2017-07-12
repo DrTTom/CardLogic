@@ -4,7 +4,6 @@ Vue.component('imagechoice', {
                +'</span>',
     mounted: function() {
         CollectionEvents.valueChanged.on(this.update);
-        console.log("mounted imageChoice for Question with value "+this.question.value)
         this.currentImage=this.question.value;
     },
     props: {

@@ -11,7 +11,7 @@ import java.util.List;
 public class ChoiceQuestion extends Question
 {
 
-  private List<String> allowedValues;
+  private List<String> options;
 
   /**
    * Creates instance.
@@ -27,22 +27,24 @@ public class ChoiceQuestion extends Question
   }
 
   /**
-   * Optional, returns list of allowed values if a selection is to be shown.
+   * Returns list of options to display in a selection input element.
    *
    * @return null for other types of input
    */
-  public List<String> getAllowedValues()
+  public List<String> getOptions()
   {
-    return allowedValues;
+    return options;
   }
 
   /**
-   * @see #getAllowedValues()
-   * @param allowedValues
+   * Specifies which options to display to the user. Elements are display values, not internal values.
+   *
+   * @see #getOptions()
+   * @param options
    */
-  public void setAllowedValues(List<String> allowedValues)
+  public void setOptions(List<String> options)
   {
-    this.allowedValues = allowedValues;
+    this.options = options;
   }
 
 }

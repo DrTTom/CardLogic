@@ -18,7 +18,7 @@ public class SpecialMeasure extends FreeText
    */
   protected SpecialMeasure()
   {
-    super("specialMeasure", 40, 1);
+    super("specialMeasure", 7, 1);
   }
 
   @Override

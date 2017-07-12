@@ -64,13 +64,12 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
   @Override
   public String check(String value, DescribedObject context)
   {
-    String primKey = primKeyByName.get(value);
-    if (primKey == null)
+    if (!nameByPrimKey.containsKey(value))
     {
       return "msg.error.invalidOption";
     }
     String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
-    if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(primKey)))
+    if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(value)))
     {
       return null;
     }

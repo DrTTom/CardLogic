@@ -2,7 +2,6 @@ package de.tautenhahn.collection.generic.data;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
@@ -97,9 +96,10 @@ public abstract class AttributeInterpreter
    * Returns null if value is OK and message otherwise. System will call this method only if values is
    * present.
    *
-   * @param value
+   * @param value internal value as present in the object
    * @param context provide a described object as context to allow the following methods changing behavior.
-   *          For instance "Viena Pattern" is legal for French suits but forbidden in German or Spanish suits.
+   *          For instance "Vienna Pattern" is legal for French suits but forbidden in German or Spanish
+   *          suits.
    */
   public abstract String check(String value, DescribedObject context);
 
@@ -146,7 +146,7 @@ public abstract class AttributeInterpreter
     ApplicationContext ctx = ApplicationContext.getInstance();
     T result = constructor.apply(ctx.getText(name + ".question.text"), ctx.getText(name + ".question.group"));
     result.setHelptext(ctx.getText(name + ".question.help"));
-    result.setValue(Optional.ofNullable(toDisplayValue(object.getAttributes().get(name))).orElse(""));
+    result.setValue(toDisplayValue(object.getAttributes().get(name)));
     return result;
   }
 
@@ -159,14 +159,17 @@ public abstract class AttributeInterpreter
   }
 
   /**
-   * Returns the value to display for representing given internal value. Values may be different if internal
-   * value is some artificial key or display value may contain characters not suitable for internal use.
+   * Returns the value to display for representing given internal value. Values may be different whenever
+   * internally used values do not look good. Reasons may be that some artificial keys are used internally.
+   * <br>
+   * By default, internally missing values are represented by empty String because most front ends can not
+   * handle null values in both directions.
    *
    * @param internalValue
    */
   public String toDisplayValue(String internalValue)
   {
-    return internalValue;
+    return internalValue == null ? "" : internalValue;
   }
 
   /**
@@ -176,7 +179,7 @@ public abstract class AttributeInterpreter
    */
   public String toInternalValue(String displayValue)
   {
-    return displayValue;
+    return dropEmptyString(displayValue);
   }
 
 }

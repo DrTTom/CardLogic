@@ -2,6 +2,8 @@ package de.tautenhahn.collection.generic.data;
 
 import java.util.List;
 
+import de.tautenhahn.collection.generic.ApplicationContext;
+
 
 /**
  * Describes an attribute which has a well-defined number of possible values.
@@ -10,6 +12,9 @@ import java.util.List;
  */
 public abstract class Enumeration extends AttributeInterpreter
 {
+
+  protected static final String NULL_PLACEHOLDER = ApplicationContext.getInstance()
+                                                                     .getText("choice.value.null");
 
   /**
    * Creates new instance.
@@ -27,7 +32,7 @@ public abstract class Enumeration extends AttributeInterpreter
   private final int matchValue;
 
   /**
-   * Returns the list of legal attribute values as used in questions and front end input.
+   * Returns the list of legal internal attribute values.
    *
    * @param context
    */
@@ -42,4 +47,18 @@ public abstract class Enumeration extends AttributeInterpreter
     }
     return isExact() ? Similarity.DIFFERENT : Similarity.NO_STATEMENT;
   }
+
+  @Override
+  public String toDisplayValue(String internalValue)
+  {
+    return internalValue == null ? NULL_PLACEHOLDER : internalValue;
+  }
+
+  @Override
+  public String toInternalValue(String displayValue)
+  {
+    return NULL_PLACEHOLDER.equals(displayValue) ? null : displayValue;
+  }
+
+
 }

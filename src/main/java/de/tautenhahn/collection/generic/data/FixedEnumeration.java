@@ -1,5 +1,6 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +69,12 @@ public abstract class FixedEnumeration extends Enumeration
     TextChoiceQuestion result = createQuestion(object,
                                                (text, group) -> new TextChoiceQuestion(getName(), text,
                                                                                        group));
-    result.setAllowedValues(getAllowedValues(object));
+    List<String> options = new ArrayList<>();
+    getAllowedValues(object).forEach(v -> options.add(toDisplayValue(v)));
+    options.add(NULL_PLACEHOLDER);
+    result.setOptions(options);
     return result;
   }
+
+
 }
