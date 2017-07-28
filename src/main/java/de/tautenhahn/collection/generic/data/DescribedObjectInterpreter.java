@@ -21,6 +21,8 @@ import de.tautenhahn.collection.generic.data.question.Question;
 public abstract class DescribedObjectInterpreter
 {
 
+  private static final String JS_NULL = "undefined";
+
   private final String type;
 
   /**
@@ -132,12 +134,12 @@ public abstract class DescribedObjectInterpreter
     for ( String key : getSupportedAttributes() )
     {
       String value = parameters.get(key);
-      if (value == null || value.trim().isEmpty())
+      if (value == null || value.trim().isEmpty() || JS_NULL.equals(value))
       {
         continue;
       }
       AttributeInterpreter ai = getAttributeInterpreter(key);
-      attribs.put(key, ai.toInternalValue(value));
+      Optional.ofNullable(ai.toInternalValue(value)).ifPresent(v -> attribs.put(key, v));
     }
 
     return new DescribedObject(type, primKey, attribs);

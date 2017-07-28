@@ -52,6 +52,8 @@ public class SearchProcess implements PersistenceChangeListener
 
   /**
    * Executes a search, reporting inconsistent search values but no missing attributes.
+   *
+   * @param parameters
    */
   public SearchResult search(Map<String, String> parameters)
   {

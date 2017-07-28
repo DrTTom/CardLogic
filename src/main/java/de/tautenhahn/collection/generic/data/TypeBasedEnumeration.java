@@ -75,8 +75,9 @@ public abstract class TypeBasedEnumeration extends Enumeration
                                                  (text, group) -> new ObjectChoiceQuestion(getName(), text,
                                                                                            group, getName()));
     List<String> options = new ArrayList<>();
-    options.add(NULL_PLACEHOLDER);
     getAllowedValues(object).forEach(v -> options.add(toDisplayValue(v)));
+    options.sort((a, b) -> a.compareTo(b));
+    options.add(NULL_PLACEHOLDER);
     result.setOptions(options);
     return result;
   }
@@ -85,13 +86,17 @@ public abstract class TypeBasedEnumeration extends Enumeration
   @Override
   public String toDisplayValue(String primKey)
   {
-    return Optional.ofNullable(primKey).map(k -> nameByPrimKey.getOrDefault(k, k)).orElse(null);
+    return Optional.ofNullable(primKey).map(k -> nameByPrimKey.getOrDefault(k, k)).orElse(NULL_PLACEHOLDER);
   }
 
 
   @Override
   public String toInternalValue(String name)
   {
+    if (NULL_PLACEHOLDER.equals(name))
+    {
+      return null;
+    }
     return Optional.ofNullable(name).map(k -> primKeyByName.getOrDefault(k, k)).orElse(null);
   }
 

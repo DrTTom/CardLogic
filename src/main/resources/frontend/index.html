@@ -45,9 +45,9 @@
                        v-bind:size="currentQuestion.cols"
                        v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:mouseout="enableUpdate" v-on:keypress="enableUpdate" 
                        v-bind:title="currentQuestion.helptext"/>
-                <select v-if="currentQuestion.type=='TextChoice' || currentQuestion.type=='ObjectChoice'"   v-model="currentQuestion.value" 
+                <select v-if="currentQuestion.type=='TextChoice' || currentQuestion.type=='ObjectChoice'" v-model="currentQuestion.value" 
                         v-on:change="answerQuestion" v-on:focus="enableUpdate" v-on:keypress="enableUpdate" >
-                   <option v-for="val in currentQuestion.allowedValues">{{val}}</option>
+                   <option v-for="val in currentQuestion.options">{{val}}</option>
                 </select>
                 <imagechoice :question="currentQuestion" v-if="currentQuestion.type=='ImageChoice'"></imagechoice>
                 <imageupload :question="currentQuestion" v-if="currentQuestion.type=='File'"></imageupload>

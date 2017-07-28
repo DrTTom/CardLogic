@@ -63,6 +63,10 @@ public abstract class FixedEnumeration extends Enumeration
     return allowedValues;
   }
 
+  /**
+   * Returns choice question where options are in sequence as is and null placeholder is added. Invalid
+   * existing value is added at the end.
+   */
   @Override
   public Question getQuestion(DescribedObject object)
   {
@@ -72,6 +76,10 @@ public abstract class FixedEnumeration extends Enumeration
     List<String> options = new ArrayList<>();
     getAllowedValues(object).forEach(v -> options.add(toDisplayValue(v)));
     options.add(NULL_PLACEHOLDER);
+    if (!options.contains(result.getValue()))
+    {
+      options.add(result.getValue());
+    }
     result.setOptions(options);
     return result;
   }

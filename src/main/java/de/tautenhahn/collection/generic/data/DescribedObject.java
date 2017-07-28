@@ -40,6 +40,7 @@ public class DescribedObject
   {
     this.type = type;
     this.primKey = primKey;
+    System.out.println("FINDME: " + attributes);
     this.attributes.putAll(attributes);
   }
 
