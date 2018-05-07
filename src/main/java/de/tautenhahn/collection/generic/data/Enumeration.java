@@ -13,6 +13,9 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 public abstract class Enumeration extends AttributeInterpreter
 {
 
+  /**
+   * Place holder to indicate that no value has been set.
+   */
   protected static final String NULL_PLACEHOLDER = ApplicationContext.getInstance()
                                                                      .getText("choice.value.null");
 

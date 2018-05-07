@@ -87,7 +87,7 @@ public class SearchWrapper
 
   /**
    * Adds a given object to the search index.
-   * 
+   *
    * @param obj
    * @throws IOException
    */
@@ -104,9 +104,14 @@ public class SearchWrapper
     }
   }
 
+  /**
+   * Removes the record specified by key from the index.
+   * 
+   * @param key
+   */
   public void removeFromIndex(String key)
   {
-    
+    // TODO
   }
 
   private IndexWriter getWriter() throws IOException

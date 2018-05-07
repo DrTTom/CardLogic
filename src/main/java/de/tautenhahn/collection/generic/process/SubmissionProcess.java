@@ -5,6 +5,7 @@ import java.util.Map;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
+import de.tautenhahn.collection.generic.persistence.Persistence;
 
 
 /**
@@ -53,10 +54,18 @@ public class SubmissionProcess
     return new SubmissionResult("msg.ok.objectStored", newPrimKey, true);
   }
 
-
+  /**
+   * Updates and stores an object, overwriting the old one.
+   *
+   * @param primKey
+   * @param attributes
+   * @param force
+   */
   public SubmissionResult update(String primKey, Map<String, String> attributes, boolean force)
   {
-    // TODO: almost same handling but do not copy
-    return null;
+    Persistence persistence = ApplicationContext.getInstance().getPersistence();
+    DescribedObject existing = persistence.find(type, primKey);
+    existing.getAttributes().putAll(attributes);
+    return submit(existing, force);
   }
 }

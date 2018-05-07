@@ -8,7 +8,6 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.data.question.TextQuestion;
 import de.tautenhahn.collection.generic.persistence.Persistence;
-import javafx.util.Pair;
 
 
 /**
@@ -20,8 +19,38 @@ public class Year extends AttributeInterpreter
 {
 
   /**
+   * Not using existing pair classes due to access restrictions.
+   */
+  private static class Pair<S, T>
+  {
+
+    private final S key;
+
+    private final T value;
+
+    Pair(S key, T value)
+    {
+      this.key = key;
+      this.value = value;
+    }
+
+
+    S getKey()
+    {
+      return key;
+    }
+
+
+    T getValue()
+    {
+      return value;
+    }
+
+  }
+
+  /**
    * Creates new instance.
-   * 
+   *
    * @param name
    * @param flags
    */

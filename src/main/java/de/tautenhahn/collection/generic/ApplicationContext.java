@@ -61,16 +61,14 @@ public abstract class ApplicationContext
   }
 
   /**
-   * Returns application specific textr for given key.
+   * Returns application specific text for given key.
    */
   protected abstract String getSpecificText(String key);
 
   /**
-   * Returns
+   * Returns an icon for the application.
    */
   public abstract Icon getApplicationIcon();
-
-
 
   /**
    * Returns the primary persistence wrapper of the application.
