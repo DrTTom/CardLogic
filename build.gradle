@@ -1,19 +1,14 @@
+
+plugins {
+  id 'com.github.spotbugs' version '1.6.2'
+  id 'com.github.ben-manes.versions' version '0.20.0'
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'eclipse'
 apply plugin: 'pmd'
-apply plugin: 'findbugs'
 apply plugin: 'jacoco'
-apply plugin: "com.github.ben-manes.versions"
-
-buildscript {
-   repositories {
-      jcenter()
-   }
-   dependencies {
-      classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
-   }
-}
 
 repositories {
    mavenCentral()
@@ -23,8 +18,8 @@ check.dependsOn jacocoTestReport
 
 dependencies {
    compile "com.sparkjava:spark-core:2.7.2"
-   compile "com.google.code.gson:gson:2.8.4"
-   compile 'org.apache.lucene:lucene-core:7.3.0'
+   compile "com.google.code.gson:gson:2.8.5"
+   compile 'org.apache.lucene:lucene-core:7.4.0'
    testCompile ("junit:junit:4.12")
    {
       exclude module: "hamcrest-core"
