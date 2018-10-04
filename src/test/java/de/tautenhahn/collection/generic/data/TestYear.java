@@ -26,7 +26,7 @@ public class TestYear
     DescribedObject master = new DescribedObject("a", "b");
     master.getAttributes().put("maker", "makerA");
     master.getAttributes().put("invented", "1954");
-    master.getAttributes().put("aquired", "1993");
+    master.getAttributes().put("acquired", "1993");
     master.getAttributes().put("blind", "dummy");
 
     DescribedObject maker = new DescribedObject("maker", "makerA");
@@ -37,14 +37,14 @@ public class TestYear
     systemUnderTest.persistence = persistence;
     systemUnderTest.addNotBeforeRestriction("maker", "founded");
     systemUnderTest.addNotBeforeRestriction("invented");
-    systemUnderTest.addNotAfterRestriction("aquired");
+    systemUnderTest.addNotAfterRestriction("acquired");
     systemUnderTest.addNotAfterRestriction("blind", "foo", "bar");
     systemUnderTest.addNotAfterRestriction("foo");
 
     assertThat("maker", systemUnderTest.check("1953", master), is("msg.error.tooEarlyFor.maker"));
     master.getAttributes().put("invented", "1962");
     assertThat("invented", systemUnderTest.check("1953", master), is("msg.error.tooEarlyFor.invented"));
-    assertThat("after aquired", systemUnderTest.check("1999", master), is("msg.error.tooLateFor.aquired"));
+    assertThat("after acquired", systemUnderTest.check("1999", master), is("msg.error.tooLateFor.acquired"));
   }
 
 }

@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.persistence;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -348,17 +349,22 @@ public class WorkspacePersistence implements Persistence
       {
         throw new IOException("Cannot create directory " + target.getParentFile().getAbsolutePath());
       }
-      try (OutputStream fos = new FileOutputStream(target))
-      {
-        byte[] buffer = new byte[4 * 1024];
-        int total = 0;
-        int count = 0;
+      doWrite(content, target);
+    }
+  }
 
-        while (total + buffer.length <= MAX_FILESIZE && (count = content.read(buffer)) != -1)
-        {
-          fos.write(buffer, 0, count);
-          total += count;
-        }
+  private void doWrite(InputStream content, File target) throws IOException, FileNotFoundException
+  {
+    try (FileOutputStream fos = new FileOutputStream(target))
+    {
+      byte[] buffer = new byte[4 * 1024];
+      int total = 0;
+      int count = 0;
+
+      while (total + buffer.length <= MAX_FILESIZE && (count = content.read(buffer)) != -1)
+      {
+        fos.write(buffer, 0, count);
+        total += count;
       }
     }
   }

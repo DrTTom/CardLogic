@@ -1,6 +1,6 @@
 
 plugins {
-  id 'com.github.spotbugs' version '1.6.2'
+  id 'com.github.spotbugs' version '1.6.4'
   id 'com.github.ben-manes.versions' version '0.20.0'
 }
 
@@ -17,9 +17,9 @@ repositories {
 check.dependsOn jacocoTestReport
 
 dependencies {
-   compile "com.sparkjava:spark-core:2.7.2"
+   compile "com.sparkjava:spark-core:2.8.0"
    compile "com.google.code.gson:gson:2.8.5"
-   compile 'org.apache.lucene:lucene-core:7.4.0'
+   compile 'org.apache.lucene:lucene-core:7.5.0'
    testCompile ("junit:junit:4.12")
    {
       exclude module: "hamcrest-core"

@@ -24,7 +24,7 @@ public class Similarity implements Comparable<Similarity>
   public static final Similarity HINT = new Similarity(1);
 
   /**
-   * Objects match better than best 10% of randomly choosen objects
+   * Objects match better than best 10% of randomly chosen objects
    */
   public static final Similarity SIMILAR = new Similarity(100);
 
