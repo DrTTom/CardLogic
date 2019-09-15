@@ -20,12 +20,12 @@ import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 
 
 /**
- * Provides all the card-specific objects to make the generic collection application one which specificly
+ * Provides all the card-specific objects to make the generic collection application one which specifically
  * supports playing card collections.
  *
  * @author TT
  */
-public class CardApplicationContext extends ApplicationContext
+public final class CardApplicationContext extends ApplicationContext
 {
 
   private final Persistence persistence;

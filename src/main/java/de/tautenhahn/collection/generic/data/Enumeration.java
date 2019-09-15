@@ -19,6 +19,8 @@ public abstract class Enumeration extends AttributeInterpreter
   protected static final String NULL_PLACEHOLDER = ApplicationContext.getInstance()
                                                                      .getText("choice.value.null");
 
+  private final int matchValue;
+
   /**
    * Creates new instance.
    *
@@ -26,13 +28,11 @@ public abstract class Enumeration extends AttributeInterpreter
    * @param matchValue describes how strong the hint is that equal values mean equal objects.
    * @param flags
    */
-  protected Enumeration(String name, int matchValue, Flag[] flags)
+  protected Enumeration(String name, int matchValue, Flag... flags)
   {
     super(name, flags);
     this.matchValue = matchValue;
   }
-
-  private final int matchValue;
 
   /**
    * Returns the list of legal internal attribute values.

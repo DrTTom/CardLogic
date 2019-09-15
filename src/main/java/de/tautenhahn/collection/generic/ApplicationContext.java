@@ -39,9 +39,9 @@ public abstract class ApplicationContext
   {
     if (instance != null)
     {
-      throw new RuntimeException("Application may instanciate only one factory");
+      throw new IllegalStateException("Application may instanciate only one factory");
     }
-    instance = this;
+    instance = this; // NOPMD only suppressed, TODO: create better API
   }
 
   /**

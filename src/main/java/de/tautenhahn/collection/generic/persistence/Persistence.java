@@ -14,26 +14,28 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
  *
  * @author TT
  */
-public interface Persistence
+public interface Persistence extends AutoCloseable
 {
 
   /**
    * Adds or updates given object.
    *
-   * @param item
+   * @param item data to store
    */
   void store(DescribedObject item);
 
   /**
    * Returns object specified by primary key
    *
-   * @param type
-   * @param primKey
+   * @param type    specifies type of object
+   * @param primKey primary key value
    */
   DescribedObject find(String type, String primKey);
 
   /**
    * Returns all object of given type.
+   * 
+   * @param type specifies type of object
    */
   Stream<DescribedObject> findAll(String type);
 
@@ -46,45 +48,39 @@ public interface Persistence
   Stream<DescribedObject> findByRestriction(String type, Map<String, String> exactValues);
 
   /**
-   * Write back all cached data and free resources - object does not have to work after this call.
-   *
-   * @throws IOException
-   */
-  void close() throws IOException;
-
-  /**
    * Get connection and/or data.
    *
    * @param args depends on implementation
-   * @throws IOException
+   * @throws IOException in case of any problems
    */
   void init(String... args) throws IOException;
 
   /**
-   * return the number of items of specified type
+   * @return the number of items of specified type
    */
   int getNumberItems(String type);
 
   /**
    * Returns all values of primKey (unique name) of objects of specified type.
    *
-   * @param type
+   * @param type specifies type of object
    */
-  public List<String> getKeyValues(String type);
+  List<String> getKeyValues(String type);
 
   /**
    * Removes an object. Throw Exception if object is referenced.
    *
-   * @param type
-   * @param name
+   * @param type specifies type of object
+   * @param name primary key value of object to remove
    */
   void delete(String type, String name);
 
   /**
    * Returns true if object is referenced by other object.
    *
-   * @param type
-   * @param name
+   * @param type            specifies type of object
+   * @param name            primary key value of object to remove
+   * @param referencingType specifies which kinds of object to search for references
    */
   boolean isReferenced(String type, String name, String... referencingType);
 
@@ -127,5 +123,10 @@ public interface Persistence
    */
   boolean binObjectExists(String ref);
 
+  /**
+   * Adds a listener.
+   * 
+   * @param listener is notified as soon as persisted content changed
+   */
   void addListener(PersistenceChangeListener listener);
 }

@@ -130,8 +130,7 @@ public class RestServer
   {
     StringBuffer refb = new StringBuffer();
     Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
-    String ref = refb.length() == 0 ? "" : refb.substring(1);
-    return ref;
+    return refb.length() == 0 ? "" : refb.substring(1);
   }
 
   private Object doDownload(InputStream src, Response response, String ref) throws IOException

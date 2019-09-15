@@ -27,7 +27,7 @@ public class ImageChoiceQuestion extends ChoiceQuestion
    */
   public ImageChoiceQuestion(String paramName, String text, String form)
   {
-    super(Type.ImageChoice, paramName, text, form);
+    super(Type.IMAGE_CHOICE, paramName, text, form);
   }
 
   /**

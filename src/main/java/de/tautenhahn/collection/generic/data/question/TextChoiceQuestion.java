@@ -17,7 +17,7 @@ public class TextChoiceQuestion extends ChoiceQuestion
    */
   public TextChoiceQuestion(String paramName, String text, String form)
   {
-    super(Type.TextChoice, paramName, text, form);
+    super(Type.TEXT_CHOICE, paramName, text, form);
   }
 
 }

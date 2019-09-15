@@ -103,9 +103,9 @@ public class TestWorkspaceStorage
     WorkspacePersistence systemUnderTest = new WorkspacePersistence();
     systemUnderTest.init("cards");
     systemUnderTest.close();
-    systemUnderTest.getObjectTypes().forEach(t -> systemUnderTest.getKeyValues(t).forEach(k -> importImage(t,
-                                                                                                           k,
-                                                                                                           systemUnderTest)));
+    systemUnderTest.getObjectTypes()
+                   .forEach(t -> systemUnderTest.getKeyValues(t)
+                                                .forEach(k -> importImage(t, k, systemUnderTest)));
     systemUnderTest.close();
     try (OutputStream out = new FileOutputStream("example.zip"))
     {

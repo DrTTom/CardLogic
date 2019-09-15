@@ -1,9 +1,9 @@
 package de.tautenhahn.collection.generic.persistence;
 
 /**
- * Able to remove internally cached data in case of persistence content changed.
+ * Ability to react on changes of persistence content (for instance update of remove internally cached data).
  * 
- * @author jean
+ * @author TT
  */
 public interface PersistenceChangeListener
 {

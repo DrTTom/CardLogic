@@ -47,6 +47,8 @@ public class WorkspacePersistence implements Persistence
 
   private static final String JSON_FILENAME = "objects.json";
 
+  private static final int MAX_FILESIZE = 100 * 1024 * 1024;
+
   private final Map<String, Map<String, DescribedObject>> objects = new TreeMap<>();
 
   private Path collectionBaseDir;
@@ -246,13 +248,7 @@ public class WorkspacePersistence implements Persistence
 
   private Map<String, DescribedObject> getTypeMap(String type)
   {
-    Map<String, DescribedObject> result = objects.get(type);
-    if (result == null)
-    {
-      result = new TreeMap<>();
-      objects.put(type, result);
-    }
-    return result;
+    return objects.computeIfAbsent(type, t -> new TreeMap<>());
   }
 
   /**
@@ -338,8 +334,6 @@ public class WorkspacePersistence implements Persistence
     }
   }
 
-  private static final int MAX_FILESIZE = 100 * 1024 * 1024;
-
   private void createLimitedFile(String relativePath, InputStream content) throws IOException
   {
     File target = collectionBaseDir.resolve(relativePath).toFile();
@@ -385,6 +379,6 @@ public class WorkspacePersistence implements Persistence
   public String toString()
   {
     return "WorksapcePesistence[" + collectionBaseDir.getFileName() + ", loaded " + objects.size()
-           + " types]";
+      + " types]";
   }
 }

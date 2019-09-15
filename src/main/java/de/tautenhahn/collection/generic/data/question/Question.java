@@ -17,15 +17,15 @@ public class Question
   public enum Type
   {
     /** free text */
-    Text,
+    TEXT,
     /** choice among given text phrases */
-    TextChoice,
+    TEXT_CHOICE,
     /** choice among given images */
-    ImageChoice,
+    IMAGE_CHOICE,
     /** choice among given objects by name */
-    ObjectChoice,
+    OBJECT_CHOICE,
     /** file upload */
-    File
+    FILE
   }
 
   private final String paramName;

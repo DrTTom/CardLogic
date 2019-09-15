@@ -46,7 +46,7 @@ public class Deck extends MapBasedDescribedObjectInterpreter
   @Override
   public String proposeNewPrimKey(DescribedObject candidate)
   {
-    Persistence persistence = ApplicationContext.getInstance().getPersistence();
+    Persistence persistence = ApplicationContext.getInstance().getPersistence(); // NOPMD: TODO
     int i = 1;
     while (persistence.keyExists("deck", Integer.toString(i)))
     {

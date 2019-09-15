@@ -134,7 +134,7 @@ public abstract class DescribedObjectInterpreter
     for ( String key : getSupportedAttributes() )
     {
       String value = parameters.get(key);
-      if (value == null || value.trim().isEmpty() || JS_NULL.equals(value))
+      if (value == null || value.chars().allMatch(Character::isWhitespace) || JS_NULL.equals(value))
       {
         continue;
       }

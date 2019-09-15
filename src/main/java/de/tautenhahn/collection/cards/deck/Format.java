@@ -47,13 +47,19 @@ public class Format extends FreeText
     }
   }
 
+  /**
+   * Just wraps width and height.
+   */
   static class Rectangle
   {
 
-    int width, height;
+    int width;
+
+    int height;
 
     Rectangle(String value)
     {
+      // TODO: use regex!
       StringTokenizer tokens = new StringTokenizer(value, "x (");
       try
       {

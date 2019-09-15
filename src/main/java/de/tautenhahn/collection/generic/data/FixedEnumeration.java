@@ -19,6 +19,8 @@ import de.tautenhahn.collection.generic.data.question.TextChoiceQuestion;
 public abstract class FixedEnumeration extends Enumeration
 {
 
+  private final List<String> allowedValues;
+
   /**
    * Returns array of translated values based on given message keys.
    *
@@ -54,8 +56,6 @@ public abstract class FixedEnumeration extends Enumeration
   {
     return getAllowedValues(context).contains(value) ? null : "msg.error.invalidOption";
   }
-
-  private final List<String> allowedValues;
 
   @Override
   public List<String> getAllowedValues(DescribedObject context)

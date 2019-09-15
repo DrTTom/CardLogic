@@ -18,35 +18,11 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 public class Year extends AttributeInterpreter
 {
 
-  /**
-   * Not using existing pair classes due to access restrictions.
-   */
-  private static class Pair<S, T>
-  {
+  Persistence persistence;
 
-    private final S key;
+  private final List<String[]> notBefore = new ArrayList<>();
 
-    private final T value;
-
-    Pair(S key, T value)
-    {
-      this.key = key;
-      this.value = value;
-    }
-
-
-    S getKey()
-    {
-      return key;
-    }
-
-
-    T getValue()
-    {
-      return value;
-    }
-
-  }
+  private final List<String[]> notAfter = new ArrayList<>();
 
   /**
    * Creates new instance.
@@ -58,12 +34,6 @@ public class Year extends AttributeInterpreter
   {
     super(name, flags);
   }
-
-  Persistence persistence;
-
-  private final List<String[]> notBefore = new ArrayList<>();
-
-  private final List<String[]> notAfter = new ArrayList<>();
 
   @Override
   public String check(String value, DescribedObject context)
@@ -87,13 +57,12 @@ public class Year extends AttributeInterpreter
   private String worstViolation(DescribedObject ctx, List<String[]> restr, int value, boolean lowerBound)
   {
     Integer defaultValue = lowerBound ? Integer.valueOf(0) : Integer.valueOf(3000);
-    String worstViolating = restr.stream()
-                                 .map(r -> getValue(ctx, r, defaultValue))
-                                 .filter(p -> lowerBound ? getInt(p) > value : getInt(p) < value)
-                                 .max((a, b) -> lowerBound ? getInt(a) - getInt(b) : getInt(b) - getInt(a))
-                                 .map(Pair::getKey)
-                                 .orElse(null);
-    return worstViolating;
+    return restr.stream()
+                .map(r -> getValue(ctx, r, defaultValue))
+                .filter(p -> lowerBound ? getInt(p) > value : getInt(p) < value)
+                .max((a, b) -> lowerBound ? getInt(a) - getInt(b) : getInt(b) - getInt(a))
+                .map(Pair::getKey)
+                .orElse(null);
   }
 
   private int getInt(Pair<String, Integer> p)
@@ -118,7 +87,7 @@ public class Year extends AttributeInterpreter
         {
           resultValue = Integer.valueOf(value);
         }
-        catch (@SuppressWarnings("unused") NumberFormatException e)
+        catch (NumberFormatException e)
         {
           break;
         }
@@ -171,5 +140,35 @@ public class Year extends AttributeInterpreter
     TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
     result.setFormat(1, 4);
     return result;
+  }
+
+  /**
+   * Not using existing pair classes due to access restrictions.
+   */
+  private static class Pair<S, T>
+  {
+
+    private final S key;
+
+    private final T value;
+
+    Pair(S key, T value)
+    {
+      this.key = key;
+      this.value = value;
+    }
+
+
+    S getKey()
+    {
+      return key;
+    }
+
+
+    T getValue()
+    {
+      return value;
+    }
+
   }
 }

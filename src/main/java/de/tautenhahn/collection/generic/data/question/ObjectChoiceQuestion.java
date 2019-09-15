@@ -19,7 +19,7 @@ public class ObjectChoiceQuestion extends ChoiceQuestion
    */
   public ObjectChoiceQuestion(String paramName, String text, String form, String auxType)
   {
-    super(Type.ObjectChoice, paramName, text, form);
+    super(Type.OBJECT_CHOICE, paramName, text, form);
     this.auxType = auxType;
   }
 

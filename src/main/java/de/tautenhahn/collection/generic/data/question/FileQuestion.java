@@ -21,7 +21,7 @@ public class FileQuestion extends Question
    */
   public FileQuestion(String paramName, String text, String form)
   {
-    super(Type.File, paramName, text, form);
+    super(Type.FILE, paramName, text, form);
   }
 
 

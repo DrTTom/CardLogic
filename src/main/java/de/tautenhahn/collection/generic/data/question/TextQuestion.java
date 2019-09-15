@@ -21,7 +21,7 @@ public class TextQuestion extends Question
    */
   public TextQuestion(String paramName, String text, String form)
   {
-    super(Type.Text, paramName, text, form);
+    super(Type.TEXT, paramName, text, form);
   }
 
   /**

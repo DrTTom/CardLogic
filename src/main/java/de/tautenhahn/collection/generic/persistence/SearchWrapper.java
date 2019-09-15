@@ -111,7 +111,7 @@ public class SearchWrapper
    */
   public void removeFromIndex(String key)
   {
-    // TODO
+    // TODO - until implemented search may temporarily return wrong results.
   }
 
   private IndexWriter getWriter() throws IOException
@@ -128,7 +128,7 @@ public class SearchWrapper
     for ( String attributeName : interpreter.getSupportedAttributes() )
     {
       String value = obj.getAttributes().get(attributeName);
-      if (value == null || value.trim().isEmpty())
+      if (value == null || value.chars().allMatch(Character::isWhitespace))
       {
         continue;
       }

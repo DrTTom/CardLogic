@@ -16,25 +16,13 @@ import de.tautenhahn.collection.generic.data.question.Question;
 public abstract class AttributeInterpreter
 {
 
-  /**
-   * Marker interface to indicate that internal and display values may differ.
-   */
-  public interface Translating
-  {
-    // marker interface only
-  }
+  private final String name;
 
-  /** makes the super() call easier */
-  public enum Flag
-  {
-    /** value may be missing */
-    OPTIONAL,
-    /** value contributes to search index */
-    SEARCHABLE,
+  private final boolean optional;
 
-    /** value can be exactly determined by given object, i.e. equal objects have always same value */
-    EXACT
-  }
+  private final boolean searchable;
+
+  private final boolean exact;
 
   /**
    * Creates new instance.
@@ -51,13 +39,6 @@ public abstract class AttributeInterpreter
     exact = flagList.contains(Flag.EXACT);
   }
 
-  private final String name;
-
-  private final boolean optional;
-
-  private final boolean searchable;
-
-  private final boolean exact;
 
   /**
    * Returns the attribute name.
@@ -96,10 +77,10 @@ public abstract class AttributeInterpreter
    * Returns null if value is OK and message otherwise. System will call this method only if values is
    * present.
    *
-   * @param value internal value as present in the object
+   * @param value   internal value as present in the object
    * @param context provide a described object as context to allow the following methods changing behavior.
-   *          For instance "Vienna Pattern" is legal for French suits but forbidden in German or Spanish
-   *          suits.
+   *                For instance "Vienna Pattern" is legal for French suits but forbidden in German or Spanish
+   *                suits.
    */
   public abstract String check(String value, DescribedObject context);
 
@@ -155,7 +136,7 @@ public abstract class AttributeInterpreter
    */
   protected String dropEmptyString(String value)
   {
-    return value == null ? null : value.trim().isEmpty() ? null : value;
+    return value == null ? null : value.chars().allMatch(Character::isWhitespace) ? null : value;
   }
 
   /**
@@ -175,11 +156,31 @@ public abstract class AttributeInterpreter
   /**
    * Inverse of {@link #toDisplayValue(String)}
    *
-   * @param displayValue
+   * @param displayValue value in font end
    */
   public String toInternalValue(String displayValue)
   {
     return dropEmptyString(displayValue);
+  }
+
+  /**
+   * Marker interface to indicate that internal and display values may differ.
+   */
+  public interface Translating
+  {
+    // marker interface only
+  }
+
+  /** makes the super() call easier */
+  public enum Flag
+  {
+    /** value may be missing */
+    OPTIONAL,
+    /** value contributes to search index */
+    SEARCHABLE,
+
+    /** value can be exactly determined by given object, i.e. equal objects have always same value */
+    EXACT
   }
 
 }

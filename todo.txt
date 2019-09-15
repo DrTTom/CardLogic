@@ -8,7 +8,6 @@
 9. add function for integrity check of data
 10. Integrate import/export
 11. Allow merging imports
-- Bild originell
 
 
 Erledigt? 

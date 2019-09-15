@@ -2,6 +2,7 @@ package de.tautenhahn.collection.cards;
 
 
 import java.io.IOException;
+import java.io.PrintStream;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.process.RestServer;
@@ -12,8 +13,15 @@ import de.tautenhahn.collection.generic.process.RestServer;
  *
  * @author TT
  */
-public class Main
+public final class Main
 {
+
+  private static final PrintStream OUT = System.out;
+
+  private Main()
+  {
+    // no instances
+  }
 
   /**
    * Starts the application from command line.
@@ -30,9 +38,9 @@ public class Main
     {
       Runtime.getRuntime().exec("firefox http://localhost:4567/index.html");
     }
-    catch (Throwable t)
+    catch (RuntimeException e)
     {
-      System.out.println("Server started, point your browser to http://localhost:4567/index.html");
+      OUT.println("Server started, point your browser to http://localhost:4567/index.html");
     }
   }
 }
