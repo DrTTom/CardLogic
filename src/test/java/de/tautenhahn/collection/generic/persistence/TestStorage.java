@@ -3,8 +3,13 @@ package de.tautenhahn.collection.generic.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,8 +60,12 @@ public class TestStorage
       {
         assertThat(ins.available()).isEqualTo(content.length);
       }
+      assertThat(systemUnderTest.findByRestriction("cryptoUrl", Map.of("protocol", "https"))
+                                .count()).isEqualTo(1);
       systemUnderTest.delete("cryptoUrl", "primary");
+      assertThat(systemUnderTest.isReferenced("protocol", "https", "cryptoUrl")).isFalse();
       assertThat(systemUnderTest.find("cryptoUrl", "primary")).isNull();
+
     }
   }
 
@@ -65,6 +74,29 @@ public class TestStorage
    *
    * @throws IOException
    */
+  @Test
+  public void importAndExport() throws IOException
+  {
+    importZip();
+    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+    systemUnderTest.init("cards");
+    assertThat(systemUnderTest.toString()).contains("cards, loaded 5 types");
+    assertThat(systemUnderTest.getKeyValues("deck")).hasSize(99);
+    Collection<String> binAttrs = Collections.singletonList("image");
+    Map<String, Collection<String>> refs = Map.of("deck",
+                                                  binAttrs,
+                                                  "makerSign",
+                                                  binAttrs,
+                                                  "pattern",
+                                                  binAttrs,
+                                                  "taxStamp",
+                                                  binAttrs);
+    try (OutputStream outs = new FileOutputStream("build/exportedByTest.zip"))
+    {
+      systemUnderTest.exportZip(refs, outs);
+    }
+  }
+
 
   /**
    * Imports zip data into workspace:
@@ -79,6 +111,7 @@ public class TestStorage
     {
       systemUnderTest.importZip(ins);
     }
+    systemUnderTest.close();
   }
 
 

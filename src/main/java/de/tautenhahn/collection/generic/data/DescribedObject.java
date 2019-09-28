@@ -1,7 +1,10 @@
 package de.tautenhahn.collection.generic.data;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 
 /**
@@ -9,12 +12,16 @@ import java.util.Map;
  *
  * @author TT
  */
+@Data
+@AllArgsConstructor
 public class DescribedObject
 {
 
-  private final String type;
 
-  private final String primKey;
+  public DescribedObject(String type, String primKey)
+  {
+    this(type, primKey, new HashMap<>());
+  }
 
   /**
    * Default key to store the display name of the object in - in most cases the name is handled as normal
@@ -27,55 +34,9 @@ public class DescribedObject
    */
   public static final String IMAGE_KEY = "image";
 
-  private final Map<String, String> attributes = new Hashtable<>();
+  private final String type;
 
-  /**
-   * Creates instance.
-   *
-   * @param type
-   * @param primKey
-   * @param attributes
-   */
-  public DescribedObject(String type, String primKey, Map<String, String> attributes)
-  {
-    this.type = type;
-    this.primKey = primKey;
-    this.attributes.putAll(attributes);
-  }
+  private final String primKey;
 
-  /**
-   * Creates instance.
-   *
-   * @param type
-   * @param primKey
-   */
-  public DescribedObject(String type, String primKey)
-  {
-    this.type = type;
-    this.primKey = primKey;
-  }
-
-  /**
-   * Returns the type of object. The value indicates how to interpret the attributes.
-   */
-  public String getType()
-  {
-    return type;
-  }
-
-  /**
-   * Returns the key of the object unique among all objects of same type.
-   */
-  public String getPrimKey()
-  {
-    return primKey;
-  }
-
-  /**
-   * Returns the attribute map which may be manipulated.
-   */
-  public Map<String, String> getAttributes()
-  {
-    return attributes;
-  }
+  private final Map<String, String> attributes;
 }
