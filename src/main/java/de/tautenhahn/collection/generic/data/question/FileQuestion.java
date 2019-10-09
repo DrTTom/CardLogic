@@ -24,7 +24,13 @@ public class FileQuestion extends Question
     super(Type.FILE, paramName, text, form);
   }
 
-
+  /**
+   * Returns proposed value of the accept attribute.
+   */
+  public String getAccept()
+  {
+    return accept;
+  }
 
   /**
    * Specifies filtered file extensions
@@ -34,14 +40,6 @@ public class FileQuestion extends Question
   public void setAccept(String accept)
   {
     this.accept = accept;
-  }
-
-  /**
-   * Returns proposed value of the accept attribute.
-   */
-  public String getAccept()
-  {
-    return accept;
   }
 
   /**

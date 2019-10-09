@@ -30,13 +30,19 @@ public abstract class TypeBasedEnumeration extends Enumeration
    */
   protected Persistence persistence;
 
-  /** For all auxiliary objects of current type: key is name of object, value is its primary key. */
+  /**
+   * For all auxiliary objects of current type: key is name of object, value is its primary key.
+   */
   protected Map<String, String> primKeyByName = new TreeMap<>();
 
-  /** Inverse map to {@link #primKeyByName} */
+  /**
+   * Inverse map to {@link #primKeyByName}
+   */
   protected Map<String, String> nameByPrimKey = new HashMap<>();
 
-  /** URLs of some images to display (if any) */
+  /**
+   * URLs of some images to display (if any)
+   */
   protected Map<String, String> imageByName = new HashMap<>();
 
   /**
@@ -69,26 +75,10 @@ public abstract class TypeBasedEnumeration extends Enumeration
   }
 
   @Override
-  public Question getQuestion(DescribedObject object)
-  {
-    ObjectChoiceQuestion result = createQuestion(object,
-                                                 (text, group) -> new ObjectChoiceQuestion(getName(), text,
-                                                                                           group, getName()));
-    List<String> options = new ArrayList<>();
-    getAllowedValues(object).forEach(v -> options.add(toDisplayValue(v)));
-    options.sort((a, b) -> a.compareTo(b));
-    options.add(NULL_PLACEHOLDER);
-    result.setOptions(options);
-    return result;
-  }
-
-
-  @Override
   public String toDisplayValue(String primKey)
   {
     return Optional.ofNullable(primKey).map(k -> nameByPrimKey.getOrDefault(k, k)).orElse(NULL_PLACEHOLDER);
   }
-
 
   @Override
   public String toInternalValue(String name)
@@ -104,6 +94,20 @@ public abstract class TypeBasedEnumeration extends Enumeration
   public String check(String value, DescribedObject context)
   {
     return nameByPrimKey.containsKey(value) ? null : "msg.error.invalidOption";
+  }
+
+  @Override
+  public Question getQuestion(DescribedObject object)
+  {
+    ObjectChoiceQuestion result = createQuestion(object,
+                                                 (text, group) -> new ObjectChoiceQuestion(getName(), text,
+                                                                                           group, getName()));
+    List<String> options = new ArrayList<>();
+    getAllowedValues(object).forEach(v -> options.add(toDisplayValue(v)));
+    options.sort((a, b) -> a.compareTo(b));
+    options.add(NULL_PLACEHOLDER);
+    result.setOptions(options);
+    return result;
   }
 
   private void setupMaps()
@@ -158,5 +162,4 @@ public abstract class TypeBasedEnumeration extends Enumeration
     result.setFormat(width, height);
     return result;
   }
-
 }

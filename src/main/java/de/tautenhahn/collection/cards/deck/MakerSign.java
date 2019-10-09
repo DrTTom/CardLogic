@@ -21,11 +21,9 @@ public class MakerSign extends TypeBasedEnumWithForeignKey
     super("makerSign", "maker", 50, Flag.OPTIONAL, Flag.EXACT);
   }
 
-
   @Override
   public Question getQuestion(DescribedObject object)
   {
     return getImageQuestion(object, "auto", "90");
   }
-
 }

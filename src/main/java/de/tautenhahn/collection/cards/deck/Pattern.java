@@ -18,5 +18,4 @@ public class Pattern extends TypeBasedEnumWithForeignKey
   {
     super("pattern", "suits", 50, Flag.OPTIONAL);
   }
-
 }

@@ -10,7 +10,6 @@ import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 
 
-
 /**
  * Produces all the application specific instances of beans. Because the application is very small, a complete
  * Spring context is not needed here. Subclasses are configured application contexts.
@@ -25,14 +24,6 @@ public abstract class ApplicationContext
   private final ResourceBundle texts = ResourceBundle.getBundle("de.tautenhahn.collection.generic.Messages");
 
   /**
-   * singleton getter
-   */
-  public static ApplicationContext getInstance()
-  {
-    return instance;
-  }
-
-  /**
    * To be called once at application start.
    */
   protected ApplicationContext()
@@ -42,6 +33,14 @@ public abstract class ApplicationContext
       throw new IllegalStateException("Application may instanciate only one factory");
     }
     instance = this; // NOPMD only suppressed, TODO: create better API
+  }
+
+  /**
+   * singleton getter
+   */
+  public static ApplicationContext getInstance()
+  {
+    return instance;
   }
 
   /**
@@ -79,5 +78,4 @@ public abstract class ApplicationContext
    * @return image to be shown in place of missing images.
    */
   public abstract Image getNoImage();
-
 }

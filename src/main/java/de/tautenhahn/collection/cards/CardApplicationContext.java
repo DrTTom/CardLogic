@@ -34,6 +34,28 @@ public final class CardApplicationContext extends ApplicationContext
 
   private final Map<String, DescribedObjectInterpreter> interpreters = new HashMap<>();
 
+  private CardApplicationContext()
+  {
+    persistence = new WorkspacePersistence();
+    interpreters.put("deck", new Deck());
+    interpreters.put("maker", new MakerData());
+    interpreters.put("makerSign", new MakerSignObject());
+    interpreters.put("pattern", new PatternObject());
+    interpreters.put("taxStamp", new TaxStampObject());
+  }
+
+  /**
+   * Make the current application a Card Collection.
+   */
+  public static void register()
+  {
+    if (ApplicationContext.getInstance() instanceof CardApplicationContext)
+    {
+      return;
+    }
+    new CardApplicationContext();
+  }
+
   @Override
   public DescribedObjectInterpreter getInterpreter(String type)
   {
@@ -55,37 +77,15 @@ public final class CardApplicationContext extends ApplicationContext
   }
 
   @Override
+  public Persistence getPersistence()
+  {
+    return persistence;
+  }
+
+  @Override
   public Image getNoImage()
   {
     // TODO Auto-generated method stub
     return null;
-  }
-
-  /**
-   * Make the current application a Card Collection.
-   */
-  public static void register()
-  {
-    if (ApplicationContext.getInstance() instanceof CardApplicationContext)
-    {
-      return;
-    }
-    new CardApplicationContext();
-  }
-
-  private CardApplicationContext()
-  {
-    persistence = new WorkspacePersistence();
-    interpreters.put("deck", new Deck());
-    interpreters.put("maker", new MakerData());
-    interpreters.put("makerSign", new MakerSignObject());
-    interpreters.put("pattern", new PatternObject());
-    interpreters.put("taxStamp", new TaxStampObject());
-  }
-
-  @Override
-  public Persistence getPersistence()
-  {
-    return persistence;
   }
 }

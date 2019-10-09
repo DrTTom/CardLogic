@@ -27,14 +27,14 @@ public interface Persistence extends AutoCloseable
   /**
    * Returns object specified by primary key
    *
-   * @param type    specifies type of object
+   * @param type specifies type of object
    * @param primKey primary key value
    */
   DescribedObject find(String type, String primKey);
 
   /**
    * Returns all object of given type.
-   * 
+   *
    * @param type specifies type of object
    */
   Stream<DescribedObject> findAll(String type);
@@ -78,8 +78,8 @@ public interface Persistence extends AutoCloseable
   /**
    * Returns true if object is referenced by other object.
    *
-   * @param type            specifies type of object
-   * @param name            primary key value of object to remove
+   * @param type specifies type of object
+   * @param name primary key value of object to remove
    * @param referencingType specifies which kinds of object to search for references
    */
   boolean isReferenced(String type, String name, String... referencingType);
@@ -125,7 +125,7 @@ public interface Persistence extends AutoCloseable
 
   /**
    * Adds a listener.
-   * 
+   *
    * @param listener is notified as soon as persisted content changed
    */
   void addListener(PersistenceChangeListener listener);

@@ -62,6 +62,4 @@ public abstract class Enumeration extends AttributeInterpreter
   {
     return NULL_PLACEHOLDER.equals(displayValue) ? null : displayValue;
   }
-
-
 }

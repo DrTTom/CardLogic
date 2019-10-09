@@ -48,7 +48,6 @@ public class TestStorage
       systemUnderTest.store(prot);
     }
 
-
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
     {
       systemUnderTest.init("testStoreAndFind");
@@ -65,7 +64,6 @@ public class TestStorage
       systemUnderTest.delete("cryptoUrl", "primary");
       assertThat(systemUnderTest.isReferenced("protocol", "https", "cryptoUrl")).isFalse();
       assertThat(systemUnderTest.find("cryptoUrl", "primary")).isNull();
-
     }
   }
 
@@ -97,7 +95,6 @@ public class TestStorage
     }
   }
 
-
   /**
    * Imports zip data into workspace:
    *
@@ -113,6 +110,4 @@ public class TestStorage
     }
     systemUnderTest.close();
   }
-
-
 }

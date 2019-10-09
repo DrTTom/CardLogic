@@ -1,7 +1,6 @@
 package de.tautenhahn.collection.generic.persistence;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -20,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * Wraps secure ZIP file handling.
- * 
+ *
  * @author TT
  */
 public class SecureZip
@@ -30,10 +29,10 @@ public class SecureZip
 
   /**
    * Creates a ZIP containing specified set of files.
-   * 
-   * @param baseDir       root of directory tree
+   *
+   * @param baseDir root of directory tree
    * @param relativePaths paths of files relative to baseDir
-   * @param target        stream to write to.
+   * @param target stream to write to.
    * @throws IOException
    */
   public void create(Path baseDir, Collection<String> relativePaths, OutputStream target) throws IOException
@@ -51,11 +50,11 @@ public class SecureZip
 
   /**
    * Unpacks a ZIP content
-   * 
-   * @param source             first entry should contain the description of whole content.
-   * @param baseDir            target base directory
+   *
+   * @param source first entry should contain the description of whole content.
+   * @param baseDir target base directory
    * @param structureEntryName expected name of the first entry, used to recognize file format.
-   * @param c                  reads the structure description
+   * @param c reads the structure description
    * @throws IOException
    */
   public void expand(InputStream source, Path baseDir, String structureEntryName, FirstEntryConsumer c)
@@ -73,10 +72,13 @@ public class SecureZip
       {
         int allowedNumberFiles = c.read(reader) * 2;
         zip.closeEntry();
-        while ((entry = zip.getNextEntry()) != null && allowedNumberFiles-- > 0)
+        entry = zip.getNextEntry();
+        while (entry != null && allowedNumberFiles > 0)
         {
           createLimitedFile(baseDir, entry.getName(), zip);
+          allowedNumberFiles--;
           zip.closeEntry();
+          entry = zip.getNextEntry();
         }
       }
     }
@@ -95,7 +97,7 @@ public class SecureZip
     }
   }
 
-  private void doWrite(InputStream content, File target) throws IOException, FileNotFoundException
+  private void doWrite(InputStream content, File target) throws IOException
   {
     try (FileOutputStream fos = new FileOutputStream(target))
     {
@@ -139,6 +141,5 @@ public class SecureZip
     {
       // not closing on purpose
     }
-
   }
 }

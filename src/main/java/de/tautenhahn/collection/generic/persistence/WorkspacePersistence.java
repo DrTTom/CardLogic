@@ -42,9 +42,9 @@ public class WorkspacePersistence implements Persistence
 
   private final Map<String, Map<String, DescribedObject>> objects = new TreeMap<>();
 
-  private Path collectionBaseDir;
-
   private final List<PersistenceChangeListener> listeners = new ArrayList<>();
+
+  private Path collectionBaseDir;
 
   @Override
   public void store(DescribedObject item)
@@ -78,22 +78,6 @@ public class WorkspacePersistence implements Persistence
   }
 
   @Override
-  public void close() throws IOException
-  {
-    Gson gson = new GsonBuilder().create();
-
-    Path path = collectionBaseDir.resolve(JSON_FILENAME);
-    try (Writer wr = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-      JsonWriter writer = new JsonWriter(wr))
-    {
-      writer.setIndent(" ");
-      writer.beginArray();
-      objects.values().forEach(m -> m.values().forEach(d -> gson.toJson(d, DescribedObject.class, writer)));
-      writer.endArray();
-    }
-  }
-
-  @Override
   public void init(String... args) throws IOException
   {
     String collectionName = args.length > 0 ? args[0] : "default";
@@ -110,67 +94,6 @@ public class WorkspacePersistence implements Persistence
         importGson(reader);
       }
     }
-  }
-
-  private int importGson(Reader reader) throws IOException
-  {
-    int result = 0;
-    Gson gson = new GsonBuilder().create();
-    try (JsonReader jr = gson.newJsonReader(reader))
-    {
-      jr.beginArray();
-      while (jr.hasNext())
-      {
-        DescribedObject item = gson.fromJson(jr, DescribedObject.class);
-        getTypeMap(item.getType()).put(item.getPrimKey(), item);
-        result++;
-      }
-      jr.endArray();
-    }
-    listeners.forEach(l -> l.onChange("*"));
-    return result;
-  }
-
-  /**
-   * Returns a path for a new binary resource, makes sure no directory becomes too full.
-   *
-   * @throws IOException
-   */
-  @Override
-  public String createNewBinRef(String parentsPrimKey, String parentsType, String fileExtension)
-    throws IOException
-  {
-    Path subDir = collectionBaseDir.resolve(Paths.get(sanitize(parentsType),
-                                                      Integer.toHexString(parentsPrimKey.hashCode() & 0xff)));
-    if (!Files.exists(subDir))
-    {
-      Files.createDirectories(subDir);
-    }
-    Path result = subDir.resolve(sanitize(parentsPrimKey) + "." + fileExtension);
-    int diff = 0;
-    while (Files.exists(result))
-    {
-      result = subDir.resolve(sanitize(parentsPrimKey) + "_" + (diff++) + "." + fileExtension);
-    }
-    return collectionBaseDir.relativize(result).toString();
-  }
-
-  private String sanitize(String input)
-  {
-    CharsetEncoder ascii = StandardCharsets.US_ASCII.newEncoder();
-    StringBuilder result = new StringBuilder();
-    for ( char x : input.toCharArray() )
-    {
-      if (Character.isLetterOrDigit(x) && ascii.canEncode(x))
-      {
-        result.append(x);
-      }
-      else
-      {
-        result.append("_").append((int)x);
-      }
-    }
-    return result.toString();
   }
 
   @Override
@@ -225,6 +148,30 @@ public class WorkspacePersistence implements Persistence
     Files.copy(ins, collectionBaseDir.resolve(ref), StandardCopyOption.REPLACE_EXISTING);
   }
 
+  /**
+   * Returns a path for a new binary resource, makes sure no directory becomes too full.
+   *
+   * @throws IOException
+   */
+  @Override
+  public String createNewBinRef(String parentsPrimKey, String parentsType, String fileExtension)
+    throws IOException
+  {
+    Path subDir = collectionBaseDir.resolve(Paths.get(sanitize(parentsType),
+                                                      Integer.toHexString(parentsPrimKey.hashCode() & 0xff)));
+    if (!Files.exists(subDir))
+    {
+      Files.createDirectories(subDir);
+    }
+    Path result = subDir.resolve(sanitize(parentsPrimKey) + "." + fileExtension);
+    int diff = 0;
+    while (Files.exists(result))
+    {
+      result = subDir.resolve(sanitize(parentsPrimKey) + "_" + (diff++) + "." + fileExtension);
+    }
+    return collectionBaseDir.relativize(result).toString();
+  }
+
   @Override
   public InputStream find(String ref) throws IOException
   {
@@ -236,6 +183,70 @@ public class WorkspacePersistence implements Persistence
     return Files.newInputStream(path);
   }
 
+  @Override
+  public boolean binObjectExists(String ref)
+  {
+    return Files.exists(collectionBaseDir.resolve(ref));
+  }
+
+  @Override
+  public void addListener(PersistenceChangeListener listener)
+  {
+    listeners.add(listener);
+  }
+
+  @Override
+  public void close() throws IOException
+  {
+    Gson gson = new GsonBuilder().create();
+
+    Path path = collectionBaseDir.resolve(JSON_FILENAME);
+    try (Writer wr = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+      JsonWriter writer = new JsonWriter(wr))
+    {
+      writer.setIndent(" ");
+      writer.beginArray();
+      objects.values().forEach(m -> m.values().forEach(d -> gson.toJson(d, DescribedObject.class, writer)));
+      writer.endArray();
+    }
+  }
+
+  private int importGson(Reader reader) throws IOException
+  {
+    int result = 0;
+    Gson gson = new GsonBuilder().create();
+    try (JsonReader jr = gson.newJsonReader(reader))
+    {
+      jr.beginArray();
+      while (jr.hasNext())
+      {
+        DescribedObject item = gson.fromJson(jr, DescribedObject.class);
+        getTypeMap(item.getType()).put(item.getPrimKey(), item);
+        result++;
+      }
+      jr.endArray();
+    }
+    listeners.forEach(l -> l.onChange("*"));
+    return result;
+  }
+
+  private String sanitize(String input)
+  {
+    CharsetEncoder ascii = StandardCharsets.US_ASCII.newEncoder();
+    StringBuilder result = new StringBuilder();
+    for ( char x : input.toCharArray() )
+    {
+      if (Character.isLetterOrDigit(x) && ascii.canEncode(x))
+      {
+        result.append(x);
+      }
+      else
+      {
+        result.append('_').append((int)x);
+      }
+    }
+    return result.toString();
+  }
 
   private Map<String, DescribedObject> getTypeMap(String type)
   {
@@ -279,21 +290,9 @@ public class WorkspacePersistence implements Persistence
   }
 
   @Override
-  public boolean binObjectExists(String ref)
-  {
-    return Files.exists(collectionBaseDir.resolve(ref));
-  }
-
-  @Override
-  public void addListener(PersistenceChangeListener listener)
-  {
-    listeners.add(listener);
-  }
-
-  @Override
   public String toString()
   {
     return "WorksapcePesistence[" + collectionBaseDir.getFileName() + ", loaded " + objects.size()
-      + " types]";
+           + " types]";
   }
 }

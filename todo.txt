@@ -1,3 +1,11 @@
+1. Get rid of boilerplate code
+2. Define new REST paths
+3. Write new tests for that paths
+4. Get rid of checked in 3rd party JS libraries
+5. Re-write frontend using custom components
+
+
+Old stuff:
 2. refactor search and submission processes to execute search in
    case submission  is not successful
 4. add search to support free text fields

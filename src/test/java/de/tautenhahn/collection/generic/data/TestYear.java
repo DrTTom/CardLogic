@@ -46,5 +46,4 @@ public class TestYear
     assertThat("invented", systemUnderTest.check("1953", master), is("msg.error.tooEarlyFor.invented"));
     assertThat("after acquired", systemUnderTest.check("1999", master), is("msg.error.tooLateFor.acquired"));
   }
-
 }

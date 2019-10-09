@@ -26,7 +26,7 @@ public class TextQuestion extends Question
 
   /**
    * Specifies expected size of input.
-   * 
+   *
    * @param numLines
    * @param charsPerLine
    */
@@ -51,5 +51,4 @@ public class TextQuestion extends Question
   {
     return lines;
   }
-
 }

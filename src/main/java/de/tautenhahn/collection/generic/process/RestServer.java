@@ -5,6 +5,7 @@ import static spark.Spark.exception;
 import static spark.Spark.get;
 import static spark.Spark.options;
 import static spark.Spark.post;
+import static spark.Spark.put;
 import static spark.Spark.staticFiles;
 
 import java.io.IOException;
@@ -33,34 +34,36 @@ import spark.Spark;
 
 
 /**
- * Feeds the RestServer with content.
+ * Feeds the REST interface with content.
  *
  * @author TT
  */
 public class RestServer
 {
 
-  /**
-   * All structured output top frontend is JSON.
-   */
-  static class JsonTransformer implements ResponseTransformer
-  {
-
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    @Override
-    public String render(Object model)
-    {
-      return gson.toJson(model);
-    }
-
-  }
-
   private static final RestServer INSTANCE = new RestServer();
 
   private RestServer()
   {
     // no other instances allowed
+  }
+
+  private static void copy(InputStream src, OutputStream dest) throws IOException
+  {
+    byte[] buf = new byte[1024];
+    int count = 0;
+    while ((count = src.read(buf)) != -1)
+    {
+      dest.write(buf, 0, count);
+    }
+  }
+
+  /**
+   * Singleton getter.
+   */
+  public static RestServer getInstance()
+  {
+    return INSTANCE;
   }
 
   /**
@@ -79,14 +82,32 @@ public class RestServer
     staticFiles.location("frontend");
 
     allowCrossSiteCalls();
+    final JsonTransformer transformer = new JsonTransformer();
 
-    get("/search/:type", (req, resp) -> search(req, resp, false), new JsonTransformer());
-    get("/view/:type/:key", this::view, new JsonTransformer());
+    get("/collected/:type/search", (req, resp) -> search(req, resp, false), transformer);
+    get("/collected/:type/key/:key", (req, resp) -> view(req, resp), transformer);
+    put("/collected/:type/key/:key", (req, resp) -> update(req, resp), transformer);
+    post("/collected/:type", (req, resp) -> submit(req, resp), transformer);
+
+    get("/file/:id", this::download);
+    post("/file/:id", this::doUpload);
+
+    post("/collection", this::importCollection);
+    get("/collection", this::export);
+
+    get("/tags", (req, resp) -> "TODO");
+
+    // end of new paths
+
+    get("/search/:type", (req, resp) -> search(req, resp, false), transformer);
+    get("/view/:type/:key", this::view, transformer);
+
+
     get("/download/*", this::download);
     post("/upload/*", this::doUpload);
 
-    get("/check/:type", (req, resp) -> search(req, resp, true), new JsonTransformer());
-    post("/submit", this::submit, new JsonTransformer());
+    get("/check/:type", (req, resp) -> search(req, resp, true), transformer);
+    post("/submit", this::submit, transformer);
 
     post("/import/:collectionName", this::importCollection);
     get("/export/", this::export);
@@ -95,6 +116,11 @@ public class RestServer
     exception(Exception.class, (exception, request, response) -> {
       exception.printStackTrace();
     });
+  }
+
+  private Object update(Request req, Response resp)
+  {
+    return "TODO";
   }
 
   /**
@@ -142,7 +168,7 @@ public class RestServer
     }
     response.header("Content-Type", type);
     response.header("Content-Disposition", "attachment");
-    try (OutputStream dest = response.raw().getOutputStream();)
+    try (OutputStream dest = response.raw().getOutputStream())
     {
       copy(src, dest);
       return null;
@@ -206,7 +232,7 @@ public class RestServer
     Map<String, Collection<String>> binRefs = new HashMap<>();
     persistence.getObjectTypes()
                .forEach(t -> binRefs.put(t, app.getInterpreter(t).getBinaryValuedAttributes()));
-    try (OutputStream dest = res.raw().getOutputStream();)
+    try (OutputStream dest = res.raw().getOutputStream())
     {
       persistence.exportZip(binRefs, dest);
       return null;
@@ -241,7 +267,6 @@ public class RestServer
     });
   }
 
-
   private SearchResult search(Request req, Response res, boolean strictCheck)
   {
     res.type("text/plain");
@@ -253,22 +278,18 @@ public class RestServer
     return strictCheck ? proc.checkValues("TODO", allParams) : proc.search(allParams);
   }
 
-  private static void copy(InputStream src, OutputStream dest) throws IOException
+  /**
+   * All structured output top frontend is JSON.
+   */
+  static class JsonTransformer implements ResponseTransformer
   {
-    byte[] buf = new byte[1024];
-    int count = 0;
-    while ((count = src.read(buf)) != -1)
+
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    @Override
+    public String render(Object model)
     {
-      dest.write(buf, 0, count);
+      return gson.toJson(model);
     }
   }
-
-  /**
-   * Singleton getter.
-   */
-  public static RestServer getInstance()
-  {
-    return INSTANCE;
-  }
-
 }

@@ -39,12 +39,11 @@ public class ChoiceQuestion extends Question
   /**
    * Specifies which options to display to the user. Elements are display values, not internal values.
    *
-   * @see #getOptions()
    * @param options
+   * @see #getOptions()
    */
   public void setOptions(List<String> options)
   {
     this.options = options;
   }
-
 }

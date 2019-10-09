@@ -18,11 +18,11 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 public class Year extends AttributeInterpreter
 {
 
-  Persistence persistence;
-
   private final List<String[]> notBefore = new ArrayList<>();
 
   private final List<String[]> notAfter = new ArrayList<>();
+
+  Persistence persistence;
 
   /**
    * Creates new instance.
@@ -52,6 +52,20 @@ public class Year extends AttributeInterpreter
                    .orElseGet(() -> Optional.ofNullable(worstViolation(context, notAfter, year, false))
                                             .map(a -> "msg.error.tooLateFor." + a)
                                             .orElse(null));
+  }
+
+  @Override
+  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
+  {
+    return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
+  }
+
+  @Override
+  public Question getQuestion(DescribedObject object)
+  {
+    TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
+    result.setFormat(1, 4);
+    return result;
   }
 
   private String worstViolation(DescribedObject ctx, List<String[]> restr, int value, boolean lowerBound)
@@ -100,12 +114,6 @@ public class Year extends AttributeInterpreter
     return new Pair<>(attrib[0], resultValue);
   }
 
-  @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
-  {
-    return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
-  }
-
   /**
    * Adds the restriction that the value may not legally be before the value specified by attribute name
    *
@@ -134,14 +142,6 @@ public class Year extends AttributeInterpreter
     notAfter.add(attribName);
   }
 
-  @Override
-  public Question getQuestion(DescribedObject object)
-  {
-    TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
-    result.setFormat(1, 4);
-    return result;
-  }
-
   /**
    * Not using existing pair classes due to access restrictions.
    */
@@ -158,17 +158,14 @@ public class Year extends AttributeInterpreter
       this.value = value;
     }
 
-
     S getKey()
     {
       return key;
     }
 
-
     T getValue()
     {
       return value;
     }
-
   }
 }

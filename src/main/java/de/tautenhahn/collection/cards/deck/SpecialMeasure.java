@@ -48,5 +48,4 @@ public class SpecialMeasure extends FreeText
       return Similarity.NO_STATEMENT;
     }
   }
-
 }

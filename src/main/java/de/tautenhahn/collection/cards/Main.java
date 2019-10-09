@@ -1,6 +1,5 @@
 package de.tautenhahn.collection.cards;
 
-
 import java.io.IOException;
 import java.io.PrintStream;
 

@@ -106,7 +106,7 @@ public class SearchWrapper
 
   /**
    * Removes the record specified by key from the index.
-   * 
+   *
    * @param key
    */
   public void removeFromIndex(String key)

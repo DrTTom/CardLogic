@@ -18,5 +18,4 @@ public class Location extends FreeText
   {
     super("location", 40, 1);
   }
-
 }

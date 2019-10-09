@@ -39,7 +39,6 @@ public abstract class AttributeInterpreter
     exact = flagList.contains(Flag.EXACT);
   }
 
-
   /**
    * Returns the attribute name.
    */
@@ -77,10 +76,10 @@ public abstract class AttributeInterpreter
    * Returns null if value is OK and message otherwise. System will call this method only if values is
    * present.
    *
-   * @param value   internal value as present in the object
+   * @param value internal value as present in the object
    * @param context provide a described object as context to allow the following methods changing behavior.
-   *                For instance "Vienna Pattern" is legal for French suits but forbidden in German or Spanish
-   *                suits.
+   *          For instance "Vienna Pattern" is legal for French suits but forbidden in German or Spanish
+   *          suits.
    */
   public abstract String check(String value, DescribedObject context);
 
@@ -112,7 +111,6 @@ public abstract class AttributeInterpreter
    * @param object
    */
   public abstract Question getQuestion(DescribedObject object);
-
 
   /**
    * Note that an empty String is filled in instead of a missing value because HTML and JavaScript front ends
@@ -164,23 +162,30 @@ public abstract class AttributeInterpreter
   }
 
   /**
+   * makes the super() call easier
+   */
+  public enum Flag
+  {
+    /**
+     * value may be missing
+     */
+    OPTIONAL,
+    /**
+     * value contributes to search index
+     */
+    SEARCHABLE,
+
+    /**
+     * value can be exactly determined by given object, i.e. equal objects have always same value
+     */
+    EXACT
+  }
+
+  /**
    * Marker interface to indicate that internal and display values may differ.
    */
   public interface Translating
   {
     // marker interface only
   }
-
-  /** makes the super() call easier */
-  public enum Flag
-  {
-    /** value may be missing */
-    OPTIONAL,
-    /** value contributes to search index */
-    SEARCHABLE,
-
-    /** value can be exactly determined by given object, i.e. equal objects have always same value */
-    EXACT
-  }
-
 }

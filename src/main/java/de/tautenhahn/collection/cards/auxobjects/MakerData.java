@@ -30,5 +30,4 @@ public class MakerData extends MapBasedDescribedObjectInterpreter
   {
     return Collections.emptyList();
   }
-
 }

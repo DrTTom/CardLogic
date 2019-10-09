@@ -52,15 +52,6 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     return result;
   }
 
-  private void setupForeignKey()
-  {
-    for ( String key : persistence.getKeyValues(getName()) )
-    {
-      DescribedObject obj = persistence.find(getName(), key);
-      foreignKeyByPrimKey.put(key, obj.getAttributes().get(foreignKey));
-    }
-  }
-
   @Override
   public String check(String value, DescribedObject context)
   {
@@ -83,6 +74,15 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     if (getName().equals(foreignKey) || "*".equals(type))
     {
       setupForeignKey();
+    }
+  }
+
+  private void setupForeignKey()
+  {
+    for ( String key : persistence.getKeyValues(getName()) )
+    {
+      DescribedObject obj = persistence.find(getName(), key);
+      foreignKeyByPrimKey.put(key, obj.getAttributes().get(foreignKey));
     }
   }
 }

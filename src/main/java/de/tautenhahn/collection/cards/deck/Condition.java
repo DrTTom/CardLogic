@@ -5,7 +5,7 @@ import de.tautenhahn.collection.generic.data.FixedEnumeration;
 
 /**
  * Condition a deck is in.
- * 
+ *
  * @author TT
  */
 public class Condition extends FixedEnumeration

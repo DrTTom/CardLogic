@@ -35,6 +35,7 @@
       <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" /> <!--optional callback methods -->
       <exclude name="ShortMethodName" /> <!-- fluent API might want methods like "of" -->
       <exclude name="IdenticalCatchBranches" /> <!-- lots of false positives with PMD 6.4 -->
+      <exclude name="UnnecessaryFullyQualifiedName" /> <!-- false positives with inner classes / constants -->
    </rule>
    <rule ref="category/java/codestyle.xml/ClassNamingConventions">
       <properties>

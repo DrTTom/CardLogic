@@ -25,6 +25,10 @@ public class SearchResult
 
   private final String type;
 
+  private final String primKeyOfEditedObject;
+
+  private final boolean forSubmit;
+
   private List<Question> questions;
 
   private String message;
@@ -38,11 +42,6 @@ public class SearchResult
   private List<DescribedObject> matches = new ArrayList<>();
 
   private Map<String, Map<String, String>> translations;
-
-  private final String primKeyOfEditedObject;
-
-  private final boolean forSubmit;
-
 
   /**
    * Creates new object setting some context data which allows state-free front ends.
@@ -194,5 +193,4 @@ public class SearchResult
   {
     return forSubmit;
   }
-
 }

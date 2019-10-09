@@ -36,5 +36,4 @@ public class NumberCards extends FreeText
     }
     return Similarity.NO_STATEMENT;
   }
-
 }

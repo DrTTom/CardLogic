@@ -48,5 +48,4 @@ public class FreeText extends AttributeInterpreter
     result.setFormat(lines, len);
     return result;
   }
-
 }

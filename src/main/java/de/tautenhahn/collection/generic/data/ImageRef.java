@@ -30,14 +30,14 @@ public class ImageRef extends AttributeInterpreter
   public String check(String value, DescribedObject context)
   {
     return value == null || ApplicationContext.getInstance().getPersistence().binObjectExists(value) ? null
-      : "msg.error.missingReferenceImage";
+      : "msg.error" + ".missingReferenceImage";
   }
 
   @Override
   protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
   {
     return Similarity.NO_STATEMENT; // TODO: could incorporate image recognition if too much computing power
-                                    // is available and images are strictly defined
+    // is available and images are strictly defined
   }
 
   @Override

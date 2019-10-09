@@ -17,12 +17,6 @@ import lombok.Data;
 public class DescribedObject
 {
 
-
-  public DescribedObject(String type, String primKey)
-  {
-    this(type, primKey, new HashMap<>());
-  }
-
   /**
    * Default key to store the display name of the object in - in most cases the name is handled as normal
    * attribute.
@@ -39,4 +33,15 @@ public class DescribedObject
   private final String primKey;
 
   private final Map<String, String> attributes;
+
+  /**
+   * Creates instance with empty attribute map.
+   *
+   * @param type kind of object
+   * @param primKey primary key
+   */
+  public DescribedObject(String type, String primKey)
+  {
+    this(type, primKey, new HashMap<>());
+  }
 }

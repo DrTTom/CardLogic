@@ -39,8 +39,8 @@ public class ImageChoiceQuestion extends ChoiceQuestion
   }
 
   /**
-   * @see #getUrls()
    * @param urls
+   * @see #getUrls()
    */
   public void setUrls(Map<String, String> urls)
   {

@@ -61,7 +61,9 @@ public class RestructureStorage
     for ( String key : source.getKeyValues("deck") )
     {
       if (key.length() > 2)
+      {
         continue;
+      }
       DescribedObject deck = source.find("deck", key);
 
       if (deck.getAttributes().get("maker") != null)
@@ -118,9 +120,10 @@ public class RestructureStorage
       taxStamp.getAttributes().put("issuer", authority);
       taxStamp = new DescribedObject(taxStamp.getType(), toTaxStampKey(key),
                                      new HashMap<>(taxStamp.getAttributes()));
-      taxStamp.getAttributes().put("name",
-                                   authority + " " + taxStamp.getAttributes().get("from") + "-"
-                                           + taxStamp.getAttributes().get("to"));
+      taxStamp.getAttributes()
+              .put("name",
+                   authority + " " + taxStamp.getAttributes().get("from") + "-"
+                           + taxStamp.getAttributes().get("to"));
 
       try (InputStream ins = source.find(taxStamp.getAttributes().get("image")))
       {
@@ -130,7 +133,6 @@ public class RestructureStorage
       }
 
       dest.store(taxStamp);
-
     }
   }
 
@@ -168,7 +170,6 @@ public class RestructureStorage
   private String toTaxStampKey(String key)
   {
     return key.startsWith("Deu") ? "DE" + key.substring(16, 20) : "AU1900";
-
   }
 
   private void migrateMaker(Persistence source, Persistence dest)
@@ -212,7 +213,6 @@ public class RestructureStorage
         pattern.getAttributes().put("image", ref);
       }
       dest.store(pattern);
-
     }
   }
 
@@ -224,7 +224,5 @@ public class RestructureStorage
                         .findAny()
                         .map(e -> e.getKey())
                         .orElseThrow(() -> new RuntimeException());
-
   }
-
 }

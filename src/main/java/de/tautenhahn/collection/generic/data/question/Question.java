@@ -11,38 +11,21 @@ import de.tautenhahn.collection.generic.data.AttributeInterpreter;
 public class Question
 {
 
-  /**
-   * Type of input required to answer the question.
-   */
-  public enum Type
-  {
-    /** free text */
-    TEXT,
-    /** choice among given text phrases */
-    TEXT_CHOICE,
-    /** choice among given images */
-    IMAGE_CHOICE,
-    /** choice among given objects by name */
-    OBJECT_CHOICE,
-    /** file upload */
-    FILE
-  }
-
   private final String paramName;
-
-  private String value;
 
   private final String text;
 
-  private String helptext;
-
   private final String form;
+
+  private final Type type;
+
+  private String value;
+
+  private String helptext;
 
   private boolean alignWithPrevious;
 
   private String problem;
-
-  private final Type type;
 
   /**
    * Creates instance setting the mandatory parameters.
@@ -58,8 +41,6 @@ public class Question
     this.text = text;
     this.form = form;
   }
-
-
 
   /**
    * Returns the type of question.
@@ -78,8 +59,8 @@ public class Question
   }
 
   /**
-   * @see #getHelptext()
    * @param helptext
+   * @see #getHelptext()
    */
   public void setHelptext(String helptext)
   {
@@ -120,8 +101,8 @@ public class Question
   }
 
   /**
-   * @see #getValue()
    * @param value
+   * @see #getValue()
    */
   public void setValue(String value)
   {
@@ -137,14 +118,13 @@ public class Question
   }
 
   /**
-   * @see Question#getProblem()
    * @param problem
+   * @see Question#getProblem()
    */
   public void setProblem(String problem)
   {
     this.problem = problem;
   }
-
 
   /**
    * Returns true if question should displayed together with previous one.
@@ -163,4 +143,30 @@ public class Question
     return this;
   }
 
+  /**
+   * Type of input required to answer the question.
+   */
+  public enum Type
+  {
+    /**
+     * free text
+     */
+    TEXT,
+    /**
+     * choice among given text phrases
+     */
+    TEXT_CHOICE,
+    /**
+     * choice among given images
+     */
+    IMAGE_CHOICE,
+    /**
+     * choice among given objects by name
+     */
+    OBJECT_CHOICE,
+    /**
+     * file upload
+     */
+    FILE
+  }
 }

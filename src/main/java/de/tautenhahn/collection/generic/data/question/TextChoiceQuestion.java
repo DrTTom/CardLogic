@@ -19,5 +19,4 @@ public class TextChoiceQuestion extends ChoiceQuestion
   {
     super(Type.TEXT_CHOICE, paramName, text, form);
   }
-
 }

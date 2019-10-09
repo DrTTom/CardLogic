@@ -41,5 +41,4 @@ public class NumberIndex extends FreeText
   {
     return super.getQuestion(object).alignWithPrevious();
   }
-
 }

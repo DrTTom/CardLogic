@@ -32,5 +32,4 @@ public class MakerSignObject extends MapBasedDescribedObjectInterpreter
   {
     return Collections.emptyList();
   }
-
 }

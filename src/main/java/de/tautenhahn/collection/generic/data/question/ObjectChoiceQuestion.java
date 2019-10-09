@@ -30,6 +30,4 @@ public class ObjectChoiceQuestion extends ChoiceQuestion
   {
     return auxType;
   }
-
-
 }

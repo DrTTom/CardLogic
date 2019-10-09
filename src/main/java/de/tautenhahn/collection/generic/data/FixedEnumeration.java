@@ -22,6 +22,20 @@ public abstract class FixedEnumeration extends Enumeration
   private final List<String> allowedValues;
 
   /**
+   * Creates new instance.
+   *
+   * @param name
+   * @param matchValue
+   * @param allowed
+   * @param flags
+   */
+  protected FixedEnumeration(String name, int matchValue, String[] allowed, Flag... flags)
+  {
+    super(name, matchValue, flags);
+    allowedValues = Collections.unmodifiableList(Arrays.asList(allowed));
+  }
+
+  /**
    * Returns array of translated values based on given message keys.
    *
    * @param paramName
@@ -37,30 +51,10 @@ public abstract class FixedEnumeration extends Enumeration
     return result;
   }
 
-  /**
-   * Creates new instance.
-   *
-   * @param name
-   * @param matchValue
-   * @param allowed
-   * @param flags
-   */
-  protected FixedEnumeration(String name, int matchValue, String[] allowed, Flag... flags)
-  {
-    super(name, matchValue, flags);
-    allowedValues = Collections.unmodifiableList(Arrays.asList(allowed));
-  }
-
   @Override
   public String check(String value, DescribedObject context)
   {
     return getAllowedValues(context).contains(value) ? null : "msg.error.invalidOption";
-  }
-
-  @Override
-  public List<String> getAllowedValues(DescribedObject context)
-  {
-    return allowedValues;
   }
 
   /**
@@ -84,5 +78,9 @@ public abstract class FixedEnumeration extends Enumeration
     return result;
   }
 
-
+  @Override
+  public List<String> getAllowedValues(DescribedObject context)
+  {
+    return allowedValues;
+  }
 }

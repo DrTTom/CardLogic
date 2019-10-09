@@ -44,5 +44,4 @@ public abstract class MapBasedDescribedObjectInterpreter extends DescribedObject
     return Optional.ofNullable(attribs.get(name))
                    .orElseThrow(() -> new IllegalArgumentException("unsupported attribute " + name));
   }
-
 }

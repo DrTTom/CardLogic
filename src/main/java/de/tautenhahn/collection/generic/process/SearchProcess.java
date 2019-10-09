@@ -29,14 +29,14 @@ public class SearchProcess implements PersistenceChangeListener
 
   private static final Persistence PERSISTENCE = ApplicationContext.getInstance().getPersistence();
 
+  private final String type;
+
+  private final DescribedObjectInterpreter interpreter;
+
   /**
    * Caching only one last search, optimization for multi-user handling not done.
    */
   private Map<String, String> lastSearch;
-
-  private final String type;
-
-  private final DescribedObjectInterpreter interpreter;
 
   /**
    * May be empty as long as initialization appears to be too expensive.
@@ -63,7 +63,7 @@ public class SearchProcess implements PersistenceChangeListener
   /**
    * Executes a search interpreting the given data as object description. All possible errors are reported.
    *
-   * @param primKey    optional, is returned with the result.
+   * @param primKey optional, is returned with the result.
    * @param parameters
    */
   public SearchResult checkValues(String primKey, Map<String, String> parameters)
@@ -71,12 +71,11 @@ public class SearchProcess implements PersistenceChangeListener
     return execute(parameters, primKey, true);
   }
 
-
   /**
    * Actually does the search. If too expensive, maybe cache old similarity values as well. However, current
    * implementation does not require the similarity to be additive.
    *
-   * @param parameters  attribute values to match
+   * @param parameters attribute values to match
    * @param primKey
    * @param checkStrict to create problem messages for missing mandatory values
    */

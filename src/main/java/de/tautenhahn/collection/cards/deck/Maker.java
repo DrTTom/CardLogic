@@ -18,5 +18,4 @@ public class Maker extends TypeBasedEnumeration
   {
     super("maker", 50, Flag.OPTIONAL);
   }
-
 }

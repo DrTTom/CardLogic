@@ -58,28 +58,6 @@ public class CardsTest
 
   private static final Random MEASURE_SOURCE = new Random();
 
-
-  /**
-   * Do not require Apache library to remove a directory tree.
-   */
-  static final class DeleteDirTree extends SimpleFileVisitor<Path>
-  {
-
-    @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
-    {
-      Files.delete(file);
-      return FileVisitResult.CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
-    {
-      Files.delete(dir);
-      return FileVisitResult.CONTINUE;
-    }
-  }
-
   private static DescribedObjectInterpreter deck;
 
   private static ApplicationContext application;
@@ -227,7 +205,6 @@ public class CardsTest
     assertThat(pq.getOptions(), hasItem(""));
   }
 
-
   /**
    * Asserts that submission process creates new object which is returned with next search. Furthermore, make
    * sure translated attributes are filled correctly.
@@ -306,7 +283,6 @@ public class CardsTest
     SubmissionResult result = systemUnderTest.submit(newDeck, force);
     assertThat("done (" + result.getStatus() + ")", result.isDone(), is(expectSuccess));
 
-
     SearchResult after = search.search(newDeck.getAttributes());
     assertThat(after.getNumberMatching(), is(expectSuccess ? 1 : 0));
     assertThat(after.getNumberTotal(), is(before.getNumberTotal() + (expectSuccess ? 1 : 0)));
@@ -337,5 +313,26 @@ public class CardsTest
                     .filter(q -> q.getParamName().equals(paramName))
                     .findAny()
                     .orElseThrow(() -> new AssertionError());
+  }
+
+  /**
+   * Do not require Apache library to remove a directory tree.
+   */
+  static final class DeleteDirTree extends SimpleFileVisitor<Path>
+  {
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+    {
+      Files.delete(file);
+      return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
+    {
+      Files.delete(dir);
+      return FileVisitResult.CONTINUE;
+    }
   }
 }

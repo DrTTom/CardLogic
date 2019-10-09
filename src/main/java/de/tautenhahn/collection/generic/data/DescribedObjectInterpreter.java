@@ -144,5 +144,4 @@ public abstract class DescribedObjectInterpreter
 
     return new DescribedObject(type, primKey, attribs);
   }
-
 }

@@ -83,5 +83,4 @@ public class Format extends FreeText
       return Math.abs(width - other.width) < 2 && Math.abs(height - other.height) < 2;
     }
   }
-
 }
