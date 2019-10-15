@@ -164,7 +164,7 @@ public abstract class AttributeInterpreter
   /**
    * makes the super() call easier
    */
-  public enum Flag
+  public static enum Flag
   {
     /**
      * value may be missing

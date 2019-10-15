@@ -146,7 +146,7 @@ public class Question
   /**
    * Type of input required to answer the question.
    */
-  public enum Type
+  public static enum Type
   {
     /**
      * free text
