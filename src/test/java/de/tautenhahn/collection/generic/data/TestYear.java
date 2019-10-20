@@ -20,6 +20,9 @@ public class TestYear
   // do not call init or close in this test!
   private static Persistence persistence = new WorkspacePersistence();
 
+  /**
+   * Asserts that Year class produces errors when value violates defined restrictions.
+   */
   @Test
   public void imposedBounds()
   {

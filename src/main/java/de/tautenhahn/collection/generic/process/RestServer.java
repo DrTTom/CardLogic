@@ -4,7 +4,6 @@ import static spark.Spark.before;
 import static spark.Spark.exception;
 import static spark.Spark.get;
 import static spark.Spark.options;
-import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.put;
 import static spark.Spark.staticFiles;
@@ -27,6 +26,7 @@ import com.google.gson.GsonBuilder;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.SubmissionResponse;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import spark.Request;
 import spark.Response;
@@ -41,6 +41,8 @@ import spark.Spark;
  */
 public class RestServer
 {
+
+  private static final Gson GSON = new GsonBuilder().create();
 
   private static final RestServer INSTANCE = new RestServer();
 
@@ -186,15 +188,19 @@ public class RestServer
 
   /**
    * @param req
-   * @param res not needed
+   * @param res
    */
-  private SubmissionResult submit(Request req, Response res)
+  private SubmissionResponse submit(Request req, Response res)
   {
-    Gson gson = new GsonBuilder().create();
-    DescribedObject object = gson.fromJson(req.body(), DescribedObject.class);
+    DescribedObject object = GSON.fromJson(req.body(), DescribedObject.class);
 
-    SubmissionProcess proc = ProcessFactory.getInstance().getSubmission(object.getType());
-    return proc.submit(object, false);
+    SubmissionProcess proc = new SubmissionProcess(req.params(":type"));
+    SubmissionResponse resp = proc.submit(object, "true".equals(req.queryParams("lenient")));
+    if (resp.getMessage().contains(".error."))
+    {
+      res.status(422);
+    }
+    return resp;
   }
 
   /**

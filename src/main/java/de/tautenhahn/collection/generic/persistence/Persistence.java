@@ -106,6 +106,14 @@ public interface Persistence extends AutoCloseable
    */
   void store(InputStream ins, String ref) throws IOException;
 
+  /**
+   * Returns a new reference for storing a binary file.
+   * 
+   * @param parentsPrimKey
+   * @param parentsType
+   * @param fileExtension
+   * @throws IOException
+   */
   String createNewBinRef(String parentsPrimKey, String parentsType, String fileExtension) throws IOException;
 
   /**

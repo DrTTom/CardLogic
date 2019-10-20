@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.data.question;
 
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
+import lombok.Data;
 
 
 /**
@@ -8,6 +9,7 @@ import de.tautenhahn.collection.generic.data.AttributeInterpreter;
  *
  * @author TT
  */
+@Data
 public class Question
 {
 
@@ -146,7 +148,7 @@ public class Question
   /**
    * Type of input required to answer the question.
    */
-  public static enum Type
+  public enum Type
   {
     /**
      * free text
