@@ -28,6 +28,7 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.SubmissionResponse;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
+import lombok.extern.slf4j.Slf4j;
 import spark.Request;
 import spark.Response;
 import spark.ResponseTransformer;
@@ -39,6 +40,7 @@ import spark.Spark;
  *
  * @author TT
  */
+@Slf4j
 public class RestServer
 {
 
@@ -95,7 +97,7 @@ public class RestServer
     post("/file/:id", this::doUpload);
 
     post("/collection", this::importCollection);
-    get("/collection", this::export);
+    get("/collection", (req, resp)-> export(resp));
 
     get("/tags", (req, resp) -> "TODO");
 
@@ -112,11 +114,11 @@ public class RestServer
     post("/submit", this::submit, transformer);
 
     post("/import/:collectionName", this::importCollection);
-    get("/export/", this::export);
+    get("/export/", (req, resp)-> export(resp));
 
     // exception handling during development
     exception(Exception.class, (exception, request, response) -> {
-      exception.printStackTrace();
+       log.error("Exception occurred", exception);
     });
   }
 
@@ -135,7 +137,6 @@ public class RestServer
   private Object doUpload(Request request, Response response) throws IOException, ServletException
   {
     String ref = splatParam(request);
-    System.out.println("\n\n got upload to " + ref);
     request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
     try (InputStream ins = request.raw().getPart("file").getInputStream())
     {
@@ -220,15 +221,15 @@ public class RestServer
     {
       persistence.importZip(ins);
     }
+    res.status(200);
     return "OK";
   }
 
   /**
-   * @param req not needed
    * @param res
    * @throws IOException
    */
-  private String export(Request req, Response res) throws IOException
+  private String export(Response res) throws IOException
   {
     ApplicationContext app = ApplicationContext.getInstance();
     WorkspacePersistence persistence = (WorkspacePersistence)app.getPersistence();

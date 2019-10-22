@@ -2,28 +2,28 @@ package de.tautenhahn.collection.generic.process;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import com.google.gson.Gson;
-
 import de.tautenhahn.collection.cards.CardApplicationContext;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.SubmissionResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import spark.Spark;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Tests for calling the REST paths on the server.
@@ -34,96 +34,141 @@ import spark.Spark;
 public class TestRestServer
 {
 
-  private static final Gson GSON = new Gson();
+    private static final Gson GSON = new Gson();
 
-  private static final HttpClient CLIENT = HttpClient.newBuilder().build();
+    private static final HttpClient CLIENT = HttpClient.newBuilder().build();
 
-  private static final String SERVER_URI = "http://localhost:4567";
+    private static final String SERVER_URI = "http://localhost:4567";
 
-  @BeforeAll
-  static void setUp() throws IOException
-  {
-    CardApplicationContext.register();
-    ApplicationContext.getInstance().getPersistence().init("cards");
-    RestServer.getInstance().start();
-    Spark.awaitInitialization();
-    log.debug("Started server");
-  }
+    @BeforeAll
+    static void setUp() throws IOException
+    {
+        CardApplicationContext.register();
+        ApplicationContext.getInstance().getPersistence().init("cards");
+        RestServer.getInstance().start();
+        Spark.awaitInitialization();
+        log.debug("Started server");
+    }
 
-  @AfterAll
-  static void tearDown()
-  {
-    RestServer.getInstance().stop();
-  }
+    @AfterAll
+    static void tearDown()
+    {
+        RestServer.getInstance().stop();
+    }
 
-  /**
-   * Requests a static page from the server.
-   *
-   * @throws Exception all the unexpected Exceptions go to test protocol
-   */
-  @Test
-  void staticPage() throws Exception
-  {
-    String index = callService(get(""), 200, String.class);
-    assertThat(index).startsWith("<!DOCTYPE html>");
-  }
+    /**
+     * Requests a static page from the server.
+     *
+     * @throws Exception all the unexpected Exceptions go to test protocol
+     */
+    @Test
+    void staticPage() throws Exception
+    {
+        String index = callService(get(""), 200, String.class);
+        assertThat(index).startsWith("<!DOCTYPE html>");
+    }
 
-  /**
-   * Create, search, update, check and delete the most simple entity in the system.
-   * 
-   * @throws Exception all the unexpected Exceptions go to test protocol
-   */
-  @Test
-  void crudSimpleType() throws Exception
-  {
+    /**
+     * Create, search, update, check and delete the most simple entity in the system.
+     *
+     * @throws Exception all the unexpected Exceptions go to test protocol
+     */
+    @Test
+    void crudSimpleType() throws Exception
+    {
+        String key = createMaker();
+        DescribedObject found = readMaker(key);
+        updateMaker(found);
+        deleteMaker(found);
+    }
 
-    Map<String, String> attribs = new HashMap<>();
-    attribs.putAll(Map.of("fullName", "Ostermann AG", "remark", "test data"));
-    DescribedObject data = new DescribedObject("maker", "OAG", attribs);
-    SubmissionResponse response = callService(post("/collected/maker", data), 422, SubmissionResponse.class);
-    assertThat(response.getMessage()).isEqualTo("msg.error.remainingProblems");
+    /**
+     * When creating an object, the data is checked for inconsistencies. Creation is done only for correct data.
+     */
+    private String createMaker() throws Exception
+    {
+        Map<String, String> attribs = new HashMap<>();
+        attribs.putAll(Map.of("fullName", "Ostermann AG", "remark", "test data"));
+        DescribedObject data = new DescribedObject("maker", "OAG", attribs);
+        SubmissionResponse response = callService(post("/collected/maker", data), 422, SubmissionResponse.class);
+        assertThat(response.getMessage()).isEqualTo("msg.error.remainingProblems");
 
-    data.getAttributes().putAll(Map.of("from", "1990", "to", "2001", "place", "Neverland", "domain", "WW"));
-    response = callService(post("/collected/maker", data), 200, SubmissionResponse.class);
-    String key = response.getPrimaryKey();
+        data.getAttributes().putAll(Map.of("from", "1990", "to", "2001", "place", "Neverland", "domain", "WW"));
+        response = callService(post("/collected/maker", data), 200, SubmissionResponse.class);
+        return response.getPrimaryKey();
+    }
 
-    SearchResult sr = callService(get("/collected/maker/search"), 200, SearchResult.class);
-    var found = sr.getMatches().stream().filter(d -> d.getPrimKey().equals(key)).findAny().get();
-    assertThat(found.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
+    /**
+     * Objects can be accessed for display. To enable editing an object, the client should send a search request with
+     * found data. By that request the client obtains the questions and the set of similar objects.
+     */
+    private DescribedObject readMaker(String key) throws Exception
+    {
+        DescribedObject read = callService(get("/collected/maker/key/" + key), 200, DescribedObject.class);
+        assertThat(read.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
 
-    found.getAttributes().put("from", "1798");
-    var ur = callService(put("/collected/maker/key/" + key, found), 200, String.class);
+        SearchResult sr = callService(get("/collected/maker/search"+toQueryParams(read)), 200, SearchResult.class);
+        DescribedObject found = sr.getMatches().stream().filter(d -> d.getPrimKey().equals(key)).findAny().get();
+        assertThat(found.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
+        System.out.println(sr);
+        return found;
+    }
 
-    System.out.println(ur);
+    /**
+     * Update should also check the data for consistency
+     * @param found
+     * @throws Exception
+     */
+    private void updateMaker(DescribedObject found) throws Exception
+    {
+        found.getAttributes().put("from", "2010");
+        var ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found), 200, String.class);
 
-  }
+        System.out.println(ur);
+    }
 
-  HttpRequest get(String path) throws URISyntaxException
-  {
-    return HttpRequest.newBuilder(new URI(SERVER_URI + path)).GET().build();
-  }
+    private void deleteMaker(DescribedObject found)
+    {
+    }
 
-  HttpRequest post(String path, Object value) throws URISyntaxException
-  {
-    String content = GSON.toJson(value);
-    return HttpRequest.newBuilder(new URI(SERVER_URI + path))
-                      .POST(HttpRequest.BodyPublishers.ofString(content))
-                      .build();
-  }
+    private String toQueryParams(DescribedObject read)
+    {
+        return "?"+String.join("&", read
+            .getAttributes()
+            .entrySet()
+            .stream()
+            .map(e -> e.getKey() + '=' + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
+            .collect(Collectors.toList()));
+    }
 
-  HttpRequest put(String path, Object value) throws URISyntaxException
-  {
-    String content = GSON.toJson(value);
-    return HttpRequest.newBuilder(new URI(SERVER_URI + path))
-                      .PUT(HttpRequest.BodyPublishers.ofString(content))
-                      .build();
-  }
+    HttpRequest get(String path) throws URISyntaxException
+    {
+        return HttpRequest.newBuilder(new URI(SERVER_URI + path)).GET().build();
+    }
 
-  <T> T callService(HttpRequest req, int expectedCode, Class<T> responseClass)
-    throws IOException, InterruptedException
-  {
-    HttpResponse<String> response = CLIENT.send(req, HttpResponse.BodyHandlers.ofString());
-    assertThat(response.statusCode()).as("status code").isEqualTo(expectedCode);
-    return String.class == responseClass ? (T)response.body() : GSON.fromJson(response.body(), responseClass);
-  }
+    HttpRequest post(String path, Object value) throws URISyntaxException
+    {
+        String content = GSON.toJson(value);
+        return HttpRequest
+            .newBuilder(new URI(SERVER_URI + path))
+            .POST(HttpRequest.BodyPublishers.ofString(content))
+            .build();
+    }
+
+    HttpRequest put(String path, Object value) throws URISyntaxException
+    {
+        String content = GSON.toJson(value);
+        return HttpRequest
+            .newBuilder(new URI(SERVER_URI + path))
+            .PUT(HttpRequest.BodyPublishers.ofString(content))
+            .build();
+    }
+
+    <T> T callService(HttpRequest req, int expectedCode, Class<T> responseClass)
+        throws IOException, InterruptedException
+    {
+        HttpResponse<String> response = CLIENT.send(req, HttpResponse.BodyHandlers.ofString());
+        assertThat(response.statusCode()).as("status code").isEqualTo(expectedCode);
+        return String.class == responseClass ? (T) response.body() : GSON.fromJson(response.body(), responseClass);
+    }
 }
