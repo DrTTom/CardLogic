@@ -119,7 +119,7 @@ public class Year extends AttributeInterpreter
    *
    * @param attribName at least one name, several indicate an attribute of a sub-object
    */
-  protected void addNotBeforeRestriction(String... attribName)
+  public void addNotBeforeRestriction(String... attribName)
   {
     if (attribName.length == 0)
     {

@@ -11,6 +11,7 @@ import static spark.Spark.staticFiles;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import javax.servlet.ServletException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.google.gson.reflect.TypeToken;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.SubmissionResponse;
@@ -47,6 +49,8 @@ public class RestServer
   private static final Gson GSON = new GsonBuilder().create();
 
   private static final RestServer INSTANCE = new RestServer();
+
+  public static final Type MAP_TYPE = new TypeToken<Map<String, String>>() {}.getType();
 
   private RestServer()
   {
@@ -122,9 +126,17 @@ public class RestServer
     });
   }
 
-  private Object update(Request req, Response resp)
+  private Object update(Request req, Response res)
   {
-    return "TODO";
+    Map<String, String> object = GSON.fromJson(req.body(), MAP_TYPE);
+
+    SubmissionProcess proc = new SubmissionProcess(req.params(":type"));
+    SubmissionResponse resp = proc.update(req.params(":key"),object, "true".equals(req.queryParams("lenient")));
+    if (resp.getMessage().contains(".error."))
+    {
+      res.status(422);
+    }
+    return resp;
   }
 
   /**
@@ -193,7 +205,7 @@ public class RestServer
    */
   private SubmissionResponse submit(Request req, Response res)
   {
-    DescribedObject object = GSON.fromJson(req.body(), DescribedObject.class);
+    Map<String, String> object = GSON.fromJson(req.body(), MAP_TYPE);
 
     SubmissionProcess proc = new SubmissionProcess(req.params(":type"));
     SubmissionResponse resp = proc.submit(object, "true".equals(req.queryParams("lenient")));

@@ -183,6 +183,7 @@ public abstract class AttributeInterpreter
 
   /**
    * Marker interface to indicate that internal and display values may differ.
+   * TODO: make data objects always contain internal values, provide display values with questions and listed objects
    */
   public interface Translating
   {

@@ -87,13 +87,12 @@ public class TestRestServer
      */
     private String createMaker() throws Exception
     {
-        Map<String, String> attribs = new HashMap<>();
-        attribs.putAll(Map.of("fullName", "Ostermann AG", "remark", "test data"));
-        DescribedObject data = new DescribedObject("maker", "OAG", attribs);
+        Map<String, String> data = new HashMap<>();
+        data.putAll(Map.of("fullName", "Ostermann AG", "remark", "test data"));
         SubmissionResponse response = callService(post("/collected/maker", data), 422, SubmissionResponse.class);
         assertThat(response.getMessage()).isEqualTo("msg.error.remainingProblems");
 
-        data.getAttributes().putAll(Map.of("from", "1990", "to", "2001", "place", "Neverland", "domain", "WW"));
+        data.putAll(Map.of("from", "1990", "to", "2001", "place", "Neverland", "domain", "WW"));
         response = callService(post("/collected/maker", data), 200, SubmissionResponse.class);
         return response.getPrimaryKey();
     }
@@ -110,20 +109,18 @@ public class TestRestServer
         SearchResult sr = callService(get("/collected/maker/search"+toQueryParams(read)), 200, SearchResult.class);
         DescribedObject found = sr.getMatches().stream().filter(d -> d.getPrimKey().equals(key)).findAny().get();
         assertThat(found.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
-        System.out.println(sr);
         return found;
     }
 
     /**
-     * Update should also check the data for consistency
+     * Update should also check the data for consistency.
      * @param found
      * @throws Exception
      */
     private void updateMaker(DescribedObject found) throws Exception
     {
         found.getAttributes().put("from", "2010");
-        var ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found), 200, String.class);
-
+        var ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found.getAttributes()), 422, String.class);
         System.out.println(ur);
     }
 
