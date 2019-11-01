@@ -7,6 +7,7 @@ import de.tautenhahn.collection.cards.CardApplicationContext;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.SubmissionResponse;
+import de.tautenhahn.collection.generic.data.question.Question;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -79,7 +80,7 @@ public class TestRestServer
         String key = createMaker();
         DescribedObject found = readMaker(key);
         updateMaker(found);
-        deleteMaker(found);
+        deleteMaker(key);
     }
 
     /**
@@ -106,7 +107,7 @@ public class TestRestServer
         DescribedObject read = callService(get("/collected/maker/key/" + key), 200, DescribedObject.class);
         assertThat(read.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
 
-        SearchResult sr = callService(get("/collected/maker/search"+toQueryParams(read)), 200, SearchResult.class);
+        SearchResult sr = callService(get("/collected/maker/search" + toQueryParams(read)), 200, SearchResult.class);
         DescribedObject found = sr.getMatches().stream().filter(d -> d.getPrimKey().equals(key)).findAny().get();
         assertThat(found.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
         return found;
@@ -114,23 +115,43 @@ public class TestRestServer
 
     /**
      * Update should also check the data for consistency.
+     *
      * @param found
      * @throws Exception
      */
     private void updateMaker(DescribedObject found) throws Exception
     {
         found.getAttributes().put("from", "2010");
-        var ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found.getAttributes()), 422, String.class);
-        System.out.println(ur);
+        SubmissionResponse ur =
+            callService(put("/collected/maker/key/" + found.getPrimKey(), found.getAttributes()), 422,
+                SubmissionResponse.class);
+        assertThat(ur
+            .getQuestions()
+            .stream()
+            .filter(q -> "to".equals(q.getParamName()))
+            .findAny()
+            .map(Question::getProblem)
+            .get()).isEqualTo("msg.error.tooEarlyFor.from");
+        found.getAttributes().put("from", "1989");
+
+        ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found.getAttributes()), 200,
+            SubmissionResponse.class);
+        assertThat(ur.getMessage()).isEqualTo("msg.ok.objectStored");
+
+        DescribedObject changed = readMaker(found.getPrimKey());
+        assertThat(changed.getAttributes().get("from")).isEqualTo("1989");
     }
 
-    private void deleteMaker(DescribedObject found)
+    private void deleteMaker(String key) throws Exception
     {
+        String path = "/collected/maker/key/" + key;
+        callService(delete(path), 200, String.class);
+        // TODO: callService(get(path), 404, String.class);
     }
 
     private String toQueryParams(DescribedObject read)
     {
-        return "?"+String.join("&", read
+        return "?" + String.join("&", read
             .getAttributes()
             .entrySet()
             .stream()
@@ -141,6 +162,11 @@ public class TestRestServer
     HttpRequest get(String path) throws URISyntaxException
     {
         return HttpRequest.newBuilder(new URI(SERVER_URI + path)).GET().build();
+    }
+
+    HttpRequest delete(String path) throws URISyntaxException
+    {
+        return HttpRequest.newBuilder(new URI(SERVER_URI + path)).DELETE().build();
     }
 
     HttpRequest post(String path, Object value) throws URISyntaxException
