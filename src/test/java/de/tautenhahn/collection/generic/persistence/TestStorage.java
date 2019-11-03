@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
@@ -36,13 +35,16 @@ public class TestStorage
     byte[] content = new byte[1001];
     String reference = null;
 
+    String protType = "protocol";
+    String urlType = "cryptoUrl";
+    String https = "https";
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
     {
       systemUnderTest.init("testStoreAndFind");
-      DescribedObject obj = new DescribedObject("cryptoUrl", "primary");
-      obj.getAttributes().put("protocol", "https");
-      DescribedObject prot = new DescribedObject("protocol", "https");
-      reference = systemUnderTest.createNewBinRef("https", "protocol", "bin");
+      DescribedObject obj = new DescribedObject(urlType, "primary");
+      obj.getAttributes().put(protType, https);
+      DescribedObject prot = new DescribedObject(protType, https);
+      reference = systemUnderTest.createNewBinRef(https, protType, "bin");
       prot.getAttributes().put("image", reference);
       systemUnderTest.store(new ByteArrayInputStream(content), reference);
       systemUnderTest.store(obj);
@@ -52,19 +54,19 @@ public class TestStorage
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
     {
       systemUnderTest.init("testStoreAndFind");
-      assertThat(systemUnderTest.find("cryptoUrl", "primary")
+      assertThat(systemUnderTest.find(urlType, "primary")
                                 .getAttributes()
-                                .get("protocol")).isEqualTo("https");
-      assertThat(systemUnderTest.isReferenced("protocol", "https", "cryptoUrl")).isTrue();
+                                .get(protType)).isEqualTo(https);
+      assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isTrue();
       try (InputStream ins = systemUnderTest.find(reference))
       {
         assertThat(ins.available()).isEqualTo(content.length);
       }
-      assertThat(systemUnderTest.findByRestriction("cryptoUrl", Map.of("protocol", "https"))
+      assertThat(systemUnderTest.findByRestriction(urlType, Map.of(protType, https))
                                 .count()).isEqualTo(1);
-      systemUnderTest.delete("cryptoUrl", "primary");
-      assertThat(systemUnderTest.isReferenced("protocol", "https", "cryptoUrl")).isFalse();
-      assertThat(systemUnderTest.find("cryptoUrl", "primary")).isNull();
+      systemUnderTest.delete(urlType, "primary");
+      assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isFalse();
+      assertThat(systemUnderTest.find(urlType, "primary")).isNull();
     }
   }
 

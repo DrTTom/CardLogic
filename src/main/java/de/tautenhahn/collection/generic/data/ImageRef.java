@@ -6,6 +6,7 @@ import java.util.Optional;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.FileQuestion;
 import de.tautenhahn.collection.generic.data.question.Question;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -13,6 +14,7 @@ import de.tautenhahn.collection.generic.data.question.Question;
  *
  * @author TT
  */
+@Slf4j
 public class ImageRef extends AttributeInterpreter
 {
 
@@ -54,7 +56,7 @@ public class ImageRef extends AttributeInterpreter
     }
     catch (IOException e)
     {
-      e.printStackTrace();
+      log.error("", e);
     }
     return result;
   }

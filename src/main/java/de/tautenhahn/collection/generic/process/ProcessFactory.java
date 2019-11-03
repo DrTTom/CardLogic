@@ -55,4 +55,12 @@ public class ProcessFactory
   {
     return new SubmissionProcess(type);
   }
+
+  /**
+   * @return the deletion process.
+   */
+  public DeletionProcess getDelete()
+  {
+    return new DeletionProcess();
+  }
 }
