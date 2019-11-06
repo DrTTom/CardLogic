@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Example for Custom Component</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="components.css">
+    <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="domBuilder.js"></script>
+    <script src="components.js"></script>
+</head>
+<body>
+  <p>Example page to show a component in:</p>
+  <my-text id="ddd"></my-text>
+
+  <script>
+    $('#ddd').load({
+        question: "A text input:",
+        value: "loaded value",
+        message: "Value is invalid.",
+        tooltip: "Enter text here!"
+    });
+  </script>
+</body>
+</html>

@@ -1,8 +1,12 @@
 /bin/
 /build/
+/.gradle/
+/node_modules/
+lombok.config
+package-lock.json
+
 /.classpath
 /.project
 /.settings/
-/.gradle/
-checkme.zip
-lombok.config
+/.idea/
+/out/

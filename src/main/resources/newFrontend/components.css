@@ -1,0 +1,17 @@
+body {
+    font-family: sans-serif;
+}
+
+.left {
+    float: left;
+    width: 30%;
+}
+
+.right {
+    float: left;
+    width: 55%;
+}
+
+.warning {
+    color: crimson;
+}
