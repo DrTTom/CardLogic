@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -80,8 +81,9 @@ public class RestServer
    */
   public void start()
   {
-    staticFiles.location("frontend");
-    allowCrossSiteCalls();
+    // To enable direct client editing without restart of server:
+    staticFiles.externalLocation(Path.of("src/main/resources/newFrontend").toAbsolutePath().toString());
+    //staticFiles.location("newFrontend");
     final JsonTransformer transformer = new JsonTransformer();
 
     post("/collected/:type", (req, resp) -> submit(req, resp), transformer);
@@ -280,34 +282,6 @@ public class RestServer
       persistence.exportZip(binRefs, dest);
       return null;
     }
-  }
-
-  private void allowCrossSiteCalls()
-  {
-    before((request, response) -> {
-      response.header("Access-Control-Allow-Origin", "*");
-      response.header("Access-Control-Request-Method", "*");
-      response.header("Access-Control-Allow-Headers", "*");
-      // Note: this may or may not be necessary in your particular application
-      response.type("application/json");
-    });
-
-    options("/*", (request, response) -> {
-
-      String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
-      if (accessControlRequestHeaders != null)
-      {
-        response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-      }
-
-      String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
-      if (accessControlRequestMethod != null)
-      {
-        response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-      }
-
-      return "OK";
-    });
   }
 
   private SearchResult search(Request req, Response res, boolean strictCheck)

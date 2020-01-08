@@ -7,18 +7,25 @@
     <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <script src="domBuilder.js"></script>
     <script src="components.js"></script>
+    <script src="fetch.js"></script>
 </head>
 <body>
-  <p>Example page to show a component in:</p>
-  <my-text id="ddd"></my-text>
+<p>Example page to show a component in:</p>
+<my-text id="ddd"></my-text>
 
-  <script>
+<p>Downloaded list data:</p>
+<p id="target"/>
+<script>
     $('#ddd').load({
         question: "A text input:",
         value: "loaded value",
         message: "Value is invalid.",
         tooltip: "Enter text here!"
     });
-  </script>
+
+    getJson('/collected/maker/search', x => x.matches.forEach(d =>
+        buildChildNode($('#target'), 'card-maker').get().load(d)
+    ));
+</script>
 </body>
 </html>
