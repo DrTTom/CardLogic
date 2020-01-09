@@ -1,5 +1,6 @@
 body {
     font-family: sans-serif;
+    background-color: #06510F;
 }
 
 .left {
@@ -14,4 +15,11 @@ body {
 
 .warning {
     color: crimson;
+}
+
+.card {
+    border-radius: 10px !important;
+    background-color: beige;
+    padding: 0ex 1ex 0ex 1ex;
+    width: 70ex;
 }

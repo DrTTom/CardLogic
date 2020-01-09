@@ -31,12 +31,24 @@ class MyText extends HTMLElement {
 
 class CardMaker extends HTMLElement {
     connectedCallback() {
-        let div = buildChildNode(this, 'div').class('row').get();
-        buildChildNode(div, 'my-text');
+        let div = buildChildNode(this, 'div').class('card').get();
+        const refId = createId();
+        this.setAttribute('refId', refId);
+        buildChildNode(div, 'h4');
+        buildChildNode(div, 'label').id(refId+"_place");
+        buildChildNode(div, 'label').id(refId+"_time");
+        buildChildNode(div, 'img');
+        buildChildNode(div, 'p');
     }
 
     load(data) {
-        $('my-text', this).load({question: 'Name', value: data.attributes.name, tooltip: data.primKey, message: '' });
+        $('h4', this).innerHTML=data.attributes.name;
+        $('h4', this).title=data.primKey;
+        const idPrefix = '#' + this.getAttribute('refId');
+        $(idPrefix+'_time').innerHTML=data.attributes.from+' - '+data.attributes.to;
+        $(idPrefix+'_place').innerHTML=data.attributes.place+' ';
+        $('p', this).innerHTML=data.attributes.remark;
+        $('img', this).setAttribute('src', 'TODO');
     }
 }
 
