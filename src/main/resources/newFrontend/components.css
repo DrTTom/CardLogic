@@ -17,9 +17,32 @@ body {
     color: crimson;
 }
 
+.cardscontainer
+{
+display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
+
 .card {
     border-radius: 10px !important;
     background-color: beige;
-    padding: 0ex 1ex 0ex 1ex;
-    width: 70ex;
+    padding: 1ex 1ex 1ex 1ex;
+    margin: 5px !important;
+    width: 65ex;
+    height: 20ex;  
+    position: relative;  
+}
+
+.topright
+{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.scroll3lines
+{
+   overflow:auto; 
+   height:7ex;
 }

@@ -37,8 +37,8 @@ class CardMaker extends HTMLElement {
         buildChildNode(div, 'h4');
         buildChildNode(div, 'label').id(refId+"_place");
         buildChildNode(div, 'label').id(refId+"_time");
-        buildChildNode(div, 'img');
-        buildChildNode(div, 'p');
+        buildChildNode(div, 'img').class('topright');
+        buildChildNode(div, 'p').class('scroll3lines');
     }
 
     load(data) {
