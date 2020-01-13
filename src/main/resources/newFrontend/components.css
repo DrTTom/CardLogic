@@ -17,11 +17,10 @@ body {
     color: crimson;
 }
 
-.cardscontainer
-{
-display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+.cardscontainer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
 }
 
 .card {
@@ -30,19 +29,17 @@ display: flex;
     padding: 1ex 1ex 1ex 1ex;
     margin: 5px !important;
     width: 65ex;
-    height: 20ex;  
-    position: relative;  
+    height: 20ex;
+    position: relative;
 }
 
-.topright
-{
-	position: absolute;
-	top: 10px;
-	right: 10px;
+.topright {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
-.scroll3lines
-{
-   overflow:auto; 
-   height:7ex;
+.scroll3lines {
+    overflow: auto;
+    height: 7ex;
 }

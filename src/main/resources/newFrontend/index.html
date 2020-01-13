@@ -14,7 +14,7 @@
 <my-text id="ddd"></my-text>
 
 <p>Downloaded list data:</p>
-<p id="target" class="cardscontainer"/>
+<search-view id="xxx"/>
 <script>
     $('#ddd').load({
         question: "A text input:",
@@ -23,9 +23,7 @@
         tooltip: "Enter text here!"
     });
 
-    getJson('/collected/maker/search', x => x.matches.forEach(d =>
-        buildChildNode($('#target'), 'card-maker').get().load(d)
-    ));
+    getJson('/collected/deck/search', x => $('#xxx').load(x));
 </script>
 </body>
 </html>
