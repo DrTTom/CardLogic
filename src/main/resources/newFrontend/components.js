@@ -76,17 +76,23 @@ class DeckBig extends HTMLElement {
         buildChildNode(div, 'h4');
         buildChildNode(div, 'label').id(refId + "_maker");
         buildChildNode(div, 'label').id(refId + "_numbercards");
-        buildChildNode(div, 'img').class('topright').attribute("width", "200");
+        let imgDiv = buildChildNode(div, 'div').attribute("style", "width: 150px, height:150px").class('topright').get();
+        buildChildNode(imgDiv, 'img').attribute("style", "max-width: 200px, max-height: 200px");
         buildChildNode(div, 'p').class('scroll3lines');
     }
 
     load(data) {
         $('h4', this).innerHTML = data.primKey + '. ' + data.attributes.name;
         const idPrefix = '#' + this.getAttribute('refId');
-        $(idPrefix + '_maker').innerHTML = data.attributes.maker;
-        $(idPrefix + '_numbercards').innerHTML = data.attributes.numberCards + " Blatt";
+        $(idPrefix + '_maker').innerHTML = data.attributes.maker+ ' '+ this.timeString(data);
+        $(idPrefix + '_numbercards').innerHTML = data.attributes.numberCards + " Blatt, "+data.attributes.format;
         $('p', this).innerHTML = data.attributes.remark;
         $('img', this).setAttribute('src', '/download/'+data.attributes.image);
+    }
+    
+    timeString(data)
+    {
+    	return ' gedruckt etwa '+data.attributes.printedLatest;
     }
 }
 
