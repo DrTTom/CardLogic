@@ -28,9 +28,8 @@ body {
     background-color: beige;
     padding: 1ex 1ex 1ex 1ex;
     margin: 5px !important;
-    width: 65ex;
+    width: 600px;
     height: 20ex;
-    position: relative;
 }
 
 .topright {
@@ -39,7 +38,22 @@ body {
     right: 10px;
 }
 
+.defaultimage {
+    max-width: 200px;
+    max-height: 150px;
+    float: right;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.leftofimage {
+    width: 390px;
+    vertical-align: top;
+    display: inline-block;
+}
+
 .scroll3lines {
     overflow: auto;
     height: 7ex;
+    flex-direction: row;
 }

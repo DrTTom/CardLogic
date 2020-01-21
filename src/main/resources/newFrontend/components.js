@@ -73,11 +73,11 @@ class DeckBig extends HTMLElement {
         let div = buildChildNode(this, 'div').class('card').get();
         const refId = createId();
         this.setAttribute('refId', refId);
-        buildChildNode(div, 'h4');
-        buildChildNode(div, 'label').id(refId + "_maker");
-        buildChildNode(div, 'label').id(refId + "_numbercards");
-        let imgDiv = buildChildNode(div, 'div').attribute("style", "width: 150px, height:150px").class('topright').get();
-        buildChildNode(imgDiv, 'img').attribute("style", "max-width: 200px, max-height: 200px");
+        const left = buildChildNode(div, 'header').attribute("class", "leftofimage").get();
+        buildChildNode(left, 'h4');
+        buildChildNode(left, 'label').id(refId + "_maker");
+        buildChildNode(left, 'label').id(refId + "_numbercards");
+        buildChildNode(div, 'img').attribute("class", "defaultimage");
         buildChildNode(div, 'p').class('scroll3lines');
     }
 
