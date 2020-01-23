@@ -1,6 +1,8 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 
@@ -62,4 +64,23 @@ public abstract class Enumeration extends AttributeInterpreter
   {
     return NULL_PLACEHOLDER.equals(displayValue) ? null : displayValue;
   }
+
+  /**
+   * Prepares the options to chose from
+   * @param object context which may affect allowed values
+   * @return key is data value, values is display value, contains null option and current value (even if illegal)
+   */
+  protected Map<String, String> getOptions(DescribedObject object)
+  {
+    Map<String, String> options = new LinkedHashMap<>();
+    getAllowedValues(object).forEach(v -> options.put(v, toDisplayValue(v)));
+    options.put("null", NULL_PLACEHOLDER);
+    String currentValue=object.getAttributes().get(getName());
+    if (!options.containsKey(currentValue))
+    {
+      options.put(currentValue, toDisplayValue(currentValue));
+    }
+    return options;
+  }
+
 }

@@ -1,7 +1,6 @@
 package de.tautenhahn.collection.generic.data.question;
 
-import java.util.List;
-
+import java.util.Map;
 
 /**
  * Question for one of several allowed values.
@@ -11,39 +10,38 @@ import java.util.List;
 public class ChoiceQuestion extends Question
 {
 
-  private List<String> options;
+    private Map<String, String> options;
 
-  /**
-   * Creates instance.
-   *
-   * @param type
-   * @param paramName
-   * @param text
-   * @param form
-   */
-  protected ChoiceQuestion(Type type, String paramName, String text, String form)
-  {
-    super(type, paramName, text, form);
-  }
+    /**
+     * Creates instance.
+     *
+     * @param type
+     * @param paramName
+     * @param text
+     * @param form
+     */
+    protected ChoiceQuestion(Type type, String paramName, String text, String form)
+    {
+        super(type, paramName, text, form);
+    }
 
-  /**
-   * Returns list of options to display in a selection input element.
-   *
-   * @return null for other types of input
-   */
-  public List<String> getOptions()
-  {
-    return options;
-  }
+    /**
+     * Returns list of options to display in a selection input element.
+     *
+     * @return keys are internal values, values are display names
+     */
+    public Map<String, String> getOptions()
+    {
+        return options;
+    }
 
-  /**
-   * Specifies which options to display to the user. Elements are display values, not internal values.
-   *
-   * @param options
-   * @see #getOptions()
-   */
-  public void setOptions(List<String> options)
-  {
-    this.options = options;
-  }
+    /**
+     * Specifies which options to display to the user.
+     *
+     * @param options keys are internal values, values are display names
+     */
+    public void setOptions(Map<String, String> options)
+    {
+        this.options = options;
+    }
 }

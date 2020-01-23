@@ -158,16 +158,16 @@ public class CardsTest
         SearchProcess systemUnderTest = ProcessFactory.getInstance().getSearch("deck");
         SearchResult result = systemUnderTest.search(Collections.emptyMap());
         ChoiceQuestion suitQuestion = (ChoiceQuestion) getQuestion(result.getQuestions(), "suits");
-        assertThat(suitQuestion.getOptions(), hasItem("deutsch"));
+        assertThat(suitQuestion.getOptions().values(), hasItem("deutsch"));
         int numberTotal = result.getNumberTotal();
         assertThat(result.getNumberPossible(), is(numberTotal));
         ChoiceQuestion patternQuestion = (ChoiceQuestion) getQuestion(result.getQuestions(), "pattern");
-        assertThat(patternQuestion.getOptions(), hasItem("Berliner Bild"));
+        assertThat(patternQuestion.getOptions().values(), hasItem("Berliner Bild"));
 
         result = systemUnderTest.search(Collections.singletonMap("suits", "deutsch"));
         assertThat(result.getNumberPossible(), lessThan(numberTotal));
         patternQuestion = (ChoiceQuestion) getQuestion(result.getQuestions(), "pattern");
-        assertThat(patternQuestion.getOptions(), not(hasItem("Berliner Bild")));
+        assertThat(patternQuestion.getOptions().values(), not(hasItem("Berliner Bild")));
         assertThat(getQuestion(result.getQuestions(), "suits").getProblem(), nullValue());
         assertThat(result.getTranslations().get("maker").get("Scharff"), is("Walter Scharff"));
 
@@ -197,8 +197,8 @@ public class CardsTest
         ChoiceQuestion pq = (ChoiceQuestion) getQuestion(interpreter.getQuestions(myDeck, false), "pattern");
         assertThat(pq.getProblem(), is(application.getText("msg.error.optionMismatches.suits")));
         assertThat(pq.getValue(), is("Französisches Bild"));
-        assertThat(pq.getOptions(), hasItem("Französisches Bild"));
-        assertThat(pq.getOptions(), hasItem(""));
+        assertThat(pq.getOptions().values(), hasItem("Französisches Bild"));
+        assertThat(pq.getOptions().values(), hasItem(""));
     }
 
     /**
