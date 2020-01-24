@@ -1,16 +1,32 @@
 let internalIdSource = 0;
 
-function createId() {
-    return 'id' + internalIdSource++;
+/**
+ * Base class for custom components, defines a unique id and calls a createContent method if necessary.
+ */
+class MyCustomElement extends HTMLElement {
+
+    connectedCallback() {
+        if (!this.getRefId()) {
+            const refId = 'id' + internalIdSource++;
+            this.setAttribute('refId', refId);
+            this.createContent(refId);
+        }
+    }
+
+    getRefId() {
+        return this.getAttribute('refId');
+    }
+
+    createContent(refId) {
+        console.log("createContent must be defined by each component")
+    }
 }
 
 /**
  * A text input.
  */
-class MyText extends HTMLElement {
-    connectedCallback() {
-        const refId = createId();
-        this.setAttribute('refId', refId);
+class MyText extends MyCustomElement {
+    createContent(refId) {
         let div = buildChildNode(this, 'div').class('question').get();
         buildChildNode(div, 'label').class('left').for(refId + '_input');
         buildChildNode(div, 'input').type('text').class('right').id(refId + '_input');
@@ -20,7 +36,7 @@ class MyText extends HTMLElement {
     load(data) {
         $('label', this).innerText = data.question;
         $('input', this).value = data.value;
-        $('#' + this.getAttribute('refId') + '_msg', this).innerText = data.message;
+        $('#' + this.getRefId() + '_msg', this).innerText = data.message;
         $('input', this).title = data.tooltip;
     }
 
@@ -28,74 +44,6 @@ class MyText extends HTMLElement {
         return $('input', this).value;
     }
 }
-
-class SearchView extends HTMLElement {
-    connectedCallback() {
-        const refId = createId();
-        this.setAttribute('refId', refId);
-        let div = buildChildNode(this, 'div').get();
-        buildChildNode(div, 'div').class('cardscontainer').id(refId + '_results');
-    }
-
-    load(data) {
-        const tagName = supportedCards[data.type][0];
-        data.matches.forEach(d =>
-            buildChildNode($('#' + this.getAttribute('refId') + '_results'), tagName).get().load(d));
-    }
-}
-
-class CardMaker extends HTMLElement {
-    connectedCallback() {
-        let div = buildChildNode(this, 'div').class('card').get();
-        const refId = createId();
-        this.setAttribute('refId', refId);
-        buildChildNode(div, 'h4');
-        buildChildNode(div, 'label').id(refId + "_place");
-        buildChildNode(div, 'label').id(refId + "_time");
-        buildChildNode(div, 'img').class('topright');
-        buildChildNode(div, 'p').class('scroll3lines');
-    }
-
-    load(data) {
-        $('h4', this).innerHTML = data.attributes.name;
-        $('h4', this).title = data.primKey;
-        const idPrefix = '#' + this.getAttribute('refId');
-        $(idPrefix + '_time').innerHTML = data.attributes.from + ' - ' + data.attributes.to;
-        $(idPrefix + '_place').innerHTML = data.attributes.place + ' ';
-        $('p', this).innerHTML = data.attributes.remark;
-        $('img', this).setAttribute('src', 'TODO');
-    }
-}
-
-class DeckBig extends HTMLElement {
-
-    connectedCallback() {
-        let div = buildChildNode(this, 'div').class('card').get();
-        const refId = createId();
-        this.setAttribute('refId', refId);
-        const left = buildChildNode(div, 'header').attribute("class", "leftofimage").get();
-        buildChildNode(left, 'h4');
-        buildChildNode(left, 'label').id(refId + "_maker");
-        buildChildNode(left, 'label').id(refId + "_numbercards");
-        buildChildNode(div, 'img').attribute("class", "defaultimage");
-        buildChildNode(div, 'p').class('scroll3lines');
-    }
-
-    load(data) {
-        $('h4', this).innerHTML = data.primKey + '. ' + data.attributes.name;
-        const idPrefix = '#' + this.getAttribute('refId');
-        $(idPrefix + '_maker').innerHTML = data.attributes.maker+ ' '+ this.timeString(data);
-        $(idPrefix + '_numbercards').innerHTML = data.attributes.numberCards + " Blatt, "+data.attributes.format;
-        $('p', this).innerHTML = data.attributes.remark;
-        $('img', this).setAttribute('src', '/download/'+data.attributes.image);
-    }
-    
-    timeString(data)
-    {
-    	return ' gedruckt etwa '+data.attributes.printedLatest;
-    }
-}
-
 
 /**
  * A drop down list.
@@ -122,14 +70,57 @@ class DropDownList extends HTMLElement {
     }
 }
 
-const supportedCards =
-    {
-        'maker': ['card-maker'],
-        'deck': ['deck-big', 'deck-medium', "deck-small"]
+
+class SearchView extends MyCustomElement {
+    createContent(refId) {
+        let div = buildChildNode(this, 'div').get();
+        buildChildNode(div, 'div').class('cardscontainer').id(refId + '_results');
     }
+
+    load(data) {
+        const tagName = supportedTiles[data.type][0];
+        data.questions.forEach(q => {
+            if (q.options) registerI18n(q.paramName, q.options)
+        });
+        data.matches.forEach(d =>
+            buildChildNode($('#' + this.getAttribute('refId') + '_results'), tagName).get().load(d));
+    }
+}
+
+let i18nData = {};
+
+function registerI18n(param, mapping) {
+    i18nData[param] = mapping;
+}
+
+function i18n(param, key) {
+    let map = i18nData[param];
+    if (map && map[key]) return map[key];
+    return key;
+}
+
+/**
+ * Sorts the children of specified content element by some property
+ * @param pathToContentContainer specifies the parent of all elements to sort.
+ * @param pathToSortableValue specifies the part within the sorted elements to sort by
+ * @param reverse true to sort backwards
+ */
+function sortChildren(pathToContentContainer, pathToSortableValue, reverse) {
+    const container = $(pathToContentContainer);
+    var items = Array.prototype.slice.call(container.children);
+    items.sort((a, b) => $(pathToSortableValue, a).innerHTML.localeCompare($(pathToSortableValue, b).innerHTML));
+    if (reverse === true) {
+        items.reverse();
+    }
+    container.innerHTML = "";
+    items.forEach(node => container.appendChild(node));
+}
+
+/**
+ * register tile components here: key data element type, values is array
+ */
+const supportedTiles = {};
 
 const elements = window.customElements ? window.customElements : customElements;
 elements.define("my-text", MyText);
-elements.define("card-maker", CardMaker);
 elements.define("search-view", SearchView);
-elements.define("deck-big", DeckBig);

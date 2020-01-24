@@ -63,13 +63,10 @@ public abstract class TypeBasedEnumeration extends Enumeration
     @Override
     public List<String> getAllowedValues(DescribedObject context)
     {
-        ArrayList<String> result = new ArrayList<>();
-        result.add("");
-        result.addAll(primKeyByName.keySet());
+        ArrayList<String> result = new ArrayList<>(nameByPrimKey.keySet());
         Optional
             .ofNullable(context)
             .map(o -> o.getAttributes().get(getName()))
-            .map(key -> nameByPrimKey.get(key))
             .filter(name -> !result.contains(name))
             .ifPresent(name -> result.add(name));
         return result;
