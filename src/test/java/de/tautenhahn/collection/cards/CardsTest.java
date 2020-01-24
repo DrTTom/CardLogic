@@ -99,7 +99,7 @@ public class CardsTest
     public void typeBaseEnum() throws IOException
     {
         TypeBasedEnumeration systemUnderTest = (TypeBasedEnumeration) deck.getAttributeInterpreter("maker");
-        assertThat("allowed values", systemUnderTest.getAllowedValues(null), hasItem("Alf Cooke"));
+        assertThat("allowed values", systemUnderTest.getAllowedValues(null), hasItem("Cooke"));
         assertThat("error code", systemUnderTest.check("wrong", null), is("msg.error.invalidOption"));
         assertThat("name", systemUnderTest.toDisplayValue("Cooke"), is("Alf Cooke"));
         assertThat("key", systemUnderTest.toInternalValue("Alf Cooke"), is("Cooke"));
@@ -122,9 +122,9 @@ public class CardsTest
         frenchDeck.getAttributes().put("suits", "französisch");
 
         assertThat("allowed values", systemUnderTest.getAllowedValues(germanDeck),
-            allOf(hasItem("Hallisches Bild"), not(hasItem("Berliner Bild"))));
+            allOf(hasItem("halle"), not(hasItem("berlin"))));
         assertThat("allowed values", systemUnderTest.getAllowedValues(frenchDeck),
-            allOf(hasItem("Berliner Bild"), not(hasItem("Hallisches Bild"))));
+            allOf(hasItem("berlin"), not(hasItem("halle"))));
         assertThat("error code", systemUnderTest.check("berlin", germanDeck), is("msg.error.optionMismatches.suits"));
     }
 
@@ -139,9 +139,9 @@ public class CardsTest
         TypeBasedEnumWithForeignKey systemUnderTest =
             (TypeBasedEnumWithForeignKey) deck.getAttributeInterpreter("makerSign");
         DescribedObject myDeck = new DescribedObject("deck", "1");
-        assertThat(systemUnderTest.getAllowedValues(myDeck), hasSize(37));
+        assertThat(systemUnderTest.getAllowedValues(myDeck), hasSize(36));
         myDeck.getAttributes().put("maker", "AS");
-        assertThat(systemUnderTest.getAllowedValues(myDeck), hasSize(7));
+        assertThat(systemUnderTest.getAllowedValues(myDeck), hasSize(6));
         // TODO: check that question describes images
     }
 
@@ -198,7 +198,7 @@ public class CardsTest
         assertThat(pq.getProblem(), is(application.getText("msg.error.optionMismatches.suits")));
         assertThat(pq.getValue(), is("Französisches Bild"));
         assertThat(pq.getOptions().values(), hasItem("Französisches Bild"));
-        assertThat(pq.getOptions().values(), hasItem(""));
+        assertThat(pq.getOptions().values(), hasItem("(Keine Angabe)"));
     }
 
     /**
@@ -226,7 +226,13 @@ public class CardsTest
         DescribedObject newDeck = createValidDeck();
         newDeck.getAttributes().put("printedLatest", "2017");
         SubmissionResponse result = doSubmit(newDeck, false, false);
-        assertThat("created primary key", result.getPrimaryKey(), nullValue());
+        assertThat("problem", result
+            .getQuestions()
+            .stream()
+            .filter(q -> "bought".equals(q.getParamName()))
+            .map(Question::getProblem)
+            .findAny()
+            .orElse(""), is("Das Jahr darf nicht vor \"gedruckt spätestens\" liegen."));
     }
 
     /**
