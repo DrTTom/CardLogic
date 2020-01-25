@@ -80,8 +80,8 @@ public class RestServer
   public void start()
   {
     // To enable direct client editing without restart of server:
-    staticFiles.externalLocation(Path.of("src/main/resources/newFrontend").toAbsolutePath().toString());
-    //staticFiles.location("newFrontend");
+    staticFiles.externalLocation(Path.of("src/main/resources/client").toAbsolutePath().toString());
+    // staticFiles.location("client");
     final JsonTransformer transformer = new JsonTransformer();
 
     post("/collected/:type", (req, resp) -> submit(req, resp), transformer);

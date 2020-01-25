@@ -1,9 +1,22 @@
-# Collection
+# CardLogic
 
-This project is for two purposes
+To manage a collection of stamps, of books or of any kind of "collectible"
+objects you will find many software solutions. Collecting stuff which comes
+without catalouges, labels or dating is an entirely differnt world.
 
-* being a sand box for trying out techniques which do not (yet) occur in my professional work
+This project is for two purposes:
+
+* getting more familiar with some JS techniques, provide examples for teaching
 * helping me organize my collection of playing cards
 
-Its organized as JavaScript front end connecting via REST to a Java back end. The back end consists of two parts: a generic application which can be used to keep track of any kind of collection and a customization 
-for handling the special needs of playing card collectors.   
+Its organized as JavaScript front end connecting via REST to a Java back end.
+Both parts constist of a generic base which could be used for any kind of
+collection and an extension which makes it suitable for handling the special
+needs of playing card collectors.
+
+Why is collecting playing cards different?
+* There is no exhaustive catalouge or reference.
+* There are rather few collectors.
+* Cards may or may not have maker signs, covers ...
+
+

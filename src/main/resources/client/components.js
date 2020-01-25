@@ -23,6 +23,34 @@ class MyCustomElement extends HTMLElement {
 }
 
 /**
+ * A dialog which can be closed
+ */
+class Dialog extends MyCustomElement {
+
+    createContent(refId) { // no content by default }
+    
+	/**
+	 * shows the dialog
+	 */
+	show() {
+	    let pane = buildChildNode(document.body, 'div').class('modal-overlay').get();
+	    let frame = buildChildNode(pane,'div').class('modal-frame').get();
+	    let headerLine = buildChildNode(frame, 'div').class('modal-header').get();
+	    let header = buildChildNode(headerLine, 'div').get();
+	    let cancel = buildChildNode(header, 'div').class('cancel-button').get();
+	    cancel.innerHTML="X";
+	    cancel.onclick=this.hide;	    
+	}
+	
+	/**
+	 * hides the dialog
+	 */
+	hide () {
+	    document.body.removeChild($('[class=modal-overlay]'));
+	}
+}
+
+/**
  * A text input.
  */
 class MyText extends MyCustomElement {
@@ -124,3 +152,4 @@ const supportedTiles = {};
 const elements = window.customElements ? window.customElements : customElements;
 elements.define("my-text", MyText);
 elements.define("search-view", SearchView);
+elements.define("dialog-view", Dialog);
