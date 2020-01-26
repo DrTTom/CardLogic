@@ -16,7 +16,7 @@ class MyCustomElement extends HTMLElement {
     getRefId() {
         return this.getAttribute('refId');
     }
-
+    
     createContent(refId) {
         console.log("createContent must be defined by each component")
     }

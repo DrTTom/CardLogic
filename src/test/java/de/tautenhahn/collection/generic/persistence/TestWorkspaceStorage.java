@@ -85,10 +85,10 @@ public class TestWorkspaceStorage
   @Disabled("this is a tool")
   public void importZip() throws IOException
   {
-    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-    systemUnderTest.init("cards");
-    try (InputStream ins = TestWorkspaceStorage.class.getResourceAsStream("/example.zip"))
+    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+      InputStream ins = TestWorkspaceStorage.class.getResourceAsStream("/example.zip"))
     {
+      systemUnderTest.init("cards");
       systemUnderTest.importZip(ins);
     }
   }

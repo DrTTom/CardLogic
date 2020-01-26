@@ -35,7 +35,6 @@ public class TestSearchWrapper
    * @throws IOException
    */
   @BeforeEach
-
   public void setUp() throws IOException
   {
     CardApplicationContext.register();

@@ -54,16 +54,13 @@ public class TestStorage
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
     {
       systemUnderTest.init("testStoreAndFind");
-      assertThat(systemUnderTest.find(urlType, "primary")
-                                .getAttributes()
-                                .get(protType)).isEqualTo(https);
+      assertThat(systemUnderTest.find(urlType, "primary").getAttributes().get(protType)).isEqualTo(https);
       assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isTrue();
       try (InputStream ins = systemUnderTest.find(reference))
       {
         assertThat(ins.available()).isEqualTo(content.length);
       }
-      assertThat(systemUnderTest.findByRestriction(urlType, Map.of(protType, https))
-                                .count()).isEqualTo(1);
+      assertThat(systemUnderTest.findByRestriction(urlType, Map.of(protType, https)).count()).isEqualTo(1);
       systemUnderTest.delete(urlType, "primary");
       assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isFalse();
       assertThat(systemUnderTest.find(urlType, "primary")).isNull();
@@ -71,7 +68,8 @@ public class TestStorage
   }
 
   /**
-   * Storage should enable different collections and transfer data in and out.
+   * Storage should enable different collections and transfer data in and out. Look at the exported file to
+   * make sure it is correct.
    *
    * @throws IOException
    */
@@ -79,21 +77,21 @@ public class TestStorage
   public void importAndExport() throws IOException
   {
     importZip();
-    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-    systemUnderTest.init("cards");
-    assertThat(systemUnderTest.toString()).contains("cards, loaded 5 types");
-    assertThat(systemUnderTest.getKeyValues("deck")).hasSize(99);
-    Collection<String> binAttrs = Collections.singletonList("image");
-    Map<String, Collection<String>> refs = Map.of("deck",
-                                                  binAttrs,
-                                                  "makerSign",
-                                                  binAttrs,
-                                                  "pattern",
-                                                  binAttrs,
-                                                  "taxStamp",
-                                                  binAttrs);
-    try (OutputStream outs = new FileOutputStream("build/exportedByTest.zip"))
+    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+      OutputStream outs = new FileOutputStream("build/exportedByTest.zip"))
     {
+      systemUnderTest.init("cards");
+      assertThat(systemUnderTest.toString()).contains("cards, loaded 5 types");
+      assertThat(systemUnderTest.getKeyValues("deck")).hasSize(99);
+      Collection<String> binAttrs = Collections.singletonList("image");
+      Map<String, Collection<String>> refs = Map.of("deck",
+                                                    binAttrs,
+                                                    "makerSign",
+                                                    binAttrs,
+                                                    "pattern",
+                                                    binAttrs,
+                                                    "taxStamp",
+                                                    binAttrs);
       systemUnderTest.exportZip(refs, outs);
     }
   }
@@ -105,12 +103,11 @@ public class TestStorage
    */
   void importZip() throws IOException
   {
-    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-    systemUnderTest.init("cards");
-    try (InputStream ins = TestStorage.class.getResourceAsStream("/example.zip"))
+    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+      InputStream ins = TestStorage.class.getResourceAsStream("/example.zip"))
     {
+      systemUnderTest.init("cards");
       systemUnderTest.importZip(ins);
     }
-    systemUnderTest.close();
   }
 }

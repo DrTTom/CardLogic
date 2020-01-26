@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.process.RestServer;
+import spark.Spark;
 
 
 /**
@@ -33,6 +34,7 @@ public final class Main
     CardApplicationContext.register();
     ApplicationContext.getInstance().getPersistence().init("cards");
     RestServer.getInstance().start();
+    Spark.awaitInitialization();
     try
     {
       Runtime.getRuntime().exec("firefox http://localhost:4567/index.html");
