@@ -27,26 +27,40 @@ class MyCustomElement extends HTMLElement {
  */
 class Dialog extends MyCustomElement {
 
-    createContent(refId) { // no content by default }
+    createContent(refId) { 
+        let pane = buildChildNode(document.body, 'div').class('modal-overlay').id(refId+'_overlay').get();
+	    let frame = buildChildNode(pane,'div').class('c-frame modal-frame').get();
+	    let headerLine = buildChildNode(frame, 'div').class('c-header').get();
+	    let cancel = buildChildNode(headerLine, 'span').class('closebutton').get();
+	    buildChildNode(headerLine, 'div').id(refId+'_title');
+	    buildChildNode(frame, 'div').class('c-body').id(refId+'_body');
+	    cancel.innerHTML="&times;";
+	    cancel.onclick=(()=> {
+	    $('#'+refId+'_overlay').style.display='none';
+	    $('#'+refId+'_body').innerHTML='';
+	    });	   
+	 }
     
 	/**
 	 * shows the dialog
 	 */
-	show() {
-	    let pane = buildChildNode(document.body, 'div').class('modal-overlay').get();
-	    let frame = buildChildNode(pane,'div').class('modal-frame').get();
-	    let headerLine = buildChildNode(frame, 'div').class('modal-header').get();
-	    let header = buildChildNode(headerLine, 'div').get();
-	    let cancel = buildChildNode(header, 'div').class('cancel-button').get();
-	    cancel.innerHTML="X";
-	    cancel.onclick=this.hide;	    
+	show(title, body) {
+	let refPrefix='#'+this.getRefId();
+		$(refPrefix+'_title').innerHTML=title;
+		$(refPrefix+'_overlay').style.display='flex';
+		if (typeof(body)==='string')
+		{
+		$(refPrefix+'_body').innerHTML=body;
+		} else if (typeof(body)==='object')
+		{$(refPrefix+'_body').appendChild(body);
+		} 	     
 	}
 	
 	/**
 	 * hides the dialog
 	 */
 	hide () {
-	    document.body.removeChild($('[class=modal-overlay]'));
+		$('#'+this.getRefId()+'_overlay').style.display='none';
 	}
 }
 
@@ -152,4 +166,4 @@ const supportedTiles = {};
 const elements = window.customElements ? window.customElements : customElements;
 elements.define("my-text", MyText);
 elements.define("search-view", SearchView);
-elements.define("dialog-view", Dialog);
+elements.define("modal-dialog", Dialog);

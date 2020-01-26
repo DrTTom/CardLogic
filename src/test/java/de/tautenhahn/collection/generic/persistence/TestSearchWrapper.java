@@ -1,17 +1,17 @@
 package de.tautenhahn.collection.generic.persistence;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.empty;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import de.tautenhahn.collection.cards.CardApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
@@ -34,7 +34,8 @@ public class TestSearchWrapper
    *
    * @throws IOException
    */
-  @Before
+  @BeforeEach
+
   public void setUp() throws IOException
   {
     CardApplicationContext.register();
@@ -46,20 +47,10 @@ public class TestSearchWrapper
    *
    * @throws IOException
    */
-  @After
+  @AfterEach
   public void tearDown() throws IOException
   {
-    Files.list(directory).forEach(p -> {
-      try
-      {
-        Files.delete(p);
-      }
-      catch (IOException e)
-      {
-        throw new RuntimeException(e);
-      }
-    });
-    Files.delete(directory);
+    Files.walk(directory).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
   }
 
   /**
@@ -70,16 +61,16 @@ public class TestSearchWrapper
   @Test
   public void search() throws IOException
   {
-
     DescribedObject deck1 = new DescribedObject("deck", "1");
     DescribedObject deck2 = new DescribedObject("deck", "2");
     deck1.getAttributes().put("remark", "This is a text to find something in");
     deck2.getAttributes().put("remark", "Another text with some other content");
     systemUnderTest.addToIndex(deck1, deck2);
-    assertThat(systemUnderTest.search("something", "remark"), contains("1"));
-    assertThat(systemUnderTest.search("some*", "remark"), contains("1", "2"));
-    assertThat(systemUnderTest.search("*other", "remark"), contains("2"));
-    assertThat(systemUnderTest.search("??other", "remark"), contains("2"));
-    assertThat(systemUnderTest.search("?other", "remark"), empty());
+
+    assertThat(systemUnderTest.search("something", "remark")).contains("1");
+    assertThat(systemUnderTest.search("some*", "remark")).contains("1", "2");
+    assertThat(systemUnderTest.search("*other", "remark")).contains("2");
+    assertThat(systemUnderTest.search("??other", "remark")).contains("2");
+    assertThat(systemUnderTest.search("?other", "remark")).isEmpty();
   }
 }

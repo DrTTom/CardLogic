@@ -104,9 +104,13 @@ public class SecureZip
       byte[] buffer = new byte[4 * 1024];
       int total = 0;
       int count = 0;
-
-      while (total + buffer.length <= MAX_FILESIZE && (count = content.read(buffer)) != -1)
+      while (total + buffer.length <= MAX_FILESIZE)
       {
+        count = content.read(buffer);
+        if (count == -1)
+        {
+          break;
+        }
         fos.write(buffer, 0, count);
         total += count;
       }
