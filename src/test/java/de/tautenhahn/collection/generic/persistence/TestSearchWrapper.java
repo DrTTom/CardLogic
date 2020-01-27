@@ -62,14 +62,15 @@ public class TestSearchWrapper
   {
     DescribedObject deck1 = new DescribedObject("deck", "1");
     DescribedObject deck2 = new DescribedObject("deck", "2");
-    deck1.getAttributes().put("remark", "This is a text to find something in");
-    deck2.getAttributes().put("remark", "Another text with some other content");
+    String fieldName = "remark";
+    deck1.getAttributes().put(fieldName, "This is a text to find something in");
+    deck2.getAttributes().put(fieldName, "Another text with some other content");
     systemUnderTest.addToIndex(deck1, deck2);
 
-    assertThat(systemUnderTest.search("something", "remark")).contains("1");
-    assertThat(systemUnderTest.search("some*", "remark")).contains("1", "2");
-    assertThat(systemUnderTest.search("*other", "remark")).contains("2");
-    assertThat(systemUnderTest.search("??other", "remark")).contains("2");
-    assertThat(systemUnderTest.search("?other", "remark")).isEmpty();
+    assertThat(systemUnderTest.search("something", fieldName)).contains("1");
+    assertThat(systemUnderTest.search("some*", fieldName)).contains("1", "2");
+    assertThat(systemUnderTest.search("*other", fieldName)).contains("2");
+    assertThat(systemUnderTest.search("??other", fieldName)).contains("2");
+    assertThat(systemUnderTest.search("?other", fieldName)).isEmpty();
   }
 }

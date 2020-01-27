@@ -12,20 +12,9 @@
     <script src="fetch.js"></script>
 </head>
 <body>
-<p>Example page to show a component in:</p>
-<my-text id="ddd"></my-text>
-
-<p>Downloaded list data:</p>
-<modal-dialog/>
-<search-view id="xxx"/>
+<modal-dialog></modal-dialog>
+<search-view id="xxx"></search-view>
 <script>
-    $('#ddd').load({
-        question: "A text input:",
-        value: "loaded value",
-        message: "Value is invalid.",
-        tooltip: "Enter text here!"
-    });
-
     getJson('/collected/deck/search', x => $('#xxx').load(x));
 </script>
 </body>
