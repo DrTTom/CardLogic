@@ -1,21 +1,41 @@
 body {
     font-family: sans-serif;
     background-color: #06510F;
-}
-
-.left {
-    float: left;
-    width: 30%;
-}
-
-.right {
-    float: left;
-    width: 55%;
+    	margin: 0px;
 }
 
 .warning {
     color: crimson;
 }
+
+input[type=checkbox] {
+  display: none;
+}
+
+label {
+  position: relative;
+  display: block;
+}
+
+label:after {
+  content: "+";
+  position: absolute;
+  right: 1em;
+}
+input:checked + label:after {
+  content: "-";
+  transition: max-height 0.5s;
+}
+.tab-content
+{
+	max-height: 0px;
+	overflow: hidden;
+}
+input:checked ~ .tab-content {
+  max-height: 2000px;
+  transition: max-height 0.5s;
+}
+
 
 .cardscontainer {
     display: flex;
@@ -23,6 +43,13 @@ body {
     justify-content: space-around;
     width: 100%;
 }
+
+.question {
+   background-color: white;
+   padding: 10px;
+   display: grid;
+   grid-template-columns: 1fr 2fr;
+} 
 
 .card {
     border-radius: 10px !important;
@@ -75,7 +102,6 @@ body {
     max-height: 150px;
     float: right;
     vertical-align: top;
-    display: inline-block;
 }
 
 .leftofimage {

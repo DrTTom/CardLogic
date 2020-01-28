@@ -23,12 +23,19 @@ class MyCustomElement extends HTMLElement {
 }
 
 /**
+ * A container which can be vertically collapsed
+ */ 
+class VerticalAccordion extends MyCustomElement {
+
+}
+
+/**
  * A dialog with header and body which can be closed
  */
 class Dialog extends MyCustomElement {
 
     createContent(refId) {
-        let pane = buildChildNode(document.body, 'div').class('modal-overlay').id(refId + '_overlay').get();
+        let pane = buildChildNode(this, 'div').class('modal-overlay').id(refId + '_overlay').get();
         let frame = buildChildNode(pane, 'div').class('c-frame modal-frame').get();
         let headerLine = buildChildNode(frame, 'div').class('c-header').get();
         let cancel = buildChildNode(headerLine, 'span').class('closebutton').get();
@@ -69,8 +76,9 @@ class Dialog extends MyCustomElement {
 class MyText extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').class('question').get();
-        buildChildNode(div, 'label').class('left').for(refId + '_input');
-        buildChildNode(div, 'input').type('text').class('right').id(refId + '_input');
+        buildChildNode(div, 'label').for(refId + '_input');
+        buildChildNode(div, 'input').type('text').id(refId + '_input');
+        buildChildNode(div, 'label');
         buildChildNode(div, 'label').class('warning').id(refId + '_msg');
     }
 
@@ -78,7 +86,10 @@ class MyText extends MyCustomElement {
         this.setAttribute("param", data.paramName);
         $('label', this).innerText = data.text;
         $('input', this).value = data.value;
+        if (data.message)
+        {
         $('#' + this.getRefId() + '_msg', this).innerText = data.message;
+        }
         $('input', this).title = data.tooltip;
     }
 
