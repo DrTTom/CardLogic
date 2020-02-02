@@ -24,9 +24,30 @@ class MyCustomElement extends HTMLElement {
 
 /**
  * A container which can be vertically collapsed
- */ 
+ */
 class VerticalAccordion extends MyCustomElement {
 
+    createContent(refId) {
+        let title = buildChildNode(this, 'label').class('accordion-title').get();
+        buildChildNode(this, 'div').id(refId + '_content').class('accordion-panel');
+        title.innerHTML = titleText;
+        title.onclick = () => {
+            title.classList.toggle('active');
+            let panel = $('#'+refId+"_content");
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        };
+    }
+
+    content() {
+        return $('#' + this.getRefId() + '_content');
+    }
+    title() {
+        return $('#' + this.getRefId() + '_title');
+    }
 }
 
 /**
@@ -86,9 +107,8 @@ class MyText extends MyCustomElement {
         this.setAttribute("param", data.paramName);
         $('label', this).innerText = data.text;
         $('input', this).value = data.value;
-        if (data.message)
-        {
-        $('#' + this.getRefId() + '_msg', this).innerText = data.message;
+        if (data.message) {
+            $('#' + this.getRefId() + '_msg', this).innerText = data.message;
         }
         $('input', this).title = data.tooltip;
     }
@@ -102,20 +122,20 @@ class MyText extends MyCustomElement {
 class SearchView extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').get();
-        buildChildNode(div, 'div').id(refId+'_questions').get();
+        buildChildNode(div, 'div').id(refId + '_questions').get();
         buildChildNode(div, 'div').class('cardscontainer').id(refId + '_results');
     }
 
     load(data) {
-        const selectorPrefix = '#'+this.getRefId()+'_';
-        const questionsDiv= $(selectorPrefix+'questions');
-        questionsDiv.innerHTML='';
+        const selectorPrefix = '#' + this.getRefId() + '_';
+        const questionsDiv = $(selectorPrefix + 'questions');
+        questionsDiv.innerHTML = '';
         data.questions.forEach(q => {
             if (q.options) registerI18n(q.paramName, q.options);
             buildChildNode(questionsDiv, "my-text").get().load(q);
         });
         const tagName = supportedTiles[data.type][0];
-        const resultsDiv = $(selectorPrefix+'results');
+        const resultsDiv = $(selectorPrefix + 'results');
         data.matches.forEach(d =>
             buildChildNode(resultsDiv, tagName).get().load(d));
     }
@@ -159,3 +179,4 @@ const elements = window.customElements ? window.customElements : customElements;
 elements.define("my-text", MyText);
 elements.define("search-view", SearchView);
 elements.define("modal-dialog", Dialog);
+elements.define("vertical-accordion", VerticalAccordion);

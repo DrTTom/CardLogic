@@ -1,41 +1,38 @@
 body {
     font-family: sans-serif;
     background-color: #06510F;
-    	margin: 0px;
+    margin: 0px;
 }
 
 .warning {
     color: crimson;
 }
 
-input[type=checkbox] {
-  display: none;
+.accordion-title {
+    position: relative;
+    display: block;
+    background-color: #cad4d8;
+    padding: 10px;
 }
 
-label {
-  position: relative;
-  display: block;
+.accordion-title:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
 }
 
-label:after {
-  content: "+";
-  position: absolute;
-  right: 1em;
-}
-input:checked + label:after {
-  content: "-";
-  transition: max-height 0.5s;
-}
-.tab-content
-{
-	max-height: 0px;
-	overflow: hidden;
-}
-input:checked ~ .tab-content {
-  max-height: 2000px;
-  transition: max-height 0.5s;
+.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
 }
 
+.accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    width: 100%;
+}
 
 .cardscontainer {
     display: flex;
@@ -45,11 +42,11 @@ input:checked ~ .tab-content {
 }
 
 .question {
-   background-color: white;
-   padding: 10px;
-   display: grid;
-   grid-template-columns: 1fr 2fr;
-} 
+    background-color: white;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
 
 .card {
     border-radius: 10px !important;
@@ -61,34 +58,33 @@ input:checked ~ .tab-content {
 }
 
 .c-frame {
-   border-radius: 10px !important;
-   background-color: beige;
-   padding: 0px;   
-   display: block;
-   overflow: hidden;
+    border-radius: 10px !important;
+    background-color: beige;
+    padding: 0px;
+    display: block;
+    overflow: hidden;
 }
 
 .c-header {
-   padding: 10px;
-   background-color: #5cb85c;
-   color: white;
-   font-weight: bold;
+    padding: 10px;
+    background-color: #5cb85c;
+    color: white;
+    font-weight: bold;
 }
 
 .c-body {
-  padding: 10px;
+    padding: 10px;
 }
 
-.closebutton
-{
-	float: right;
+.closebutton {
+    float: right;
 }
 
 .closebutton:hover,
 .closebutton:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .topright {
@@ -122,21 +118,21 @@ h4 {
 }
 
 .modal-overlay {
-	position: fixed !important;
-	background-color: hsla(0, 0%, 7%, .7) !important;
-	z-index: 1;
+    position: fixed !important;
+    background-color: hsla(0, 0%, 7%, .7) !important;
+    z-index: 1;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    display: none;    
+    display: none;
 }
 
 .modal-frame {
-       margin: 100px auto auto auto;
-	}
-	
+    margin: 100px auto auto auto;
+}
+
 .tile-header {
-	width: 100%
-	
+    width: 100%
+
 }

@@ -13,20 +13,13 @@
 </head>
 <body>
 
-<div>
-    <input type="checkbox" name="tab-1" id="tab-1">
-    <label for="tab-1">Title of Tab 1</label>
-     
-    <div class="tab-content">
-      <h2>Content Title (don't use h1 tag here)</h2>
-      <p>Some content.... </p>p>
-    </div>
-   
-  </div>
 <modal-dialog></modal-dialog>
 <search-view id="xxx"></search-view>
 <script>
     getJson('/collected/deck/search', x => $('#xxx').load(x));
+    let check = new VerticalAccordion('this is some accordion');
+    document.body.appendChild(check);
+    check.content().innerHTML="und das steht drin";
 </script>
 </body>
 </html>
