@@ -28,12 +28,11 @@ class MyCustomElement extends HTMLElement {
 class VerticalAccordion extends MyCustomElement {
 
     createContent(refId) {
-        let title = buildChildNode(this, 'label').class('accordion-title').get();
+        let title = buildChildNode(this, 'label').id(refId + '_title').class('accordion-title').get();
         buildChildNode(this, 'div').id(refId + '_content').class('accordion-panel');
-        title.innerHTML = titleText;
         title.onclick = () => {
             title.classList.toggle('active');
-            let panel = $('#'+refId+"_content");
+            let panel = $('#' + refId + "_content");
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null;
             } else {
@@ -45,6 +44,7 @@ class VerticalAccordion extends MyCustomElement {
     content() {
         return $('#' + this.getRefId() + '_content');
     }
+
     title() {
         return $('#' + this.getRefId() + '_title');
     }
@@ -103,6 +103,10 @@ class MyText extends MyCustomElement {
         buildChildNode(div, 'label').class('warning').id(refId + '_msg');
     }
 
+    input() {
+        return $('#' + this.getRefId() + '_input', this);
+    }
+
     load(data) {
         this.setAttribute("param", data.paramName);
         $('label', this).innerText = data.text;
@@ -110,7 +114,8 @@ class MyText extends MyCustomElement {
         if (data.message) {
             $('#' + this.getRefId() + '_msg', this).innerText = data.message;
         }
-        $('input', this).title = data.tooltip;
+        $('input', this).title = data.helptext;
+        this.setAttribute('data-key', data.paramName);
     }
 
     store() {
@@ -127,17 +132,41 @@ class SearchView extends MyCustomElement {
     }
 
     load(data) {
-        const selectorPrefix = '#' + this.getRefId() + '_';
+        const refId = this.getRefId();
+        const selectorPrefix = '#' + refId + '_';
         const questionsDiv = $(selectorPrefix + 'questions');
         questionsDiv.innerHTML = '';
+        let lastGroupTitle = '';
+        let group;
         data.questions.forEach(q => {
+            if (lastGroupTitle !== q.form) {
+                lastGroupTitle = q.form;
+                group = buildChildNode(questionsDiv, 'vertical-accordion').get();
+                group.title().innerHTML = lastGroupTitle;
+            }
             if (q.options) registerI18n(q.paramName, q.options);
-            buildChildNode(questionsDiv, "my-text").get().load(q);
+            let element = buildChildNode(group.content(), "my-text").get();
+            element.load(q);
+            element.input().addEventListener("change", () => this.update(refId));
         });
         const tagName = supportedTiles[data.type][0];
         const resultsDiv = $(selectorPrefix + 'results');
+        resultsDiv.innerHTML = '';
         data.matches.forEach(d =>
             buildChildNode(resultsDiv, tagName).get().load(d));
+    }
+
+    update(refId) {
+        let url = '/collected/deck/search';
+        let separator = '?';
+        $$('[data-key]', this).forEach(x => {
+            const value = x.store();
+            if (value !== null && value !== '' && value !== '(Keine Angabe)') {
+                url = url + separator + x.getAttribute('data-key') + '=' + encodeURIComponent(value);
+            }
+        });
+        console.log(url);
+        getJson(url, x => this.load(x));
     }
 }
 
