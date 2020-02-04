@@ -81,7 +81,7 @@ public class Year extends AttributeInterpreter
 
   private int getInt(Pair<String, Integer> p)
   {
-    return p.getValue().intValue();
+    return p.getValue();
   }
 
   private Pair<String, Integer> getValue(DescribedObject obj, String[] attrib, Integer defaultValue)

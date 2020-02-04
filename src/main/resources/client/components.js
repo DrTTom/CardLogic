@@ -94,11 +94,11 @@ class Dialog extends MyCustomElement {
 /**
  * A text input. TODO: make this a base class for different types of questions.
  */
-class MyText extends MyCustomElement {
+class InputElement extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').class('question').get();
         buildChildNode(div, 'label').for(refId + '_input');
-        buildChildNode(div, 'input').type('text').id(refId + '_input');
+        div.appendChild(this.createInputElement(refId + '_input'));
         buildChildNode(div, 'label');
         buildChildNode(div, 'label').class('warning').id(refId + '_msg');
     }
@@ -110,45 +110,82 @@ class MyText extends MyCustomElement {
     load(data) {
         this.setAttribute("param", data.paramName);
         $('label', this).innerText = data.text;
-        $('input', this).value = data.value;
+        this.loadInput(data);
         if (data.message) {
             $('#' + this.getRefId() + '_msg', this).innerText = data.message;
         }
-        $('input', this).title = data.helptext;
         this.setAttribute('data-key', data.paramName);
     }
 
     store() {
-        return $('input', this).value;
+        return this.input().value;
+    }
+
+    createInputElement(id) {
+        return buildNode('input').type('text').id(id).get();
+    }
+
+    loadInput(data) {
+        this.input().value = data.value;
+        this.input().title = data.helptext;
     }
 }
 
 
+/**
+ * A text input. TODO: make this a base class for different types of questions.
+ */
+class MyText extends InputElement {
+    // uses default of everything
+}
+
+class TextChoice extends InputElement {
+    createInputElement(id) {
+        return buildNode('select').id(id).get();
+    }
+
+    loadInput(data) {
+        const select = this.input();
+        Object.entries(data.options).forEach(e => buildChildNode(select, 'option').attribute('value', e[0]).get().innerHTML = e[1]);
+        select.value = data.value;
+        select.title = data.helptext;
+    }
+}
+
 class SearchView extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').get();
-        buildChildNode(div, 'div').id(refId + '_questions').get();
+        buildChildNode(div, 'div').id(refId + '_questions');
+        let afterQuestions = buildChildNode(div, 'div').class('separator').get();
+        buildChildNode(afterQuestions, 'label').id(refId + '_stats');
+        let create = buildChildNode(afterQuestions, 'button').get();
+        create.innerHTML = 'Neues Element Anlegen';
         buildChildNode(div, 'div').class('cardscontainer').id(refId + '_results');
     }
 
-    load(data) {
+    load(data, keepQuestionGroups = false) {
         const refId = this.getRefId();
         const selectorPrefix = '#' + refId + '_';
         const questionsDiv = $(selectorPrefix + 'questions');
-        questionsDiv.innerHTML = '';
-        let lastGroupTitle = '';
-        let group;
+        if (keepQuestionGroups) {
+            $$('vertical-accordion', questionsDiv).forEach(a => a.content().innerHTML = '');
+        } else {
+            questionsDiv.innerHTML = '';
+        }
         data.questions.forEach(q => {
-            if (lastGroupTitle !== q.form) {
-                lastGroupTitle = q.form;
-                group = buildChildNode(questionsDiv, 'vertical-accordion').get();
-                group.title().innerHTML = lastGroupTitle;
+            let groupId = q.form.replace(/ /g, '_');
+            let group = $('#' + groupId, questionsDiv);
+            if (!group) {
+                group = buildChildNode(questionsDiv, 'vertical-accordion').id(groupId).get();
+                group.title().innerHTML = q.form;
             }
             if (q.options) registerI18n(q.paramName, q.options);
-            let element = buildChildNode(group.content(), "my-text").get();
+            const questionType = q.type === 'TEXT_CHOICE' ? 'text-choice' : 'my-text';
+            let element = buildChildNode(group.content(), questionType).get();
             element.load(q);
             element.input().addEventListener("change", () => this.update(refId));
         });
+        $(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";
         const tagName = supportedTiles[data.type][0];
         const resultsDiv = $(selectorPrefix + 'results');
         resultsDiv.innerHTML = '';
@@ -163,10 +200,10 @@ class SearchView extends MyCustomElement {
             const value = x.store();
             if (value !== null && value !== '' && value !== '(Keine Angabe)') {
                 url = url + separator + x.getAttribute('data-key') + '=' + encodeURIComponent(value);
+                separator = '&';
             }
         });
-        console.log(url);
-        getJson(url, x => this.load(x));
+        getJson(url, x => this.load(x, true));
     }
 }
 
@@ -206,6 +243,7 @@ const supportedTiles = {};
 
 const elements = window.customElements ? window.customElements : customElements;
 elements.define("my-text", MyText);
+elements.define("text-choice", TextChoice);
 elements.define("search-view", SearchView);
 elements.define("modal-dialog", Dialog);
 elements.define("vertical-accordion", VerticalAccordion);

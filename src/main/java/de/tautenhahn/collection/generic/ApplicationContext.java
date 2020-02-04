@@ -51,7 +51,7 @@ public abstract class ApplicationContext
   /**
    * Return a text specified by key (internationalization).
    *
-   * @param key
+   * @param key specifies text to translate
    */
   public final String getText(String key)
   {

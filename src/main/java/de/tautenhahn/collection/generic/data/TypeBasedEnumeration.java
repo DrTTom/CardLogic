@@ -28,22 +28,22 @@ public abstract class TypeBasedEnumeration extends Enumeration
     /**
      * Persistence holding the auxiliary objects the foreign key points to.
      */
-    protected Persistence persistence;
+    protected final Persistence persistence;
 
     /**
      * For all auxiliary objects of current type: key is name of object, value is its primary key.
      */
-    protected Map<String, String> primKeyByName = new TreeMap<>();
+    protected final Map<String, String> primKeyByName = new TreeMap<>();
 
     /**
      * Inverse map to {@link #primKeyByName}
      */
-    protected Map<String, String> nameByPrimKey = new HashMap<>();
+    protected final Map<String, String> nameByPrimKey = new HashMap<>();
 
     /**
      * URLs of some images to display (if any)
      */
-    protected Map<String, String> imageByName = new HashMap<>();
+    protected final Map<String, String> imageByName = new HashMap<>();
 
     /**
      * Creates new instance.
@@ -68,7 +68,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
             .ofNullable(context)
             .map(o -> o.getAttributes().get(getName()))
             .filter(name -> !result.contains(name))
-            .ifPresent(name -> result.add(name));
+            .ifPresent(result::add);
         return result;
     }
 
@@ -155,7 +155,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
         urlByValue.put(NULL_PLACEHOLDER, "");
         List<String> options = new ArrayList<>();
         options.add(NULL_PLACEHOLDER);
-        getAllowedValues(object).stream().map(v -> toDisplayValue(v)).sorted().forEach(dv ->
+        getAllowedValues(object).stream().map(this::toDisplayValue).sorted().forEach(dv ->
         {
             urlByValue.put(dv, imageByName.get(dv));
             options.add(dv);

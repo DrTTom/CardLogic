@@ -29,7 +29,7 @@ public abstract class FixedEnumeration extends Enumeration
     protected FixedEnumeration(String name, int matchValue, String[] allowed, Flag... flags)
     {
         super(name, matchValue, flags);
-        allowedValues = Collections.unmodifiableList(Arrays.asList(allowed));
+        allowedValues = List.of(allowed);
     }
 
     /**

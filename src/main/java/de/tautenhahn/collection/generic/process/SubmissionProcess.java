@@ -22,7 +22,7 @@ public class SubmissionProcess
 
     private final DescribedObjectInterpreter interpreter;
 
-    String type;
+    final String type;
 
     /**
      * Creates an instance for one time use.

@@ -270,8 +270,8 @@ public class WorkspacePersistence implements Persistence
                       .stream()
                       .flatMap(v -> v.getAttributes().entrySet().stream())
                       .filter(e -> binAttrs.contains(e.getKey()))
-                      .map(e -> e.getValue())
-                      .filter(p -> p != null)
+                      .map(Map.Entry::getValue)
+                      .filter(Objects::nonNull)
                       .forEach(relPathes::add);
     });
 

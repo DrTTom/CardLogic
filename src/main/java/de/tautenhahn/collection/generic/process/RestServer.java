@@ -84,13 +84,13 @@ public class RestServer
     // staticFiles.location("client");
     final JsonTransformer transformer = new JsonTransformer();
 
-    post("/collected/:type", (req, resp) -> submit(req, resp), transformer);
+    post("/collected/:type", this::submit, transformer);
 
     get("/collected/:type/search", (req, resp) -> search(req, resp, false), transformer);
 
-    get("/collected/:type/key/:key", (req, resp) -> view(req, resp), transformer);
-    put("/collected/:type/key/:key", (req, resp) -> update(req, resp), transformer);
-    delete("/collected/:type/key/:key", (req, resp) -> doDelete(req, resp), transformer);
+    get("/collected/:type/key/:key", this::view, transformer);
+    put("/collected/:type/key/:key", this::update, transformer);
+    delete("/collected/:type/key/:key", this::doDelete, transformer);
 
     get("/file/:id", this::download);
     post("/file/:id", this::doUpload);
@@ -115,9 +115,7 @@ public class RestServer
     get("/export/", (req, resp) -> export(resp));
 
     // exception handling during development
-    exception(Exception.class, (exception, request, response) -> {
-      log.error("Exception occurred", exception);
-    });
+    exception(Exception.class, (exception, request, response) -> log.error("Exception occurred", exception));
   }
 
   private String doDelete(Request req, Response res)

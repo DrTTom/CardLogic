@@ -118,7 +118,7 @@ public class SearchProcess implements PersistenceChangeListener
     });
     remainingCandidates.forEach(c -> addTranslation(c, result));
     result.setNumberPossible(similars.size());
-    result.setNumberMatching((int)similars.values().stream().filter(x -> x.probablyEqual()).count());
+    result.setNumberMatching((int)similars.values().stream().filter(Similarity::probablyEqual).count());
     if (result.getNumberMatching() > 0 || similars.size() < 100)
     {
       result.setMatches(new ArrayList<>(similars.keySet()));
@@ -136,7 +136,7 @@ public class SearchProcess implements PersistenceChangeListener
   {
     interpreter.getSupportedAttributes()
                .stream()
-               .map(name -> interpreter.getAttributeInterpreter(name))
+               .map(interpreter::getAttributeInterpreter)
                .filter(ai -> ai instanceof AttributeInterpreter.Translating)
                .forEach(ai -> {
                  String attrName = ai.getName();

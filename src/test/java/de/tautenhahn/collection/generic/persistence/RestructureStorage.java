@@ -13,11 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Ignore;
-import org.junit.Test;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
-
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
  * Temporary tool to migrate old data content.
@@ -37,7 +36,7 @@ public class RestructureStorage
    * @throws IOException
    */
   @Test
-  @Ignore("this is a tool")
+  @Disabled("this is a tool")
   public void test() throws IOException
   {
     Persistence source = new WorkspacePersistence();
@@ -222,7 +221,7 @@ public class RestructureStorage
                         .stream()
                         .filter(e -> e.getValue().equals(primKey))
                         .findAny()
-                        .map(e -> e.getKey())
-                        .orElseThrow(() -> new RuntimeException());
+                        .map(Map.Entry::getKey)
+                        .orElseThrow(RuntimeException::new);
   }
 }

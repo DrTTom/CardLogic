@@ -1,7 +1,7 @@
 body {
     font-family: sans-serif;
     background-color: #06510F;
-    margin: 0px;
+    margin: 0;
 }
 
 .warning {
@@ -34,6 +34,14 @@ body {
     width: 100%;
 }
 
+.separator {
+    display: flex;
+    background-color: #7b929e;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
 .cardscontainer {
     display: flex;
     flex-flow: row wrap;
@@ -60,7 +68,7 @@ body {
 .c-frame {
     border-radius: 10px !important;
     background-color: beige;
-    padding: 0px;
+    padding: 0;
     display: block;
     overflow: hidden;
 }

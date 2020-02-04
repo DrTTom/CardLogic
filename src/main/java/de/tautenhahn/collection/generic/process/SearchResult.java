@@ -61,25 +61,21 @@ public class SearchResult
   }
 
   /**
-   * Declares how a String can be translated into human.readable text.
+   * Declares how a String can be translated into human-readable text.
    *
    * @param attrName
    * @param orig
    * @param translation
+   * @deprecated attributes translations are given in respective question
    */
+  @Deprecated
   public void addTranslation(String attrName, String orig, String translation)
   {
     if (translations == null)
     {
       translations = new HashMap<>();
     }
-    Map<String, String> target = translations.get(attrName);
-    if (target == null)
-    {
-      target = new HashMap<>();
-      translations.put(attrName, target);
-    }
-    target.put(orig, translation);
+    translations.computeIfAbsent(attrName, k -> new HashMap<>()).put(orig, translation);
   }
 
 }

@@ -49,6 +49,7 @@ public class CardsTest
 {
 
   private static final Random MEASURE_SOURCE = new Random();
+  public static final String PATTERN = "pattern";
 
   private static DescribedObjectInterpreter deck;
 
@@ -87,10 +88,9 @@ public class CardsTest
   /**
    * Assert that {@link TypeBasedEnumeration} can provide allowed values and translations.
    *
-   * @throws IOException
    */
   @Test
-  public void typeBaseEnum() throws IOException
+  public void typeBaseEnum()
   {
     TypeBasedEnumeration systemUnderTest = (TypeBasedEnumeration)deck.getAttributeInterpreter("maker");
     assertThat(systemUnderTest.getAllowedValues(null)).as("allowed values").contains("Cooke");
@@ -103,12 +103,11 @@ public class CardsTest
    * Assert that {@link TypeBasedEnumWithForeignKey} provides allowed values in accordance with the respective
    * context.
    *
-   * @throws IOException
    */
   @Test
-  public void foreignKey() throws IOException
+  public void foreignKey()
   {
-    TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter("pattern");
+    TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter(PATTERN);
     DescribedObject germanDeck = new DescribedObject("deck", "1");
     germanDeck.getAttributes().put("suits", "deutsch");
     DescribedObject frenchDeck = new DescribedObject("deck", "2");
@@ -126,10 +125,9 @@ public class CardsTest
   /**
    * Assert that maker sign choice is update with maker.
    *
-   * @throws IOException
    */
   @Test
-  public void imageChoice() throws IOException
+  public void imageChoice()
   {
     TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter("makerSign");
     DescribedObject myDeck = new DescribedObject("deck", "1");
@@ -143,11 +141,9 @@ public class CardsTest
    * Asserts that search process filters results, adapts option values and reports errors. Note that error
    * reporting is for information only, process still works even if search criteria contain errors.
    *
-   * @throws Exception
    */
-  @SuppressWarnings("boxing")
   @Test
-  public void search() throws Exception
+  public void search()
   {
     SearchProcess systemUnderTest = ProcessFactory.getInstance().getSearch("deck");
     SearchResult result = systemUnderTest.search(Collections.emptyMap());
@@ -155,24 +151,24 @@ public class CardsTest
     assertThat(suitQuestion.getOptions().values()).contains("deutsch");
     int numberTotal = result.getNumberTotal();
     assertThat(result.getNumberPossible()).isEqualTo(numberTotal);
-    ChoiceQuestion patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), "pattern");
+    ChoiceQuestion patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), PATTERN);
     assertThat(patternQuestion.getOptions().values()).contains("Berliner Bild");
 
     result = systemUnderTest.search(Collections.singletonMap("suits", "deutsch"));
     assertThat(result.getNumberPossible()).isLessThan(numberTotal);
-    patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), "pattern");
+    patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), PATTERN);
     assertThat(patternQuestion.getOptions().values()).doesNotContain("Berliner Bild");
     assertThat(getQuestion(result.getQuestions(), "suits").getProblem()).isNull();
     assertThat(result.getTranslations().get("maker").get("Scharff")).isEqualTo("Walter Scharff");
 
     HashMap<String, String> params = new HashMap<>();
     params.put("suits", "marsianisch");
-    params.put("pattern", "Französisches Bild");
+    params.put(PATTERN, "Französisches Bild");
 
     result = systemUnderTest.search(params);
     assertThat(getQuestion(result.getQuestions(),
                            "suits").getProblem()).isEqualTo(application.getText("msg.error.invalidOption"));
-    Question pq = getQuestion(result.getQuestions(), "pattern");
+    Question pq = getQuestion(result.getQuestions(), PATTERN);
     assertThat(pq.getProblem()).isEqualTo(application.getText("msg.error.optionMismatches.suits"));
     assertThat(pq.getValue()).isEqualTo("Französisches Bild");
   }
@@ -186,9 +182,9 @@ public class CardsTest
   {
     DescribedObject myDeck = new DescribedObject("deck", null);
     myDeck.getAttributes().put("suits", "deutsch");
-    myDeck.getAttributes().put("pattern", "french");
+    myDeck.getAttributes().put(PATTERN, "french");
     DescribedObjectInterpreter interpreter = application.getInterpreter(myDeck.getType());
-    ChoiceQuestion pq = (ChoiceQuestion)getQuestion(interpreter.getQuestions(myDeck, false), "pattern");
+    ChoiceQuestion pq = (ChoiceQuestion)getQuestion(interpreter.getQuestions(myDeck, false), PATTERN);
     assertThat(pq.getProblem()).isEqualTo(application.getText("msg.error.optionMismatches.suits"));
     assertThat(pq.getValue()).isEqualTo("Französisches Bild");
     assertThat(pq.getOptions().values()).contains("Französisches Bild");
@@ -200,7 +196,7 @@ public class CardsTest
    * sure translated attributes are filled correctly.
    */
   @Test
-  public void submitPositive() throws Exception
+  public void submitPositive()
   {
 
     DescribedObject newDeck = createValidDeck();
@@ -208,14 +204,14 @@ public class CardsTest
     SubmissionResponse result = doSubmit(newDeck, false, true);
     assertThat(result.getPrimaryKey()).as("created primary key").isNotNull();
     DescribedObject stored = application.getPersistence().find("deck", result.getPrimaryKey());
-    assertThat(stored.getAttributes().get("pattern")).isEqualTo("halle");
+    assertThat(stored.getAttributes().get(PATTERN)).isEqualTo("halle");
   }
 
   /**
    * Asserts that submission process aborts with error message in data is inconsistent.
    */
   @Test
-  public void submitInconsistentData() throws Exception
+  public void submitInconsistentData()
   {
     DescribedObject newDeck = createValidDeck();
     newDeck.getAttributes().put("printedLatest", "2017");
@@ -231,7 +227,7 @@ public class CardsTest
    * Asserts that submission process stores inconsistent data if forced.
    */
   @Test
-  public void submitForce() throws Exception
+  public void submitForce()
   {
     DescribedObject newDeck = createValidDeck();
     newDeck.getAttributes().put("printedEarliest", "2017");
@@ -245,7 +241,6 @@ public class CardsTest
    *
    * @throws Exception
    */
-  @SuppressWarnings("boxing")
   @Test
   public void callREST() throws Exception
   {
@@ -265,7 +260,6 @@ public class CardsTest
     }
   }
 
-  @SuppressWarnings("boxing")
   private SubmissionResponse doSubmit(DescribedObject newDeck, boolean force, boolean expectSuccess)
   {
     SubmissionProcess systemUnderTest = ProcessFactory.getInstance().getSubmission("deck");
@@ -286,7 +280,7 @@ public class CardsTest
   {
     DescribedObject newDeck = new DescribedObject("deck", null);
     newDeck.getAttributes().put("suits", "deutsch");
-    newDeck.getAttributes().put("pattern", "halle");
+    newDeck.getAttributes().put(PATTERN, "halle");
     newDeck.getAttributes()
            .put("format", (10 + MEASURE_SOURCE.nextInt(100)) + "x" + (50 + MEASURE_SOURCE.nextInt(200)));
     newDeck.getAttributes().put("specialMeasure", "12x" + (10 + MEASURE_SOURCE.nextInt(40)));
@@ -305,6 +299,6 @@ public class CardsTest
     return questions.stream()
                     .filter(q -> q.getParamName().equals(paramName))
                     .findAny()
-                    .orElseThrow(() -> new AssertionError());
+                    .orElseThrow(AssertionError::new);
   }
 }

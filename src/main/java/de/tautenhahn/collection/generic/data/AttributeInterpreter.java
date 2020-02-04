@@ -27,8 +27,8 @@ public abstract class AttributeInterpreter
   /**
    * Creates new instance.
    *
-   * @param name
-   * @param flags
+   * @param name name of attribute
+   * @param flags specifies properties of that attribute
    */
   protected AttributeInterpreter(String name, Flag... flags)
   {

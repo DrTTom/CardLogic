@@ -15,6 +15,7 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -79,7 +80,7 @@ public class SearchWrapper
       {
 
         Document doc = searcher.doc(sdoc.doc);
-        Optional.ofNullable(doc.getField("key")).map(f -> f.stringValue()).ifPresent(s -> result.add(s));
+        Optional.ofNullable(doc.getField("key")).map(IndexableField::stringValue).ifPresent(result::add);
       }
       return result;
     }

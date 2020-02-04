@@ -36,7 +36,7 @@ public class TestWorkspaceStorage
     {
         byte[] content = new byte[1001];
         String reference = null;
-        try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();)
+        try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
         {
             systemUnderTest.init("testing");
             DescribedObject obj = new DescribedObject("cryptoUrl", "primary");
@@ -54,7 +54,7 @@ public class TestWorkspaceStorage
             }
         }
 
-        try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();)
+        try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
         {
             systemUnderTest.init("testingOther");
             try (FileInputStream ins = new FileInputStream("build/checkme.zip"))
