@@ -111,8 +111,8 @@ class InputElement extends MyCustomElement {
         this.setAttribute("param", data.paramName);
         $('label', this).innerText = data.text;
         this.loadInput(data);
-        if (data.message) {
-            $('#' + this.getRefId() + '_msg', this).innerText = data.message;
+        if (data.problem) {
+            $('#' + this.getRefId() + '_msg', this).innerText = data.problem;
         }
         this.setAttribute('data-key', data.paramName);
     }
@@ -183,7 +183,7 @@ class SearchView extends MyCustomElement {
             const questionType = q.type === 'TEXT_CHOICE' ? 'text-choice' : 'my-text';
             let element = buildChildNode(group.content(), questionType).get();
             element.load(q);
-            element.input().addEventListener("change", () => this.update(refId));
+            element.input().addEventListener("change", () => this.updateFromQuestions());
         });
         $(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";
         const tagName = supportedTiles[data.type][0];
@@ -193,18 +193,19 @@ class SearchView extends MyCustomElement {
             buildChildNode(resultsDiv, tagName).get().load(d));
     }
 
-    update(refId) {
-        let url = '/collected/deck/search';
-        let separator = '?';
-        $$('[data-key]', this).forEach(x => {
-            const value = x.store();
-            if (value !== null && value !== '' && value !== '(Keine Angabe)') {
-                url = url + separator + x.getAttribute('data-key') + '=' + encodeURIComponent(value);
-                separator = '&';
-            }
-        });
+    updateFromQuestions() {
+        let data = {};
+        $$('[data-key]', this).forEach(x => data[x.getAttribute('data-key')] = x.store());
+        this.update(data);
+    }
+
+    update(data) {
+        let params = Object.entries(data).filter(e => e[1] !== null && e[1] !== '' && e[1] !== '(Keine Angabe)')
+            .map(e => e[0] + '=' + encodeURIComponent(e[1])).join('&');
+        let url = '/collected/deck/search' + (params === '' ? '' : '?' + params);
         getJson(url, x => this.load(x, true));
     }
+
 }
 
 let i18nData = {};

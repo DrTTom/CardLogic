@@ -2,7 +2,7 @@
 
 To manage a collection of stamps, of books or of any kind of "collectible"
 objects you will find many software solutions. Collecting stuff which comes
-without catalouges, labels or dating is an entirely differnt world.
+without catalouges, labels or dating is an entirely different world.
 
 This project is for two purposes:
 
@@ -10,7 +10,7 @@ This project is for two purposes:
 * helping me organize my collection of playing cards
 
 Its organized as JavaScript front end connecting via REST to a Java back end.
-Both parts constist of a generic base which could be used for any kind of
+Both parts consist of a generic base which could be used for any kind of
 collection and an extension which makes it suitable for handling the special
 needs of playing card collectors.
 
@@ -19,4 +19,8 @@ Why is collecting playing cards different?
 * There are rather few collectors.
 * Cards may or may not have maker signs, covers ...
 
-
+## Usage
+The project is not finished, the application cannot really be used now.
+Run tests first, that will leave a directory called ```.Collection``` in your
+home folder which contains some example data. Then run the application and have
+a look.
