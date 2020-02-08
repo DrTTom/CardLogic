@@ -19,6 +19,19 @@ class CardMaker extends MyCustomElement {
     }
 }
 
+class SimpleTile extends MyCustomElement {
+    createContent(refId) {
+        let div = buildChildNode(this, 'div').class('card').get();
+        buildChildNode(div, 'h4');
+    }
+
+    load(data) {
+        $('h4', this).innerHTML = data.attributes.name;
+        $('h4', this).title = data.primKey;
+    }
+}
+
+
 class DeckBig extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').class('card').get();
@@ -75,18 +88,18 @@ class FullDeck extends MyCustomElement {
         buildChildNode(left, 'br');
         buildChildNode(left, 'label').id(refId + "_numbercards");
         buildChildNode(left, 'br');
-		buildChildNode(left, 'label').id(refId + "_specialMeasure").class('sepAfter');
-		buildChildNode(left, 'br');
-		buildChildNode(left, 'label').id(refId + "_suits");
-		buildChildNode(left, 'br');
-		buildChildNode(left, 'label').id(refId + "_pattern");
-		buildChildNode(left, 'br');
-		buildChildNode(left, 'label').id(refId + "_index");
-		buildChildNode(this, 'img').attribute("class", "bigimage");
+        buildChildNode(left, 'label').id(refId + "_specialMeasure").class('sepAfter');
+        buildChildNode(left, 'br');
+        buildChildNode(left, 'label').id(refId + "_suits");
+        buildChildNode(left, 'br');
+        buildChildNode(left, 'label').id(refId + "_pattern");
+        buildChildNode(left, 'br');
+        buildChildNode(left, 'label').id(refId + "_index");
+        buildChildNode(this, 'img').attribute("class", "bigimage");
         buildChildNode(this, 'p').class('scroll6lines');
         buildChildNode(this, 'label').id(refId + "_condition");
-		buildChildNode(this, 'br');
-        buildChildNode(this, 'button').id(refId+'_button').get().innerHTML='Daten übernehmen';
+        buildChildNode(this, 'br');
+        buildChildNode(this, 'button').id(refId + '_button').get().innerHTML = 'Daten übernehmen';
     }
 
     load(data) {
@@ -98,10 +111,10 @@ class FullDeck extends MyCustomElement {
         $('p', this).innerHTML = data.attributes.remark;
         $('img', this).setAttribute('src', '/download/' + data.attributes.image);
         $(idPrefix + '_condition').innerHTML = 'erworben ' + attrs.bought + ', ' + i18n('condition', attrs.condition) + ', befindet sich in ' + attrs.location;
-		$(idPrefix + '_suits').innerHTML = 'Farbzeichen ' + i18n('suits', attrs.suits);
-		$(idPrefix + '_pattern').innerHTML = 'Bild: ' + i18n('pattern', attrs.pattern);
-		$(idPrefix + '_index').innerHTML = ' Index ' + attrs.numIndex + ' mal ' + attrs.index;
-		$(idPrefix + '_button').onclick= () => $('search-view').update(attrs);
+        $(idPrefix + '_suits').innerHTML = 'Farbzeichen ' + i18n('suits', attrs.suits);
+        $(idPrefix + '_pattern').innerHTML = 'Bild: ' + i18n('pattern', attrs.pattern);
+        $(idPrefix + '_index').innerHTML = ' Index ' + attrs.numIndex + ' mal ' + attrs.index;
+        $(idPrefix + '_button').onclick = () => $('search-view').update(attrs);
     }
 
     timeString(attrs) {
@@ -118,7 +131,11 @@ class FullDeck extends MyCustomElement {
 
 supportedTiles.deck = ['deck-big', 'deck-medium', "deck-small"];
 supportedTiles.maker = ['card-maker'];
+supportedTiles.makerSign = ['simple-tile'];
+supportedTiles.taxStamp = ['simple-tile'];
+supportedTiles.pattern = ['simple-tile'];
 
 elements.define("card-maker", CardMaker);
 elements.define("deck-big", DeckBig);
+elements.define("simple-tile", SimpleTile);
 elements.define("deck-full", FullDeck);

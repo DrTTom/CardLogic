@@ -14,11 +14,21 @@
 <body>
 
 <modal-dialog></modal-dialog>
-<div class="separator"><span style="font-weight: bolder">Kartenspiele</span> <span>Hersteller</span>
-    <span>Firmenzeichen</span> <span>Steuerstempel</span> <span>Künstler</span> <span></span><span>Einstellungen</span> </div>
+<div class="separator">
+    <span style="font-weight: bolder" onclick="loadSearchView('deck', this)">Kartenspiele</span>
+    <span onclick="loadSearchView('maker', this)">Hersteller</span>
+    <span onclick="loadSearchView('makerSign', this)">Firmenzeichen</span>
+    <span onclick="loadSearchView('taxStamp', this)">Steuerstempel</span>
+    <span onclick="loadSearchView('pattern', this)">Standardbilder</span>
+    <span></span><span>Einstellungen</span></div>
 <search-view id="xxx"></search-view>
 <script>
     getJson('/collected/deck/search', x => $('#xxx').load(x));
+    function loadSearchView(type, that) {
+        $$('span', that.parentElement).forEach(e => e.setAttribute('style', ''));
+        that.setAttribute('style', 'font-weight: bolder');
+        getJson('/collected/' + type + '/search', x => $('#xxx').load(x));
+    }
 </script>
 </body>
 </html>

@@ -156,10 +156,19 @@ class SearchView extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').get();
         buildChildNode(div, 'div').id(refId + '_questions');
+        
         let afterQuestions = buildChildNode(div, 'div').class('separator').get();
         buildChildNode(afterQuestions, 'label').id(refId + '_stats');
-        let create = buildChildNode(afterQuestions, 'button').get();
-        create.innerHTML = 'Neues Element Anlegen';
+        let control = buildChildNode(afterQuestions, 'span').get();
+        let clear = buildChildNode(control, 'button').get();
+        clear.innerHTML = 'Eingaben löschen';
+        let create = buildChildNode(control, 'button').get();
+        create.innerHTML = 'Neu Anlegen';
+        let update = buildChildNode(control, 'button').attribute('disabled', 'true').get();
+        update.innerHTML = 'Aktualisieren';
+        buildChildNode(control, 'input').attribute('type', 'checkbox').get();
+        buildChildNode(control, 'span').get().innerHTML = 'Fehler ignorieren';
+
         buildChildNode(div, 'div').class('cardscontainer').id(refId + '_results');
     }
 
@@ -167,6 +176,7 @@ class SearchView extends MyCustomElement {
         const refId = this.getRefId();
         const selectorPrefix = '#' + refId + '_';
         const questionsDiv = $(selectorPrefix + 'questions');
+        this.setAttribute('type', data.type);
         if (keepQuestionGroups) {
             $$('vertical-accordion', questionsDiv).forEach(a => a.content().innerHTML = '');
         } else {
@@ -180,7 +190,7 @@ class SearchView extends MyCustomElement {
                 group.title().innerHTML = q.form;
             }
             if (q.options) registerI18n(q.paramName, q.options);
-            const questionType = q.type === 'TEXT_CHOICE' ? 'text-choice' : 'my-text';
+            const questionType = q.options ? 'text-choice' : 'my-text';
             let element = buildChildNode(group.content(), questionType).get();
             element.load(q);
             element.input().addEventListener("change", () => this.updateFromQuestions());
@@ -202,10 +212,9 @@ class SearchView extends MyCustomElement {
     update(data) {
         let params = Object.entries(data).filter(e => e[1] !== null && e[1] !== '' && e[1] !== '(Keine Angabe)')
             .map(e => e[0] + '=' + encodeURIComponent(e[1])).join('&');
-        let url = '/collected/deck/search' + (params === '' ? '' : '?' + params);
+        let url = '/collected/'+this.getAttribute('type')+'/search' + (params === '' ? '' : '?' + params);
         getJson(url, x => this.load(x, true));
     }
-
 }
 
 let i18nData = {};

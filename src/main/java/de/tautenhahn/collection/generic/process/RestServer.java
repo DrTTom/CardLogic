@@ -98,7 +98,7 @@ public class RestServer
     post("/collection", this::importCollection);
     get("/collection", (req, resp) -> export(resp));
 
-    get("/tags", (req, resp) -> "TODO");
+    get("/datatypes", (req, resp) -> ApplicationContext.getInstance().getPersistence().getObjectTypes());
 
     // end of new paths
 
