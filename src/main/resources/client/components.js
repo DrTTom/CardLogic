@@ -23,7 +23,7 @@ class MyCustomElement extends HTMLElement {
 }
 
 /**
- * A container which can be vertically collapsed
+ * A container which can be vertically collapsed. Ever seen a real accordion?
  */
 class VerticalAccordion extends MyCustomElement {
 
@@ -50,6 +50,30 @@ class VerticalAccordion extends MyCustomElement {
     }
 }
 
+class TabRow extends HTMLElement
+{
+    connectedCallback()
+    {
+        buildChildNode(this, 'div').class('tab-row');
+    }
+
+    add(text, activate)
+    {
+        let parent = $('div', this);
+        let tab= buildChildNode(parent, 'span').get();
+        tab.innerHTML=text;
+        tab.onclick= ()=> {
+            if (!tab.classList.contains('selected'))
+            {
+                $$('span', parent).forEach(e=> e.classList.remove('selected'));
+                tab.classList.add('selected');
+                activate();
+            }
+        };
+        return tab;
+    }
+}
+
 /**
  * A dialog with header and body which can be closed
  */
@@ -63,10 +87,10 @@ class Dialog extends MyCustomElement {
         buildChildNode(headerLine, 'div').id(refId + '_title');
         buildChildNode(frame, 'div').class('c-body').id(refId + '_body');
         cancel.innerHTML = "&times;";
-        cancel.onclick = (() => {
+        cancel.onclick = () => {
             $('#' + refId + '_overlay').style.display = 'none';
             $('#' + refId + '_body').innerHTML = '';
-        });
+        };
     }
 
     /**
@@ -133,7 +157,7 @@ class InputElement extends MyCustomElement {
 
 
 /**
- * A text input. TODO: make this a base class for different types of questions.
+ * A text input.
  */
 class MyText extends InputElement {
     // uses default of everything
@@ -257,3 +281,4 @@ elements.define("text-choice", TextChoice);
 elements.define("search-view", SearchView);
 elements.define("modal-dialog", Dialog);
 elements.define("vertical-accordion", VerticalAccordion);
+elements.define("tab-row", TabRow);

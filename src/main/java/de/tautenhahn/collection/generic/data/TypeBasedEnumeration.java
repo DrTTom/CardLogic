@@ -22,7 +22,7 @@ import java.util.TreeMap;
  * @author TT
  */
 public abstract class TypeBasedEnumeration extends Enumeration
-    implements PersistenceChangeListener, AttributeInterpreter.Translating
+    implements PersistenceChangeListener
 {
 
     /**
@@ -105,7 +105,7 @@ public abstract class TypeBasedEnumeration extends Enumeration
             .entrySet()
             .stream()
             .filter(e -> !"null".equals(e.getKey()))
-            .sorted(Comparator.comparing(Map.Entry::getValue))
+            .sorted(Map.Entry.comparingByValue())
             .forEach(e -> options.put(e.getKey(), e.getValue()));
         options.put("null", NULL_PLACEHOLDER);
         result.setOptions(options);

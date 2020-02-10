@@ -36,7 +36,7 @@ test {
 mainClassName = "de.tautenhahn.collection.cards.Main"
 
 pmd {
-    toolVersion = '6.20.0'
+    toolVersion = '6.21.0'
     ruleSets = []
     ruleSetFiles = files("pmd_config.xml")
     ignoreFailures = true // TODO!

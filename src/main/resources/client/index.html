@@ -14,19 +14,20 @@
 <body>
 
 <modal-dialog></modal-dialog>
-<div class="separator">
-    <span style="font-weight: bolder" onclick="loadSearchView('deck', this)">Kartenspiele</span>
-    <span onclick="loadSearchView('maker', this)">Hersteller</span>
-    <span onclick="loadSearchView('makerSign', this)">Firmenzeichen</span>
-    <span onclick="loadSearchView('taxStamp', this)">Steuerstempel</span>
-    <span onclick="loadSearchView('pattern', this)">Standardbilder</span>
-    <span></span><span>Einstellungen</span></div>
+<tab-row id="yyy"></tab-row>
 <search-view id="xxx"></search-view>
+
 <script>
-    getJson('/collected/deck/search', x => $('#xxx').load(x));
-    function loadSearchView(type, that) {
-        $$('span', that.parentElement).forEach(e => e.setAttribute('style', ''));
-        that.setAttribute('style', 'font-weight: bolder');
+    let tabs = $('#yyy');
+    tabs.add('Kartenspiele', () => loadSearchView('deck')).click();
+    tabs.add('Hersteller', () => loadSearchView('maker'));
+    tabs.add('Firmenzeichen', () => loadSearchView('makerSign'));
+    tabs.add('Steuerstempel', () => loadSearchView('taxStamp'));
+    tabs.add('Bild', () => loadSearchView('pattern'));
+    tabs.add('');
+    tabs.add('Einstellungen', () => alert('Noch nicht implementiert'));
+
+    function loadSearchView(type) {
         getJson('/collected/' + type + '/search', x => $('#xxx').load(x));
     }
 </script>

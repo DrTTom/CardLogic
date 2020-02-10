@@ -34,6 +34,22 @@ body {
     width: 100%;
 }
 
+.tab-row {
+    display: flex;
+    background-color: #7b929e;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+}
+
+.tab-row > span {
+    padding: 10px;
+}
+
+.tab-row > .selected {
+    font-weight: bolder;
+}
+
 .separator {
     display: flex;
     background-color: #7b929e;

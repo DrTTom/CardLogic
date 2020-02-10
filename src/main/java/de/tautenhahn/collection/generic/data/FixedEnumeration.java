@@ -4,8 +4,6 @@ import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.data.question.TextChoiceQuestion;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**

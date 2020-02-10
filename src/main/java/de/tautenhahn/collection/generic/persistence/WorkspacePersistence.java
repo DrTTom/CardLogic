@@ -265,15 +265,13 @@ public class WorkspacePersistence implements Persistence
     close();
     List<String> relPathes = new ArrayList<>();
     relPathes.add(JSON_FILENAME);
-    binRefs.forEach((type, binAttrs) -> {
-      getTypeMap(type).values()
-                      .stream()
-                      .flatMap(v -> v.getAttributes().entrySet().stream())
-                      .filter(e -> binAttrs.contains(e.getKey()))
-                      .map(Map.Entry::getValue)
-                      .filter(Objects::nonNull)
-                      .forEach(relPathes::add);
-    });
+    binRefs.forEach((type, binAttrs) -> getTypeMap(type).values()
+                    .stream()
+                    .flatMap(v -> v.getAttributes().entrySet().stream())
+                    .filter(e -> binAttrs.contains(e.getKey()))
+                    .map(Map.Entry::getValue)
+                    .filter(Objects::nonNull)
+                    .forEach(relPathes::add));
 
     new SecureZip().create(collectionBaseDir, relPathes, outs);
   }

@@ -159,7 +159,6 @@ public class CardsTest
     patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), PATTERN);
     assertThat(patternQuestion.getOptions().values()).doesNotContain("Berliner Bild");
     assertThat(getQuestion(result.getQuestions(), "suits").getProblem()).isNull();
-    assertThat(result.getTranslations().get("maker").get("Scharff")).isEqualTo("Walter Scharff");
 
     HashMap<String, String> params = new HashMap<>();
     params.put("suits", "marsianisch");
@@ -248,7 +247,7 @@ public class CardsTest
     {
       RestServer.getInstance().start();
       Spark.awaitInitialization();
-      try (InputStream ins = (InputStream)new URL("http://localhost:4567/search/maker").getContent())
+      try (InputStream ins = (InputStream)new URL("http://localhost:4567/collected/maker/search").getContent())
       {
         assertThat(ins.available()).isGreaterThan(255);
       }

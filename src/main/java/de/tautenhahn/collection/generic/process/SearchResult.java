@@ -1,14 +1,12 @@
 package de.tautenhahn.collection.generic.process;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.question.Question;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Contains all data created by a search process. That data contains:
@@ -24,58 +22,39 @@ import lombok.Data;
 public class SearchResult
 {
 
-  private final String type;
+    private final String type;
 
-  private final String primKeyOfEditedObject;
+    private final String primKeyOfEditedObject;
 
-  private final boolean forSubmit;
+    private final boolean forSubmit;
 
-  private List<Question> questions;
+    private List<Question> questions;
 
-  private String message;
+    private String message;
 
-  private int numberTotal;
+    private int numberTotal;
 
-  private int numberMatching;
+    private int numberMatching;
 
-  private int numberPossible;
+    private int numberPossible;
 
-  private List<DescribedObject> matches = new ArrayList<>();
+    private List<DescribedObject> matches = new ArrayList<>();
 
-  private Map<String, Map<String, String>> translations;
+    private Map<String, Map<String, String>> translations;
 
-  /**
-   * Creates new object setting some context data which allows state-free front ends.
-   *
-   * @param type type of described objects(s)
-   * @param primKeyOfEditedObject optional, if specified primKey value of the existing object which is
-   *          currently edited.
-   * @param forSubmit true in case user already requested submitting of entered data but had to do some
-   *          corrections before.
-   */
-  public SearchResult(String type, String primKeyOfEditedObject, boolean forSubmit)
-  {
-    this.type = type;
-    this.primKeyOfEditedObject = primKeyOfEditedObject;
-    this.forSubmit = forSubmit;
-  }
-
-  /**
-   * Declares how a String can be translated into human-readable text.
-   *
-   * @param attrName
-   * @param orig
-   * @param translation
-   * @deprecated attributes translations are given in respective question
-   */
-  @Deprecated
-  public void addTranslation(String attrName, String orig, String translation)
-  {
-    if (translations == null)
+    /**
+     * Creates new object setting some context data which allows state-free front ends.
+     *
+     * @param type type of described objects(s)
+     * @param primKeyOfEditedObject optional, if specified primKey value of the existing object which is currently
+     *     edited.
+     * @param forSubmit true in case user already requested submitting of entered data but had to do some
+     *     corrections before.
+     */
+    public SearchResult(String type, String primKeyOfEditedObject, boolean forSubmit)
     {
-      translations = new HashMap<>();
+        this.type = type;
+        this.primKeyOfEditedObject = primKeyOfEditedObject;
+        this.forSubmit = forSubmit;
     }
-    translations.computeIfAbsent(attrName, k -> new HashMap<>()).put(orig, translation);
-  }
-
 }
