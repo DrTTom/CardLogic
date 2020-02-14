@@ -176,6 +176,26 @@ class TextChoice extends InputElement {
     }
 }
 
+class ObjectChoice extends InputElement {
+    createInputElement(id) {
+        let span = buildNode('span').class("flex-row").get();
+        buildChildNode(span, 'select').class("flex-grows").id(id);
+        buildChildNode(span, 'div').id(this.getRefId()+'_more').class('button').get().innerHTML='?';
+        return span;
+    }
+
+    loadInput(data) {
+        const select = this.input();
+        Object.entries(data.options).forEach(e => buildChildNode(select, 'option').attribute('value', e[0]).get().innerHTML = e[1]);
+        select.value = data.value;
+        select.title = data.helptext;
+    }
+}
+
+class ImageChoice extends ObjectChoice {
+    // TODO: implement own view
+}
+
 class SearchView extends MyCustomElement {
     createContent(refId) {
         let div = buildChildNode(this, 'div').get();
@@ -214,7 +234,7 @@ class SearchView extends MyCustomElement {
                 group.title().innerHTML = q.form;
             }
             if (q.options) registerI18n(q.paramName, q.options);
-            const questionType = q.options ? 'text-choice' : 'my-text';
+            const questionType = elements.get(q.type)=== undefined ? 'my-text': q.type;
             let element = buildChildNode(group.content(), questionType).get();
             element.load(q);
             element.input().addEventListener("change", () => this.updateFromQuestions());
@@ -278,6 +298,8 @@ const supportedTiles = {};
 const elements = window.customElements ? window.customElements : customElements;
 elements.define("my-text", MyText);
 elements.define("text-choice", TextChoice);
+elements.define("object-choice", ObjectChoice);
+elements.define("image-choice", ImageChoice);
 elements.define("search-view", SearchView);
 elements.define("modal-dialog", Dialog);
 elements.define("vertical-accordion", VerticalAccordion);

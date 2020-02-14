@@ -158,5 +158,23 @@ h4 {
 
 .tile-header {
     width: 100%
+}
 
+.flex-row {
+    display: flex;
+    align-items: center;
+}
+
+.flex-grows {
+    flex-grow: 10;
+}
+
+.button{
+    padding: 5px 10px 5px 10px;
+    background-color: #cad4d8;
+}
+
+.button:focus {
+    text-decoration: none;
+    cursor: pointer;
 }

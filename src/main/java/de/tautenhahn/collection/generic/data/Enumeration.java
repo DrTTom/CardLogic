@@ -3,6 +3,7 @@ package de.tautenhahn.collection.generic.data;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 
@@ -74,8 +75,8 @@ public abstract class Enumeration extends AttributeInterpreter
   {
     Map<String, String> options = new LinkedHashMap<>();
     getAllowedValues(object).forEach(v -> options.put(v, toDisplayValue(v)));
-    options.put("null", NULL_PLACEHOLDER);
-    String currentValue=object.getAttributes().get(getName());
+    options.put("", NULL_PLACEHOLDER);
+    String currentValue= Optional.ofNullable(object.getAttributes().get(getName())).orElse("");
     if (!options.containsKey(currentValue))
     {
       options.put(currentValue, toDisplayValue(currentValue));

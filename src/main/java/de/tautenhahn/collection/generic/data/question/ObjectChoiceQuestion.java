@@ -1,5 +1,7 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.Getter;
+
 /**
  * Question for an auxiliary object of some type.
  *
@@ -8,6 +10,7 @@ package de.tautenhahn.collection.generic.data.question;
 public class ObjectChoiceQuestion extends ChoiceQuestion
 {
 
+  @Getter
   private final String auxType;
 
   /**
@@ -19,15 +22,12 @@ public class ObjectChoiceQuestion extends ChoiceQuestion
    */
   public ObjectChoiceQuestion(String paramName, String text, String form, String auxType)
   {
-    super(Type.OBJECT_CHOICE, paramName, text, form);
-    this.auxType = auxType;
+    this("object-choice", paramName, text, form, auxType);
   }
 
-  /**
-   * Returns the type of auxiliary object. TODO: must find out the primary key as well.
-   */
-  public String getAuxType()
+  ObjectChoiceQuestion(String type, String paramName, String text, String form, String auxType)
   {
-    return auxType;
+    super(type, paramName, text, form);
+    this.auxType = auxType;
   }
 }

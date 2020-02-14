@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 
 /**
@@ -9,39 +12,20 @@ import java.util.Map;
  */
 public class ChoiceQuestion extends Question
 {
-
+    @Getter
+    @Setter
     private Map<String, String> options;
 
     /**
      * Creates instance.
      *
-     * @param type
-     * @param paramName
-     * @param text
-     * @param form
+     * @param type specifies which type of input element is needed
+     * @param paramName name of the objects attribute
+     * @param text text to display
+     * @param form group this question belongs to
      */
-    protected ChoiceQuestion(Type type, String paramName, String text, String form)
+    protected ChoiceQuestion(String type, String paramName, String text, String form)
     {
         super(type, paramName, text, form);
-    }
-
-    /**
-     * Returns list of options to display in a selection input element.
-     *
-     * @return keys are internal values, values are display names
-     */
-    public Map<String, String> getOptions()
-    {
-        return options;
-    }
-
-    /**
-     * Specifies which options to display to the user.
-     *
-     * @param options keys are internal values, values are display names
-     */
-    public void setOptions(Map<String, String> options)
-    {
-        this.options = options;
     }
 }

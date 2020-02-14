@@ -96,7 +96,6 @@ public class CardsTest
     assertThat(systemUnderTest.getAllowedValues(null)).as("allowed values").contains("Cooke");
     assertThat(systemUnderTest.check("wrong", null)).as("error code").isEqualTo("msg.error.invalidOption");
     assertThat(systemUnderTest.toDisplayValue("Cooke")).isEqualTo("Alf Cooke");
-    assertThat(systemUnderTest.toInternalValue("Alf Cooke")).isEqualTo("Cooke");
   }
 
   /**
@@ -162,14 +161,14 @@ public class CardsTest
 
     HashMap<String, String> params = new HashMap<>();
     params.put("suits", "marsianisch");
-    params.put(PATTERN, "Französisches Bild");
+    params.put(PATTERN, "french");
 
     result = systemUnderTest.search(params);
     assertThat(getQuestion(result.getQuestions(),
                            "suits").getProblem()).isEqualTo(application.getText("msg.error.invalidOption"));
     Question pq = getQuestion(result.getQuestions(), PATTERN);
     assertThat(pq.getProblem()).isEqualTo(application.getText("msg.error.optionMismatches.suits"));
-    assertThat(pq.getValue()).isEqualTo("Französisches Bild");
+    assertThat(pq.getValue()).isEqualTo("french");
   }
 
   /**
@@ -185,7 +184,7 @@ public class CardsTest
     DescribedObjectInterpreter interpreter = application.getInterpreter(myDeck.getType());
     ChoiceQuestion pq = (ChoiceQuestion)getQuestion(interpreter.getQuestions(myDeck, false), PATTERN);
     assertThat(pq.getProblem()).isEqualTo(application.getText("msg.error.optionMismatches.suits"));
-    assertThat(pq.getValue()).isEqualTo("Französisches Bild");
+    assertThat(pq.getValue()).isEqualTo("french");
     assertThat(pq.getOptions().values()).contains("Französisches Bild");
     assertThat(pq.getOptions().values()).contains("(Keine Angabe)");
   }

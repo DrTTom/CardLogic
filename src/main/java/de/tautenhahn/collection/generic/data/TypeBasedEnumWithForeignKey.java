@@ -42,12 +42,8 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
     if (foreignKeyValue != null)
     {
-      String chosenKey = Optional.ofNullable(context.getAttributes().get(getName()))
-                                 .map(this::toInternalValue)
-                                 .orElse(null);
       result.removeIf(v -> !("".equals(v)
-                             || foreignKeyValue.equals(foreignKeyByPrimKey.get(toInternalValue(v)))
-                             || toInternalValue(v).equals(chosenKey)));
+                             || foreignKeyValue.equals(foreignKeyByPrimKey.get(v))));
     }
     return result;
   }
@@ -55,16 +51,14 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
   @Override
   public String check(String value, DescribedObject context)
   {
-    if (!nameByPrimKey.containsKey(value))
-    {
-      return "msg.error.invalidOption";
-    }
-    String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
-    if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(value)))
-    {
-      return null;
-    }
-    return "msg.error.optionMismatches." + foreignKey;
+    return Optional.ofNullable(super.check(value, context)).orElseGet(()-> {
+      String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
+      if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(value)))
+      {
+        return null;
+      }
+      return "msg.error.optionMismatches." + foreignKey;
+    });
   }
 
   @Override

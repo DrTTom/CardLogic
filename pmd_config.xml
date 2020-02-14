@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Default lza rules" xmlns="http://pmd.sf.net/ruleset/2.0.0"
+<ruleset name="Some hopefully sensible rules" xmlns="http://pmd.sf.net/ruleset/2.0.0"
 >
    <description>
       Shall become bos default rule set.
@@ -70,6 +70,7 @@
       <exclude name="DataClass" /> <!-- contradicts rule above -->
       <exclude name="GodClass" /> <!-- too restrictive, not configurable -->
       <exclude name="AvoidRethrowingException" /> <!-- not compatible with some lambdas -->
+      <exclude name="ExcessiveMethodLength" /> <!-- special config below -->
    </rule>
    <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts">
       <properties>

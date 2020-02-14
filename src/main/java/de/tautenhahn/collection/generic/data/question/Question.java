@@ -17,10 +17,9 @@ public class Question
 
     private final String form;
 
-    private final Type type;
+    private final String type;
 
     private String value;
-
     private String helptext;
 
     private boolean alignWithPrevious;
@@ -34,20 +33,12 @@ public class Question
      * @param text
      * @param form
      */
-    protected Question(Type type, String paramName, String text, String form)
+    protected Question(String type, String paramName, String text, String form)
     {
         this.type = type;
         this.paramName = paramName;
         this.text = text;
         this.form = form;
-    }
-
-    /**
-     * Returns the type of question.
-     */
-    public Type getType()
-    {
-        return type;
     }
 
     /**
@@ -96,7 +87,7 @@ public class Question
      */
     public String getValue()
     {
-        return value;
+        return "".equals(value) ? null: value;
     }
 
     /**
@@ -105,7 +96,7 @@ public class Question
      */
     public void setValue(String value)
     {
-        this.value = value;
+        this.value = value==null ? "": value;
     }
 
     /**
@@ -140,32 +131,5 @@ public class Question
     {
         alignWithPrevious = true;
         return this;
-    }
-
-    /**
-     * Type of input required to answer the question.
-     */
-    public enum Type
-    {
-        /**
-         * free text
-         */
-        TEXT,
-        /**
-         * choice among given text phrases
-         */
-        TEXT_CHOICE,
-        /**
-         * choice among given images
-         */
-        IMAGE_CHOICE,
-        /**
-         * choice among given objects by name
-         */
-        OBJECT_CHOICE,
-        /**
-         * file upload
-         */
-        FILE
     }
 }

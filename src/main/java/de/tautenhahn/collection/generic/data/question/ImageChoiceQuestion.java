@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author TT
  */
-public class ImageChoiceQuestion extends ChoiceQuestion
+public class ImageChoiceQuestion extends ObjectChoiceQuestion
 {
 
   private Map<String, String> urls;
@@ -21,13 +21,14 @@ public class ImageChoiceQuestion extends ChoiceQuestion
   /**
    * Creates instance.
    *
-   * @param paramName
-   * @param text
-   * @param form
+   * @param paramName attribute name
+   * @param text label text
+   * @param form question group
+   * @param auxType type of object represented by that value
    */
-  public ImageChoiceQuestion(String paramName, String text, String form)
+  public ImageChoiceQuestion(String paramName, String text, String form, String auxType)
   {
-    super(Type.IMAGE_CHOICE, paramName, text, form);
+    super("image-choice", paramName, text, form, auxType);
   }
 
   /**
