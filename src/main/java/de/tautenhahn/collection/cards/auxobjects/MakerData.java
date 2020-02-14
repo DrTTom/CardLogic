@@ -21,7 +21,7 @@ public class MakerData extends MapBasedDescribedObjectInterpreter
    */
   public MakerData()
   {
-    super("maker", new FreeText("fullName", 80, 1), new Year("from"), new Year("to"),
+    super("maker", true, new FreeText("fullName", 80, 1), new Year("from"), new Year("to"),
           new FreeText("place", 80, 1), new Domain(), new FreeText("remark", 80, 4));
     ((Year)getAttributeInterpreter("to")).addNotBeforeRestriction("from");
   }

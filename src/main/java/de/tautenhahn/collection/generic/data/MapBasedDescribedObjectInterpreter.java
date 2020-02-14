@@ -20,16 +20,32 @@ public abstract class MapBasedDescribedObjectInterpreter extends DescribedObject
    * Creates instance with given set of attribute interpreters.
    *
    * @param type
+   * @param userKeyPrefix true to use type as prefix for message keys.
    * @param ai
    */
-  protected MapBasedDescribedObjectInterpreter(String type, AttributeInterpreter... ai)
+  protected MapBasedDescribedObjectInterpreter(String type, boolean useKeyPrefix, AttributeInterpreter... ai)
   {
     super(type);
     attribs = new LinkedHashMap<>();
     for ( AttributeInterpreter attr : ai )
     {
+      if (useKeyPrefix)
+      {
+        attr.setKeyPrefix(type);
+      }
       attribs.put(attr.getName(), attr);
     }
+  }
+
+  /**
+   * Creates instance with given set of attribute interpreters.
+   *
+   * @param type
+   * @param ai
+   */
+  protected MapBasedDescribedObjectInterpreter(String type, AttributeInterpreter... ai)
+  {
+    this(type, false, ai);
   }
 
   @Override

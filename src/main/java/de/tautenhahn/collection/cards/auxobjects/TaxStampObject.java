@@ -22,7 +22,7 @@ public class TaxStampObject extends MapBasedDescribedObjectInterpreter
    */
   public TaxStampObject()
   {
-    super("taxStamp", new Year("usedFrom"), new Year("usedTo"), new ImageRef(),
+    super("taxStamp", true, new Year("usedFrom"), new Year("usedTo"), new ImageRef(),
           new FreeText("remark", 80, 2));
   }
 

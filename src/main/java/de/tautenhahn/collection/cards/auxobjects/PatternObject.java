@@ -22,7 +22,7 @@ public class PatternObject extends MapBasedDescribedObjectInterpreter
    */
   public PatternObject()
   {
-    super("pattern", new FreeText("name", 40, 1), new ImageRef(), new Suits());
+    super("pattern", true, new FreeText("name", 40, 1), new ImageRef(), new Suits());
   }
 
   @Override
