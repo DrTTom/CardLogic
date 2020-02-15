@@ -245,10 +245,8 @@ class SearchView extends MyCustomElement {
 			element.input().addEventListener("change", () => this.updateFromQuestions());
 		});
 		$(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";
-		const tagName = supportedTiles[data.type][0];
-		console.log("############");
-		console.log(data.type);
-		console.log(tagName);
+		const tags = supportedTiles[data.type];
+		const tagName = tags[Math.min(Math.floor(Math.log(data.numberPossible)/2.1),tags.length-1)];
 		const resultsDiv = $(selectorPrefix + 'results');
 		resultsDiv.innerHTML = '';
 		data.matches.forEach(d =>

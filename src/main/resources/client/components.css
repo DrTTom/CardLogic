@@ -97,6 +97,11 @@ body {
 
 .c-body {
     padding: 10px;
+    position: relative;
+}
+
+.c-body > div {
+		display: block; 
 }
 
 .closebutton {
@@ -125,7 +130,7 @@ body {
 .c-big
 {
 	width: 600px;
-	height:370px;
+	height:270px;
 	margin: 5px !important;
 }
 
@@ -135,11 +140,20 @@ body {
     right: 10px;
 }
 
-.defaultimage {
+.image-default {
     max-width: 200px;
     max-height: 150px;
     float: right;
     vertical-align: top;
+    margin-bottom: 10px;
+}
+
+.image-small {
+    max-width: 120px;
+    max-height: 120px;
+    float: right;
+    vertical-align: top;
+    margin-bottom: 10px;
 }
 
 .leftofimage {
@@ -148,10 +162,19 @@ body {
     display: inline-block;
 }
 
+.scroll2lines {
+    overflow: auto;
+    height: 5ex;    
+}
+
 .scroll3lines {
     overflow: auto;
-    height: 7ex;
-    flex-direction: row;
+    height: 7ex;    
+}
+
+.scroll6lines {
+    overflow: auto;
+    height: 14ex;
 }
 
 h4 {
@@ -187,6 +210,13 @@ h4 {
     flex-grow: 10;
 }
 
+.separated {
+	margin-top: 10px;
+}
+
+.clear {
+ clear: both;
+}
 .button{
     padding: 5px 10px 5px 10px;
     background-color: #cad4d8;

@@ -6,17 +6,17 @@ class DefaultTile extends MyCustomElement {
 	}
 	load(data) {
 		const idPrefix = '#' + this.getRefId();
-		let header =$(idPrefix + '_header');
+		let header = $(idPrefix + '_header');
 		header.innerHTML = data.attributes.name;
 		header.title = data.primKey;
 		this.fillContent($(idPrefix + '_content'), data);
-		$('div',this).onclick = () => this.showFull(data.type, data.primKey);	
+		$('div', this).onclick = () => this.showFull(data.type, data.primKey);
 	}
 	fillContent(node, data) {
 		node.innerHTML = JSON.stringify(data.attributes);
-	}	
+	}
 	showFull(type, key) {
-		getJson('collected/'+type+'/key/' + key, data => {
+		getJson('collected/' + type + '/key/' + key, data => {
 			let fullView = supportedFullViews[type].apply()
 			$('modal-dialog').show(key + '. ' + data.attributes.name, fullView);
 			fullView.load(data);
@@ -28,63 +28,36 @@ class DefaultTile extends MyCustomElement {
 class CardMaker extends DefaultTile {
 	createContent(refId) {
 		super.createContent(refId);
-		$('div',this).classList.add('c-medium');
+		$('div', this).classList.add('c-medium');
 	}
 
-    fillContent(node, data) {
-		buildChildNode(node, 'label').get().innerHTML = data.attributes.place;
-		buildChildNode(node, 'label').get().innerHTML=data.attributes.from + ' - ' + data.attributes.to;
-		buildChildNode(node, 'img').class('topright').attribute('src', 'TODO');
-		buildChildNode(node, 'p').class('scroll3lines').get().innerHTML = data.attributes.remark;
-	}	
+	fillContent(node, data) {
+		buildChildNode(node, 'div').get().innerHTML = data.attributes.place;
+		buildChildNode(node, 'div').get().innerHTML = data.attributes.from + ' - ' + data.attributes.to;
+		buildChildNode(node, 'p').class('scroll5lines').get().innerHTML = data.attributes.remark;
+	}
 }
 
 class SimpleTile extends DefaultTile {
 	createContent(refId) {
 		super.createContent(refId);
-		$('div',this).classList.add('c-small');
+		$('div', this).classList.add('c-small');
 	}
 }
 
-
-class DeckBig extends MyCustomElement {
+class DeckSmall extends DefaultTile {
 	createContent(refId) {
-		let div = buildChildNode(this, 'div').class('card').get();
-		const left = buildChildNode(div, 'div').attribute("class", "leftofimage").get();
-		let header = buildChildNode(left, 'h4').get();
-		buildChildNode(header, 'span').id(refId + "_key");
-		buildChildNode(header, 'span').id(refId + "_title");
-		buildChildNode(left, 'label').id(refId + "_maker");
-		buildChildNode(left, 'br');
-		buildChildNode(left, 'label').id(refId + "_date");
-		buildChildNode(left, 'br');
-		buildChildNode(left, 'label').id(refId + "_numbercards");
-		buildChildNode(div, 'img').attribute("class", "defaultimage");
-		buildChildNode(div, 'p').class('scroll3lines');
-		div.onclick = () => this.showFull(refId);
+		super.createContent(refId);
+		$('div', this).classList.add('c-small');
+	}
+	fillContent(node, data) {
+		buildChildNode(node, 'div').get().innerHTML = i18n('maker', data.attributes.maker);
+		buildChildNode(node, 'div').get().innerHTML = DeckSmall.timeString(data.attributes);
+		let text = data.attributes.remark ? data.attributes.remark : i18n('pattern', data.attributes.pattern);
+		buildChildNode(node, 'p').class('scroll2lines').get().innerHTML = text;
 	}
 
-	load(data) {
-		const idPrefix = '#' + this.getRefId();
-		$(idPrefix + '_key').innerHTML = data.primKey;
-		$(idPrefix + '_title').innerHTML = '. ' + data.attributes.name;
-		$(idPrefix + '_maker').innerHTML = i18n('maker', data.attributes.maker);
-		$(idPrefix + '_date').innerHTML = this.timeString(data.attributes);
-		$(idPrefix + '_numbercards').innerHTML = data.attributes.numberCards + " Blatt, " + data.attributes.format;
-		$('p', this).innerHTML = data.attributes.remark;
-		$('img', this).setAttribute('src', '/download/' + data.attributes.image);
-	}
-
-	showFull(refId) {
-		let key = $('#' + refId + '_key').innerHTML;
-		getJson('collected/deck/key/' + key, deck => {
-			let fullDeck = new FullDeck();
-			$('modal-dialog').show(key + '. ' + deck.attributes.name, fullDeck);
-			fullDeck.load(deck);
-		});
-	}
-
-	timeString(attrs) {
+	static timeString(attrs) {
 		let to = attrs.printedLatest;
 		let from = attrs.printedEarliest;
 		if (to) {
@@ -92,7 +65,43 @@ class DeckBig extends MyCustomElement {
 		}
 		return from ? 'frühestens ' + from : 'keine Zeitangabe';
 	}
+
 }
+
+class DeckMedium extends DefaultTile {
+	createContent(refId) {
+		super.createContent(refId);
+		$('div', this).classList.add('c-medium');
+	}
+	fillContent(node, data) {
+		buildChildNode(node, 'img').class('image-small').attribute('src', '/download/' + data.attributes.image);
+		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker));
+		buildChildNode(node, 'div').text(DeckSmall.timeString(data.attributes));
+		buildChildNode(node, 'div').class('separated').text(data.attributes.numberCards + ' Blatt, ' + data.attributes.format);
+		let text = data.attributes.remark ? data.attributes.remark : i18n('pattern', data.attributes.pattern);
+		buildChildNode(node, 'p').class('scroll3lines separated clear').text(text);
+	}
+}
+
+
+class DeckBig extends DefaultTile {
+	createContent(refId) {
+		super.createContent(refId);
+		$('div', this).classList.add('c-big');
+	}
+	fillContent(node, data) {
+		buildChildNode(node, 'img').class('image-default').attribute('src', '/download/' + data.attributes.image);
+		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker))
+		buildChildNode(node, 'div').text(DeckSmall.timeString(data.attributes));
+		buildChildNode(node, 'div').class('separated').text(data.attributes.numberCards + ' Blatt, ' + data.attributes.format);
+		let text = 'erworben '+data.attributes.bought+', '+i18n('condition', data.attributes.condition);
+		buildChildNode(node, 'div').class('separated').text(text);
+		text = data.attributes.remark ? data.attributes.remark : i18n('pattern', data.attributes.pattern);
+		buildChildNode(node, 'p').class('scroll3lines separated clear').text(text);		
+	}
+}
+
+
 
 class FullDeck extends MyCustomElement {
 	createContent(refId) {
@@ -144,15 +153,15 @@ class FullDeck extends MyCustomElement {
 
 }
 
-supportedTiles.deck = ['deck-big', 'deck-medium', "deck-small"];
+supportedTiles.deck = ['deck-big', 'deck-medium', 'deck-small'];
 supportedTiles.maker = ['card-maker'];
 supportedTiles.makerSign = ['simple-tile'];
 supportedTiles.taxStamp = ['simple-tile'];
 supportedTiles.pattern = ['simple-tile'];
 
-let supportedFullViews={};
+let supportedFullViews = {};
 supportedFullViews.deck = () => new FullDeck();
-supportedFullViews.maker = () => new CardMaker(); 
+supportedFullViews.maker = () => new CardMaker();
 supportedFullViews.makerSign = () => new SimpleTile();
 supportedFullViews.taxStamp = () => new SimpleTile();
 supportedFullViews.pattern = () => new SimpleTile();
@@ -160,6 +169,8 @@ supportedFullViews.pattern = () => new SimpleTile();
 
 elements.define("card-maker", CardMaker);
 elements.define("deck-big", DeckBig);
+elements.define("deck-medium", DeckMedium);
+elements.define("deck-small", DeckSmall);
 elements.define("simple-tile", SimpleTile);
 elements.define("deck-full", FullDeck);
 elements.define("default-tile", DefaultTile);
