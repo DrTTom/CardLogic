@@ -83,7 +83,7 @@ body {
 
 .c-frame {
     border-radius: 10px !important;
-    background-color: beige;
+    background-color: beige;    
     padding: 0;
     display: block;
     overflow: hidden;
@@ -91,8 +91,7 @@ body {
 
 .c-header {
     padding: 10px;
-    background-color: #5cb85c;
-    color: white;
+    background-color:#ede1b5;    
     font-weight: bold;
 }
 
@@ -109,6 +108,25 @@ body {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+.c-small
+{
+	width: 260px;
+	height:160px;
+	margin: 5px !important;
+}
+.c-medium
+{
+	width: 395px;
+	height:243px;
+	margin: 5px !important;
+}
+.c-big
+{
+	width: 600px;
+	height:370px;
+	margin: 5px !important;
 }
 
 .topright {
