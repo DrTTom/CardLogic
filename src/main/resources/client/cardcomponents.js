@@ -109,11 +109,15 @@ class FullView extends MyCustomElement {
 		}
 		
 		/**
-		 * buildContent is short cut in case full view and tile have identic content. Otherwise, class must impement this method itself.
+		 * may pass fillContent method from another class in case full view and tile have identic content. 
 		 */		
-		load(data, buildContent)
+		load(data, actualFillContent)
 		{
-			buildContent($('#'+this.getRefId()+'_content'), data);
+			const idPrefix = '#' + this.getRefId()+'_';
+			actualFillContent ? actualFillContent: this.fillContent;
+			actualFillContent($(idPrefix+'content'), data);
+			$(idPrefix + 'edit').onclick = ()=> $('search-view').setObjectToEdit(data);
+			$(idPrefix + 'delete').onclick = ()=> alert('Löschen kommt erst, wenn Create/Update fertig sind');
 		}
 }
 

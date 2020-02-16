@@ -208,13 +208,11 @@ class SearchView extends MyCustomElement {
 		let afterQuestions = buildChildNode(div, 'div').class('separator').get();
 		buildChildNode(afterQuestions, 'label').id(refId + '_stats');
 		let control = buildChildNode(afterQuestions, 'span').get();
-		let clear = buildChildNode(control, 'button').get();
-		clear.innerHTML = 'Eingaben löschen';
-		clear.onclick= ()=>this.update({});
-		let create = buildChildNode(control, 'button').get();
+		buildChildNode(control, 'button').text('Eingaben löschen').get().onclick = () => this.clear();
+		let create = buildChildNode(control, 'button').id(refId + '_new').get();
 		create.innerHTML = 'Neu Anlegen';
 		create.onclick = () => this.createObject();
-		let update = buildChildNode(control, 'button').attribute('disabled', 'true').get();
+		let update = buildChildNode(control, 'button').id(refId + '_update').attribute('disabled', 'true').get();
 		update.innerHTML = 'Aktualisieren';
 		buildChildNode(control, 'input').attribute('type', 'checkbox').get();
 		buildChildNode(control, 'span').get().innerHTML = 'Fehler ignorieren';
@@ -271,13 +269,40 @@ class SearchView extends MyCustomElement {
 		getJson(url, x => this.load(x, true));
 	}
 
+	setObjectToEdit(data) {
+		this.setAttribute('currentPrimkey', data.primKey);
+		this.update(data.attributes);
+		let button = $('#' + this.getRefId() + '_update');
+		button.removeAttribute('disabled');
+		button.innerHTML = data.primKey + ' Aktualisieren';
+		button.onclick = () => this.updateObject();
+	}
+
+	updateObject() {
+		let data = {};
+		$$('[data-key]', this).forEach(x => data[x.getAttribute('data-key')] = x.store());
+		putObject('/collected/' + this.getAttribute('type') + '/key/' + this.getAttribute('currentPrimkey'), data, r => {
+			alert(i18n('messages', r.message));
+			if (r.questions) { this.loadQuestions(r.questions, $('#' + this.getRefId() + '_questions', this), true); }
+		});
+	}
+
 	createObject() {
 		let data = {};
 		$$('[data-key]', this).forEach(x => data[x.getAttribute('data-key')] = x.store());
 		postObject('/collected/' + this.getAttribute('type'), data, r => {
 			alert(i18n('messages', r.message));
-			if (r.questions) { this.loadQuestions(r.questions, $('#'+this.getRefId() + '_questions', this), true); }
+			if (r.questions) { this.loadQuestions(r.questions, $('#' + this.getRefId() + '_questions', this), true); }
 		});
+	}
+
+	clear() {
+		this.update({});
+		this.removeAttribute('currentPrimkey');
+		let button = $('#' + this.getRefId() + '_update');
+		button.setAttribute('disabled', 'true');
+		button.innerHTML = 'Aktualisieren';
+		button.onclick = null;
 	}
 }
 

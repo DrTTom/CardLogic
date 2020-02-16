@@ -91,7 +91,7 @@ public class TestRestServer
    */
   private String createMaker() throws Exception
   {
-    Map<String, String> data = new HashMap<>(Map.of("fullName", "Ostermann AG", "remark", "test data"));
+    Map<String, String> data = new HashMap<>(Map.of("name", "Ostermann AG", "remark", "test data"));
     SubmissionResponse response = callService(post("/collected/maker", data), 422, SubmissionResponse.class);
     assertThat(response.getMessage()).isEqualTo("msg.error.remainingProblems");
 
@@ -107,13 +107,13 @@ public class TestRestServer
   private DescribedObject readMaker(String key) throws Exception
   {
     DescribedObject read = callService(get("/collected/maker/key/" + key), 200, DescribedObject.class);
-    assertThat(read.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
+    assertThat(read.getAttributes().get("name")).isEqualTo("Ostermann AG");
 
     SearchResult sr = callService(get("/collected/maker/search" + toQueryParams(read)),
                                   200,
                                   SearchResult.class);
     DescribedObject found = sr.getMatches().stream().filter(d -> d.getPrimKey().equals(key)).findAny().get();
-    assertThat(found.getAttributes().get("fullName")).isEqualTo("Ostermann AG");
+    assertThat(found.getAttributes().get("name")).isEqualTo("Ostermann AG");
     return found;
   }
 
@@ -158,11 +158,10 @@ public class TestRestServer
   private String toQueryParams(DescribedObject read)
   {
     return "?" + read.getAttributes()
-        .entrySet()
-        .stream()
-        .map(e -> e.getKey() + '='
-                  + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
-        .collect(Collectors.joining("&"));
+                     .entrySet()
+                     .stream()
+                     .map(e -> e.getKey() + '=' + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
+                     .collect(Collectors.joining("&"));
   }
 
   HttpRequest get(String path) throws URISyntaxException
@@ -196,7 +195,7 @@ public class TestRestServer
   {
     HttpResponse<String> response = CLIENT.send(req, HttpResponse.BodyHandlers.ofString());
     assertThat(response.statusCode()).as("status code").isEqualTo(expectedCode);
-    //noinspection unchecked
+    // noinspection unchecked
     return String.class == responseClass ? (T)response.body() : GSON.fromJson(response.body(), responseClass);
   }
 }
