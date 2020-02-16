@@ -17,9 +17,9 @@ class DefaultTile extends MyCustomElement {
 	}
 	showFull(type, key) {
 		getJson('collected/' + type + '/key/' + key, data => {
-			let fullView = supportedFullViews[type].apply()
+			let fullView = supportedFullViews[type] ? supportedFullViews[type].apply(): new FullView();
 			$('modal-dialog').show(key + '. ' + data.attributes.name, fullView);
-			fullView.load(data);
+			fullView.load(data, this.fillContent);
 		});
 	}
 }
@@ -101,7 +101,21 @@ class DeckBig extends DefaultTile {
 	}
 }
 
-
+class FullView extends MyCustomElement {
+	createContent(refId) {
+		buildChildNode(this, 'div').id(refId+"_content").get();
+		buildChildNode(this, 'div').class('button').text('Löschen').id(refId+"_delete");
+		buildChildNode(this, 'div').class('button').text('In Eingabe übernehmen').id(refId+"_edit");		
+		}
+		
+		/**
+		 * buildContent is short cut in case full view and tile have identic content. Otherwise, class must impement this method itself.
+		 */		
+		load(data, buildContent)
+		{
+			buildContent($('#'+this.getRefId()+'_content'), data);
+		}
+}
 
 class FullDeck extends MyCustomElement {
 	createContent(refId) {
@@ -161,10 +175,10 @@ supportedTiles.pattern = ['simple-tile'];
 
 let supportedFullViews = {};
 supportedFullViews.deck = () => new FullDeck();
-supportedFullViews.maker = () => new CardMaker();
-supportedFullViews.makerSign = () => new SimpleTile();
-supportedFullViews.taxStamp = () => new SimpleTile();
-supportedFullViews.pattern = () => new SimpleTile();
+// supportedFullViews.maker = () => new CardMaker();
+// supportedFullViews.makerSign = () => new SimpleTile();
+// supportedFullViews.taxStamp = () => new SimpleTile();
+// supportedFullViews.pattern = () => new SimpleTile();
 
 
 elements.define("card-maker", CardMaker);
@@ -174,3 +188,4 @@ elements.define("deck-small", DeckSmall);
 elements.define("simple-tile", SimpleTile);
 elements.define("deck-full", FullDeck);
 elements.define("default-tile", DefaultTile);
+elements.define("default-full", FullView);

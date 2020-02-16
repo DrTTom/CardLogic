@@ -60,8 +60,7 @@ class TabRow extends HTMLElement {
 
 	add(text, activate) {
 		let parent = $('div', this);
-		let tab = buildChildNode(parent, 'span').get();
-		tab.innerHTML = text;
+		let tab = buildChildNode(parent, 'span').text(text).get();
 		tab.onclick = () => {
 			if (!tab.classList.contains('selected')) {
 				$$('span', parent).forEach(e => e.classList.remove('selected'));
@@ -211,8 +210,10 @@ class SearchView extends MyCustomElement {
 		let control = buildChildNode(afterQuestions, 'span').get();
 		let clear = buildChildNode(control, 'button').get();
 		clear.innerHTML = 'Eingaben löschen';
+		clear.onclick= ()=>this.update({});
 		let create = buildChildNode(control, 'button').get();
 		create.innerHTML = 'Neu Anlegen';
+		create.onclick = () => this.createObject();
 		let update = buildChildNode(control, 'button').attribute('disabled', 'true').get();
 		update.innerHTML = 'Aktualisieren';
 		buildChildNode(control, 'input').attribute('type', 'checkbox').get();
@@ -222,20 +223,31 @@ class SearchView extends MyCustomElement {
 	}
 
 	load(data, keepQuestionGroups = false) {
-		const refId = this.getRefId();
-		const selectorPrefix = '#' + refId + '_';
-		const questionsDiv = $(selectorPrefix + 'questions');
+		const selectorPrefix = '#' + this.getRefId() + '_';
 		this.setAttribute('type', data.type);
-		if (keepQuestionGroups) {
-			$$('vertical-accordion', questionsDiv).forEach(a => a.content().innerHTML = '');
+
+		this.loadQuestions(data.questions, $(selectorPrefix + 'questions', this), keepQuestionGroups);
+
+		$(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";
+		const tags = supportedTiles[data.type];
+		const tagName = tags[Math.min(Math.floor(Math.log(data.numberPossible) / 2.1), tags.length - 1)];
+		const resultsDiv = $(selectorPrefix + 'results');
+		resultsDiv.innerHTML = '';
+		data.matches.forEach(d =>
+			buildChildNode(resultsDiv, tagName).get().load(d));
+	}
+
+	loadQuestions(questions, targetNode, keepGroups) {
+		if (keepGroups) {
+			$$('vertical-accordion', targetNode).forEach(a => a.content().innerHTML = '');
 		} else {
-			questionsDiv.innerHTML = '';
+			targetNode.innerHTML = '';
 		}
-		data.questions.forEach(q => {
+		questions.forEach(q => {
 			let groupId = q.form.replace(/ /g, '_');
-			let group = $('#' + groupId, questionsDiv);
+			let group = $('#' + groupId, targetNode);
 			if (!group) {
-				group = buildChildNode(questionsDiv, 'vertical-accordion').id(groupId).get();
+				group = buildChildNode(targetNode, 'vertical-accordion').id(groupId).get();
 				group.title().innerHTML = q.form;
 			}
 			if (q.options) registerI18n(q.paramName, q.options);
@@ -244,13 +256,6 @@ class SearchView extends MyCustomElement {
 			element.load(q);
 			element.input().addEventListener("change", () => this.updateFromQuestions());
 		});
-		$(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";
-		const tags = supportedTiles[data.type];
-		const tagName = tags[Math.min(Math.floor(Math.log(data.numberPossible)/2.1),tags.length-1)];
-		const resultsDiv = $(selectorPrefix + 'results');
-		resultsDiv.innerHTML = '';
-		data.matches.forEach(d =>
-			buildChildNode(resultsDiv, tagName).get().load(d));
 	}
 
 	updateFromQuestions() {
@@ -264,6 +269,15 @@ class SearchView extends MyCustomElement {
 			.map(e => e[0] + '=' + encodeURIComponent(e[1])).join('&');
 		let url = '/collected/' + this.getAttribute('type') + '/search' + (params === '' ? '' : '?' + params);
 		getJson(url, x => this.load(x, true));
+	}
+
+	createObject() {
+		let data = {};
+		$$('[data-key]', this).forEach(x => data[x.getAttribute('data-key')] = x.store());
+		postObject('/collected/' + this.getAttribute('type'), data, r => {
+			alert(i18n('messages', r.message));
+			if (r.questions) { this.loadQuestions(r.questions, $('#'+this.getRefId() + '_questions', this), true); }
+		});
 	}
 }
 
