@@ -1,5 +1,6 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +119,15 @@ public abstract class DescribedObjectInterpreter
    */
   public String proposeNewPrimKey(DescribedObject candidate)
   {
-    return UUID.randomUUID().toString();
+    String name = candidate.getAttributes().get(DescribedObject.NAME_KEY);
+    return Optional.ofNullable(name).map(this::abbreviate).orElseGet(()-> UUID.randomUUID().toString());
+  }
+
+  public String abbreviate(String s)
+  {
+    String[] parts = s.split(" ");
+    int pl = Math.max(6/parts.length, 1);
+    return Arrays.stream(parts).map(p-> p.substring(0, Math.min(pl, p.length()))).collect(Collectors.joining(""));
   }
 
   /**
