@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data;
 
+import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.Question;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,10 +11,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.data.question.Question;
-
 
 /**
  * Information about supported features of certain type of {@link DescribedObject}. Instances must be
@@ -123,12 +122,16 @@ public abstract class DescribedObjectInterpreter
     return Optional.ofNullable(name).map(this::abbreviate).orElseGet(()-> UUID.randomUUID().toString());
   }
 
-  public String abbreviate(String s)
-  {
-    String[] parts = s.split(" ");
-    int pl = Math.max(6/parts.length, 1);
-    return Arrays.stream(parts).map(p-> p.substring(0, Math.min(pl, p.length()))).collect(Collectors.joining(""));
-  }
+    private String abbreviate(String s)
+    {
+        String[] parts = s.split(" ");
+        int pl = Math.max(6 / parts.length, 1);
+        return Arrays
+            .stream(parts)
+            .map(p -> p.replaceAll("\\W", "_"))
+            .map(p -> p.substring(0, Math.min(pl, p.length())))
+            .collect(Collectors.joining(""));
+    }
 
   /**
    * Creates an object with given values.

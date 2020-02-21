@@ -20,7 +20,7 @@ public abstract class MapBasedDescribedObjectInterpreter extends DescribedObject
    * Creates instance with given set of attribute interpreters.
    *
    * @param type
-   * @param userKeyPrefix true to use type as prefix for message keys.
+   * @param useKeyPrefix true to use type as prefix for message keys.
    * @param ai
    */
   protected MapBasedDescribedObjectInterpreter(String type, boolean useKeyPrefix, AttributeInterpreter... ai)

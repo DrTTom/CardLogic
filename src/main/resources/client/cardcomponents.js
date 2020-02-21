@@ -116,7 +116,8 @@ class FullView extends MyCustomElement {
 			const idPrefix = '#' + this.getRefId()+'_';
 			actualFillContent ? actualFillContent: this.fillContent;
 			actualFillContent($(idPrefix+'content'), data);
-			$(idPrefix + 'edit').onclick = ()=> $('search-view').setObjectToEdit(data);
+			$(idPrefix + 'edit').onclick = ()=> { $('search-view').setObjectToEdit(data);
+			$('modal-dialog').hide(); };
 			$(idPrefix + 'delete').onclick = ()=> alert('Löschen kommt erst, wenn Create/Update fertig sind');
 		}
 }

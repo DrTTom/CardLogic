@@ -113,6 +113,7 @@ class Dialog extends MyCustomElement {
         if (typeof (body) === 'string') {
             $(refPrefix + '_body').innerHTML = body;
         } else if (typeof (body) === 'object') {
+            $(refPrefix + '_body').innerHTML = '';
             $(refPrefix + '_body').appendChild(body);
         }
     }
@@ -265,7 +266,16 @@ class SearchView extends MyCustomElement {
             let element = buildChildNode(group.content(), questionType).get();
             element.load(q);
             element.input().addEventListener("change", () => this.updateFromQuestions());
+            if (q.message) {
+                group.expand();
+            }
         });
+        $$('vertical-accordion', targetNode).forEach(a => {
+                if (a.isExpanded()) {
+                    a.expand();
+                };
+            }
+        );
     }
 
     updateFromQuestions() {
@@ -284,6 +294,9 @@ class SearchView extends MyCustomElement {
     setObjectToEdit(data) {
         this.setAttribute('currentPrimkey', data.primKey);
         this.update(data.attributes);
+        if ($$('vertical-accordion', this).every(a => !a.isExpanded())) {
+            $('vertical-accordion', this).expand();
+        }
         let button = $('#' + this.getRefId() + '_update');
         button.removeAttribute('disabled');
         button.innerHTML = data.primKey + ' Aktualisieren';
