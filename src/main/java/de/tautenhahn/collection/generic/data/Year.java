@@ -1,14 +1,14 @@
 package de.tautenhahn.collection.generic.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.data.question.TextQuestion;
 import de.tautenhahn.collection.generic.persistence.Persistence;
+import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A year when something happened, providing restrictions to put events in correct chronological order.
@@ -18,154 +18,139 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 public class Year extends AttributeInterpreter
 {
 
-  private final List<String[]> notBefore = new ArrayList<>();
+    private final List<ReferencedValue> notBefore = new ArrayList<>();
 
-  private final List<String[]> notAfter = new ArrayList<>();
+    private final List<ReferencedValue> notAfter = new ArrayList<>();
 
-  Persistence persistence;
+    Persistence persistence;
 
-  /**
-   * Creates new instance.
-   *
-   * @param name
-   * @param flags
-   */
-  public Year(String name, Flag... flags)
-  {
-    super(name, flags);
-  }
-
-  @Override
-  public String check(String value, DescribedObject context)
-  {
-    if (!value.matches("[12][0-9][0-9][0-9]"))
+    /**
+     * Creates new instance.
+     *
+     * @param name
+     * @param flags
+     */
+    public Year(String name, Flag... flags)
     {
-      return "msg.error.mustBeYear";
+        super(name, flags);
     }
-    if (persistence == null)
+
+    @Override
+    public String check(String value, DescribedObject context)
     {
-      persistence = ApplicationContext.getInstance().getPersistence();
-    }
-    int year = Integer.parseInt(value);
-    return Optional.ofNullable(worstViolation(context, notBefore, year, true))
-                   .map(a -> "msg.error.tooEarlyFor." + a)
-                   .orElseGet(() -> Optional.ofNullable(worstViolation(context, notAfter, year, false))
-                                            .map(a -> "msg.error.tooLateFor." + a)
-                                            .orElse(null));
-  }
-
-  @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
-  {
-    return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
-  }
-
-  @Override
-  public Question getQuestion(DescribedObject object)
-  {
-    TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
-    result.setFormat(1, 4);
-    return result;
-  }
-
-  private String worstViolation(DescribedObject ctx, List<String[]> restr, int value, boolean lowerBound)
-  {
-    Integer defaultValue = lowerBound ? Integer.valueOf(0) : Integer.valueOf(3000);
-    return restr.stream()
-                .map(r -> getValue(ctx, r, defaultValue))
-                .filter(p -> lowerBound ? getInt(p) > value : getInt(p) < value)
-                .max((a, b) -> lowerBound ? getInt(a) - getInt(b) : getInt(b) - getInt(a))
-                .map(Pair::getKey)
-                .orElse(null);
-  }
-
-  private int getInt(Pair<String, Integer> p)
-  {
-    return p.getValue();
-  }
-
-  private Pair<String, Integer> getValue(DescribedObject obj, String[] attrib, Integer defaultValue)
-  {
-    DescribedObject current = obj;
-    Integer resultValue = defaultValue;
-    for ( int i = 0 ; i < attrib.length && current != null ; i++ )
-    {
-      String value = current.getAttributes().get(attrib[i]);
-      if (value == null)
-      {
-        break;
-      }
-      if (i == attrib.length - 1)
-      {
-        try
+        if (!value.matches("[12][0-9][0-9][0-9]"))
         {
-          resultValue = Integer.valueOf(value);
+            return "msg.error.mustBeYear";
         }
-        catch (NumberFormatException e)
+        if (persistence == null)
         {
-          break;
+            persistence = ApplicationContext.getInstance().getPersistence();
         }
-      }
-      else
-      {
-        current = persistence.find(attrib[i], value);
-      }
+        int year = Integer.parseInt(value);
+        return Optional
+            .ofNullable(worstViolation(context, notBefore, year, true))
+            .map(a -> "msg.error.tooEarlyFor." + a)
+            .orElseGet(() -> Optional
+                .ofNullable(worstViolation(context, notAfter, year, false))
+                .map(a -> "msg.error.tooLateFor." + a)
+                .orElse(null));
     }
-    return new Pair<>(attrib[0], resultValue);
-  }
 
-  /**
-   * Adds the restriction that the value may not legally be before the value specified by attribute name
-   *
-   * @param attribName at least one name, several indicate an attribute of a sub-object
-   */
-  public void addNotBeforeRestriction(String... attribName)
-  {
-    if (attribName.length == 0)
+    @Override
+    protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
     {
-      throw new IllegalArgumentException("attribute name must be given");
+        return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
     }
-    notBefore.add(attribName);
-  }
 
-  /**
-   * Same as {@link #addNotBeforeRestriction(String...)} but value may not be later that the other one.
-   *
-   * @param attribName
-   */
-  protected void addNotAfterRestriction(String... attribName)
-  {
-    if (attribName.length == 0)
+    @Override
+    public Question getQuestion(DescribedObject object)
     {
-      throw new IllegalArgumentException("attribute name must be given");
+        TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
+        result.setFormat(1, 4);
+        return result;
     }
-    notAfter.add(attribName);
-  }
 
-  /**
-   * Not using existing pair classes due to access restrictions.
-   */
-  private static class Pair<S, T>
-  {
-
-    private final S key;
-
-    private final T value;
-
-    Pair(S key, T value)
+    private String worstViolation(DescribedObject ctx, List<ReferencedValue> restr, int value, boolean lowerBound)
     {
-      this.key = key;
-      this.value = value;
+        Integer defaultValue = lowerBound ? Integer.valueOf(0) : Integer.valueOf(3000);
+        return restr
+            .stream()
+            .peek(r -> r.setUpValue(ctx, defaultValue, persistence))
+            .filter(p -> lowerBound ? p.getValue() > value : p.getValue() < value)
+            .max((a, b) -> lowerBound ? a.getValue() - b.getValue() : b.getValue() - a.getValue())
+            .map(r -> keyPrefix + r.getPath()[0])
+            .orElse(null);
     }
 
-    S getKey()
+    /**
+     * Adds the restriction that the value may not legally be before the value specified by attribute name
+     *
+     * @param path at least one name, several indicate an attribute of a sub-object
+     */
+    public void addNotBeforeRestriction(String... path)
     {
-      return key;
+        addRestriction(notBefore, path);
     }
 
-    T getValue()
+    /**
+     * Same as {@link #addNotBeforeRestriction(String...)} but value may not be later that the other one.
+     *
+     * @param path at least one name, several indicate an attribute of a sub-object
+     */
+    protected void addNotAfterRestriction(String... path)
     {
-      return value;
+        addRestriction(notAfter, path);
     }
-  }
+
+    private void addRestriction(List<ReferencedValue> type, String... path)
+    {
+        if (path.length == 0)
+        {
+            throw new IllegalArgumentException("attribute name must be given");
+        }
+
+        type.add(new ReferencedValue(path));
+    }
+
+    /**
+     * Value to compare to and how it is called.
+     */
+    @Data
+    private static class ReferencedValue
+    {
+        String[] path;
+        int value;
+
+        public ReferencedValue(String[] path)
+        {
+            this.path = path;
+        }
+
+        void setUpValue(DescribedObject obj, int defaultValue, Persistence persistence)
+        {
+            value = defaultValue;
+            DescribedObject current = obj;
+            for (int i = 0; i < path.length; i++)
+            {
+                String attrValue = current == null ? null : current.getAttributes().get(path[i]);
+                if (attrValue == null)
+                {
+                    return;
+                }
+                if (i == path.length - 1)
+                {
+                    try
+                    {
+                        value = Integer.valueOf(attrValue);
+                    } catch (NumberFormatException e)
+                    {
+                        break;
+                    }
+                } else
+                {
+                    current = persistence.find(path[i], attrValue);
+                }
+            }
+        }
+    }
 }

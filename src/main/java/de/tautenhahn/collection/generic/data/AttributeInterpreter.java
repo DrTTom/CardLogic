@@ -25,7 +25,7 @@ public abstract class AttributeInterpreter
 
   private final boolean exact;
 
-  private String keyPrefix = NOT_SPECIFIED;
+  String keyPrefix = NOT_SPECIFIED;
 
   /**
    * Representation of null values in the front end.

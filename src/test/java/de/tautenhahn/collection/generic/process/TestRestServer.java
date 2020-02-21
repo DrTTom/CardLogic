@@ -135,7 +135,7 @@ public class TestRestServer
                  .filter(q -> "to".equals(q.getParamName()))
                  .findAny()
                  .map(Question::getProblem)
-                 .get()).isEqualTo("msg.error.tooEarlyFor.from");
+                 .get()).isEqualTo("msg.error.tooEarlyFor.maker.from");
     found.getAttributes().put("from", "1989");
 
     ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found.getAttributes()),
