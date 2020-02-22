@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.Getter;
+
+
 /**
  * Question for a text value.
  *
@@ -8,9 +11,11 @@ package de.tautenhahn.collection.generic.data.question;
 public class TextQuestion extends Question
 {
 
+  @Getter
   private int cols;
 
-  private int lines;
+  @Getter
+  private int rows;
 
   /**
    * Creates instance.
@@ -19,36 +24,10 @@ public class TextQuestion extends Question
    * @param text
    * @param form
    */
-  public TextQuestion(String paramName, String text, String form)
+  public TextQuestion(String paramName, String text, String form, int cols, int lines)
   {
-    super("text-input", paramName, text, form);
-  }
-
-  /**
-   * Specifies expected size of input.
-   *
-   * @param numLines
-   * @param charsPerLine
-   */
-  public void setFormat(int numLines, int charsPerLine)
-  {
-    lines = numLines;
-    cols = charsPerLine;
-  }
-
-  /**
-   * Returns the number of characters which should fit into one line.
-   */
-  public int getCols()
-  {
-    return cols;
-  }
-
-  /**
-   * Returns the number of expected lines.
-   */
-  public int getLines()
-  {
-    return lines;
+    super(lines == 1 ? "text-input" : "bigtext-input", paramName, text, form);
+    this.cols = cols;
+    this.rows = lines;
   }
 }

@@ -190,6 +190,7 @@ public class TestRestServer
                       .build();
   }
 
+  @SuppressWarnings("unchecked")
   <T> T callService(HttpRequest req, int expectedCode, Class<T> responseClass)
     throws IOException, InterruptedException
   {

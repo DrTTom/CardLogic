@@ -44,8 +44,6 @@ public class FreeText extends AttributeInterpreter
   @Override
   public Question getQuestion(DescribedObject object)
   {
-    TextQuestion result = createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group));
-    result.setFormat(lines, len);
-    return result;
+    return createQuestion(object, (text, group) -> new TextQuestion(getName(), text, group, len, lines));
   }
 }

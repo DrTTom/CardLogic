@@ -173,6 +173,19 @@ class TextInput extends InputElement {
     // everything default
 }
 
+/**
+ * A text input.
+ */
+class BigTextInput extends InputElement {
+    createInputElement(id) {
+        return buildNode('textarea').id(id).get();
+    }
+	loadInput(data) {
+        super.loadInput(data);
+        this.input().setAttribute('rows', data.rows);
+    }
+}
+
 
 /**
  * Select element supporting only text.
@@ -335,6 +348,60 @@ class SearchView extends MyCustomElement {
     }
 }
 
+class DefaultTile extends MyCustomElement {
+	createContent(refId) {
+		let div = buildChildNode(this, 'div').class('c-frame').get();
+		buildChildNode(div, 'div').class('c-header').id(refId + "_header");
+		buildChildNode(div, 'div').class('c-body').id(refId + "_content");
+	}
+	load(data) {
+		const idPrefix = '#' + this.getRefId();
+		let header = $(idPrefix + '_header');
+		header.innerHTML = data.attributes.name;
+		header.title = data.primKey;
+		this.fillContent($(idPrefix + '_content'), data);
+		$('div', this).onclick = () => this.showFull(data.type, data.primKey);
+	}
+	fillContent(node, data) {
+		node.innerHTML = JSON.stringify(data.attributes);
+	}
+	showFull(type, key) {
+		getJson('collected/' + type + '/key/' + key, data => {
+			let fullView = supportedFullViews[type] ? supportedFullViews[type].apply(): new FullView();
+			$('modal-dialog').show(key + '. ' + data.attributes.name, fullView);
+			fullView.load(data, this.fillContent);
+		});
+	}
+}
+
+class SimpleTile extends DefaultTile {
+	createContent(refId) {
+		super.createContent(refId);
+		$('div', this).classList.add('c-small');
+	}
+}
+
+class FullView extends MyCustomElement {
+	createContent(refId) {
+		buildChildNode(this, 'div').id(refId+"_content").get();
+		buildChildNode(this, 'div').class('button').text('Löschen').id(refId+"_delete");
+		buildChildNode(this, 'div').class('button').text('In Eingabe übernehmen').id(refId+"_edit");		
+		}
+		
+		/**
+		 * may pass fillContent method from another class in case full view and tile have identic content. 
+		 */		
+		load(data, defaultFillContent)
+		{
+			const idPrefix = '#' + this.getRefId()+'_';
+			let actualFillContent=this.fillContent  ? this.fillContent: defaultFillContent;
+			actualFillContent($(idPrefix+'content'), data);
+			$(idPrefix + 'edit').onclick = ()=> { $('search-view').setObjectToEdit(data);
+			$('modal-dialog').hide(); };
+			$(idPrefix + 'delete').onclick = ()=> alert('Löschen kommt erst, wenn Create/Update fertig sind');
+		}
+}
+
 let i18nData = {};
 
 function registerI18n(param, mapping) {
@@ -369,8 +436,13 @@ function sortChildren(pathToContentContainer, pathToSortableValue, reverse) {
  */
 const supportedTiles = {};
 
+/**
+ * same for full view components, ommit registration to use tile as full view.
+ */
+let supportedFullViews = {};
 const elements = window.customElements ? window.customElements : customElements;
 elements.define("text-input", TextInput);
+elements.define("bigtext-input", BigTextInput);
 elements.define("text-choice", TextChoice);
 elements.define("object-choice", ObjectChoice);
 elements.define("image-choice", ImageChoice);
@@ -378,3 +450,7 @@ elements.define("search-view", SearchView);
 elements.define("modal-dialog", Dialog);
 elements.define("vertical-accordion", VerticalAccordion);
 elements.define("tab-row", TabRow);
+elements.define("simple-tile", SimpleTile);
+elements.define("default-tile", DefaultTile);
+elements.define("default-full", FullView);
+

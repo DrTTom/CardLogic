@@ -148,9 +148,30 @@ body {
     margin-bottom: 10px;
 }
 
+.image-wide {
+    max-width: 380px;
+    max-height: 150px;
+}
+
 .image-small {
     max-width: 120px;
     max-height: 120px;
+    float: right;
+    vertical-align: top;
+    margin-bottom: 10px;
+}
+
+.image-tiny {
+    max-width: 80px;
+    max-height: 80px;
+    float: right;
+    vertical-align: top;
+    margin-bottom: 10px;
+}
+
+.image-big {
+    max-width: 300px;
+    max-height: 300px;
     float: right;
     vertical-align: top;
     margin-bottom: 10px;
@@ -180,6 +201,10 @@ body {
 h4 {
     margin-top: 3px;
     margin-bottom: 10px;
+}
+
+.dialog-big {
+	width: 600px;
 }
 
 .modal-overlay {
