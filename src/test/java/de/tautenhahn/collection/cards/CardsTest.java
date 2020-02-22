@@ -49,6 +49,7 @@ public class CardsTest
 {
 
   private static final Random MEASURE_SOURCE = new Random();
+
   public static final String PATTERN = "pattern";
 
   private static DescribedObjectInterpreter deck;
@@ -87,7 +88,6 @@ public class CardsTest
 
   /**
    * Assert that {@link TypeBasedEnumeration} can provide allowed values and translations.
-   *
    */
   @Test
   public void typeBaseEnum()
@@ -101,7 +101,6 @@ public class CardsTest
   /**
    * Assert that {@link TypeBasedEnumWithForeignKey} provides allowed values in accordance with the respective
    * context.
-   *
    */
   @Test
   public void foreignKey()
@@ -123,23 +122,21 @@ public class CardsTest
 
   /**
    * Assert that maker sign choice is update with maker.
-   *
    */
   @Test
   public void imageChoice()
   {
     TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter("makerSign");
     DescribedObject myDeck = new DescribedObject("deck", "1");
-    assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(36);
+    assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(37);
     myDeck.getAttributes().put("maker", "AS");
-    assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(6);
+    assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(7);
     // TODO: check that question describes images
   }
 
   /**
    * Asserts that search process filters results, adapts option values and reports errors. Note that error
    * reporting is for information only, process still works even if search criteria contain errors.
-   *
    */
   @Test
   public void search()
@@ -246,7 +243,8 @@ public class CardsTest
     {
       RestServer.getInstance().start();
       Spark.awaitInitialization();
-      try (InputStream ins = (InputStream)new URL("http://localhost:4567/collected/maker/search").getContent())
+      try (
+        InputStream ins = (InputStream)new URL("http://localhost:4567/collected/maker/search").getContent())
       {
         assertThat(ins.available()).isGreaterThan(255);
       }

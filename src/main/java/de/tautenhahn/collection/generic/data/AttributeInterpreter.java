@@ -199,6 +199,11 @@ public abstract class AttributeInterpreter
     /**
      * value can be exactly determined by given object, i.e. equal objects have always same value
      */
-    EXACT
+    EXACT,
+
+    /**
+     * For an enum value, explicitly stating "none" is allowed like in "No price tag".
+     */
+    SUPPORTS_NONE
   }
 }

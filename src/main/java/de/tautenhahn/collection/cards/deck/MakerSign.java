@@ -2,6 +2,7 @@ package de.tautenhahn.collection.cards.deck;
 
 import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 
+
 /**
  * Defines the makers logo on the playing cards.
  *
@@ -10,12 +11,12 @@ import de.tautenhahn.collection.generic.data.TypeBasedEnumWithForeignKey;
 public class MakerSign extends TypeBasedEnumWithForeignKey
 {
 
-    /**
-     * Creates immutable instance.
-     */
-    public MakerSign()
-    {
-        super("makerSign", "maker", 50, Flag.OPTIONAL, Flag.EXACT);
-        enableImage("auto", "90");
-    }
+  /**
+   * Creates immutable instance.
+   */
+  public MakerSign()
+  {
+    super("makerSign", "maker", 50, Flag.OPTIONAL, Flag.EXACT, Flag.SUPPORTS_NONE);
+    enableImage("auto", "90");
+  }
 }
