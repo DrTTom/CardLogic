@@ -43,3 +43,13 @@ _Fazit:_
   alles rein mit CSS zu machen ist, lohnt die Beschäftigung.
 
 Außerdem hat sich in diesem Zusammenhang die Webseite https://jsfiddle.net/ als recht nützlich erwiesen. Dort kann man das Zusamenspiel von CSS, HTML und JS-Schnipselns schnell und einfach ausprobieren.
+
+Custom Components
+=================
+
+Ermöglichen eine einfache, übersichtliche Implementierung der Oberfläche bei Minimierung der Nutzung notwendiger Fremdbibliotheken.
+Für die aktuelle Anwendung ist der Verzicht auf VueJS ein erheblicher Gewinn. 
+
+Achtung: Custom Components sind zwar Klassen, aber die Instanzen sind keine Objekte wie in Java, sondern 
+lediglich Sichten auf das DOM-Element. Attribute müssen also zwingend im DOM abgelegt werden, da das JS-Objekt 
+ggf. aus dem DOM-Element rekonstruiert wird.  

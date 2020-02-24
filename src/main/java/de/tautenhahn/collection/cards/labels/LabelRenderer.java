@@ -11,7 +11,18 @@ import java.util.List;
  */
 public interface LabelRenderer
 {
-
+  /**
+   * Writes the given labels into the target stream.
+   * @param labels
+   * @param target
+   * @throws Exception
+   */
   void render(List<Label> labels, OutputStream target) throws Exception;
+
+  /**
+   *
+   * @return media type used in output
+   */
+  String getMediaType();
 }
 

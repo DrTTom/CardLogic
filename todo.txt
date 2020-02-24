@@ -1,25 +1,9 @@
-1. Get rid of boilerplate code
-2. Define new REST paths
-3. Write new tests for that paths
-4. Get rid of checked in 3rd party JS libraries
-5. Re-write frontend using custom components
-
-
-Old stuff:
-2. refactor search and submission processes to execute search in
-   case submission  is not successful
-4. add search to support free text fields
-5. integrate image upload 
-6. Refactore frontend processes - re-design user stories
-7. Create tags for printing
-8. Format aux images -> remove margins
-9. add function for integrity check of data
-10. Integrate import/export
-11. Allow merging imports
-
-
-Erledigt? 
-
-- Format and specialmeasure fields shorter
-- frühestens/spätestens in einer Zeile
-- Auswahl mit Option "keine Angabe"
+1. add search to support free text fields
+2. implement image upload
+3. make import/export/labels available from client
+4. implement image-choice component
+5. implement object-based fancy tool tips
+6. Format aux images -> remove margins
+7. add function for integrity check of data
+8. Allow merging imports
+9. Fix media type and file extension for existing images
