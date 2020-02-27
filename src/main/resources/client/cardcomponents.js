@@ -7,7 +7,8 @@ class CardMaker extends DefaultTile {
 	}
 
 	fillContent(node, data) {
-		buildChildNode(node, 'div').get().innerHTML = data.attributes.place;
+		BuildNode.div().in(node).text(data.attributes.place);
+		//buildChildNode(node, 'div').get().innerHTML = data.attributes.place;
 		buildChildNode(node, 'div').get().innerHTML = data.attributes.from + ' - ' + data.attributes.to;
 		buildChildNode(node, 'p').class('scroll5lines').get().innerHTML = data.attributes.remark;
 	}
