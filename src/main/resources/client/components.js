@@ -189,13 +189,10 @@ class BigTextInput extends InputElement {
 
 class FileInput extends InputElement {
     createInputElement(id) {
-        let form = buildNode('form').attribute('action', '/file/sandbox').attribute('method', 'POST').attribute('enctype', 'multipart/form-data').get();
+        let form = buildNode('form').attribute('enctype', 'multipart/form-data').get();
         buildChildNode(form, 'input').type('text').attribute('disabled', 'true').id(id);
         buildChildNode(form, 'input').attribute('name', 'file').type('file');
-        buildChildNode(form, 'label').class('button').text('Hochladen').get().onclick= ()=> {
-            let formData= new FormData(form);
-            fetch(form.getAttribute('action'), {method: 'POST', body: formData }).then((response) => alert(response));
-        };
+        buildChildNode(form, 'label').class('button').text('Hochladen');
         return form;
     }
 
@@ -203,7 +200,14 @@ class FileInput extends InputElement {
         this.input().value = data.value;
         let form = $('form', this);
         form.title = data.helptext;
-        form.setAttribute('action', '/file/' + data.paramName + '?'+data.proposedKey);
+        let uploadPath= '/file/' + data.contextType + '?primKey='+data.contextKey;
+        $('[type=file]', this).onchange = () => {
+            $('[class=button]', this).onclick = () => {
+                fetch(uploadPath, {method: 'POST', body: new FormData(form)})
+                    .then(response => response.text())
+                    .then(text=> $('[type=text]', this).value=text);
+            };
+        }
     }
 }
 
@@ -217,7 +221,7 @@ class TextChoice extends InputElement {
 
     loadInput(data) {
         const select = this.input();
-        Object.entries(data.options).forEach(e => buildChildNode(select, 'option').attribute('value', e[0]).get().innerHTML = e[1]);
+        Object.entries(data.options).forEach(e => buildChildNode(select, 'option').attribute('value', e[0]).text(e[1]));
         select.value = data.value;
         select.title = data.helptext;
     }
@@ -226,20 +230,15 @@ class TextChoice extends InputElement {
 /**
  * Select element providing additional info about selected element.
  */
-class ObjectChoice extends InputElement {
+class ObjectChoice extends TextChoice {
     createInputElement(id) {
         let span = buildNode('span').class("flex-row").get();
         buildChildNode(span, 'select').class("flex-grows").id(id);
-        buildChildNode(span, 'div').id(this.getRefId() + '_more').class('button').get().innerHTML = '?';
+        buildChildNode(span, 'div').id(this.getRefId() + '_more').class('button').text('...');
         return span;
     }
 
-    loadInput(data) {
-        const select = this.input();
-        Object.entries(data.options).forEach(e => buildChildNode(select, 'option').attribute('value', e[0]).get().innerHTML = e[1]);
-        select.value = data.value;
-        select.title = data.helptext;
-    }
+    // TODO: add action to ... when loading
 }
 
 class ImageChoice extends ObjectChoice {
@@ -306,7 +305,7 @@ class SearchView extends MyCustomElement {
         $$('vertical-accordion', targetNode).forEach(a => {
                 if (a.isExpanded()) {
                     a.expand();
-                };
+                }
             }
         );
     }
@@ -442,7 +441,7 @@ function i18n(param, key) {
  */
 function sortChildren(pathToContentContainer, pathToSortableValue, reverse) {
     const container = $(pathToContentContainer);
-    var items = Array.prototype.slice.call(container.children);
+    let items = Array.prototype.slice.call(container.children);
     items.sort((a, b) => $(pathToSortableValue, a).innerHTML.localeCompare($(pathToSortableValue, b).innerHTML));
     if (reverse === true) {
         items.reverse();

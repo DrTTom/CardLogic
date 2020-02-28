@@ -75,7 +75,7 @@ public abstract class AttributeInterpreter
 
   /**
    * Returns true if value should be added to a search index, thus enabling free text search. Otherwise, the
-   * attribute is searchable via its {@link #computeCorrellation(String, String, DescribedObject)} method.
+   * attribute is searchable via its {@link #computeCorrelation(String, String, DescribedObject)} method.
    */
   public boolean isSearchable()
   {
@@ -102,31 +102,31 @@ public abstract class AttributeInterpreter
   public abstract String check(String value, DescribedObject context);
 
   /**
-   * Returns a value indicating whether two values could be for the same object.
+   * Returns a value indicating whether two values could be for the same object. See {@link Similarity} for sensible values.
    *
-   * @param thisValue
-   * @param otherValue
+   * @param thisValue one value to compare
+   * @param otherValue one value to compare
    * @param context other attributes may influence interpretation of this attributes value
    */
-  public final Similarity computeCorrellation(String thisValue, String otherValue, DescribedObject context)
+  public final Similarity computeCorrelation(String thisValue, String otherValue, DescribedObject context)
   {
     if (otherValue == null || thisValue == null)
     {
       return Similarity.NO_STATEMENT;
     }
-    return correllateValue(thisValue, otherValue, context);
+    return correlateValue(thisValue, otherValue, context);
   }
 
   /**
-   * Same as {@link #computeCorrellation(String, String, DescribedObject)} but never called with null
+   * Same as {@link #computeCorrelation(String, String, DescribedObject)} but never called with null
    * arguments.
    */
-  protected abstract Similarity correllateValue(String thisValue, String otherValue, DescribedObject context);
+  protected abstract Similarity correlateValue(String thisValue, String otherValue, DescribedObject context);
 
   /**
    * Returns the question for that attribute already knowing something about the object asked for.
    *
-   * @param object
+   * @param object already known values
    */
   public abstract Question getQuestion(DescribedObject object);
 
@@ -168,18 +168,6 @@ public abstract class AttributeInterpreter
   public String toDisplayValue(String internalValue)
   {
     return internalValue == null ? "" : internalValue;
-  }
-
-  /**
-   * Inverse of {@link #toDisplayValue(String)}
-   *
-   * @param displayValue value in font end
-   * @deprecated Always work with real values, display values are only for displaying
-   */
-  @Deprecated
-  public String toInternalValue(String displayValue)
-  {
-    return dropEmptyString(displayValue);
   }
 
   /**

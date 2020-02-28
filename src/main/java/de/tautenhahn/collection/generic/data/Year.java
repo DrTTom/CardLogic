@@ -28,8 +28,8 @@ public class Year extends AttributeInterpreter
   /**
    * Creates new instance.
    *
-   * @param name
-   * @param flags
+   * @param name parameter name
+   * @param flags further options for that property
    */
   public Year(String name, Flag... flags)
   {
@@ -56,7 +56,7 @@ public class Year extends AttributeInterpreter
   }
 
   @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject content)
+  protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject content)
   {
     return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
   }

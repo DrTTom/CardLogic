@@ -28,17 +28,19 @@ public class NumberIndex extends FreeText
     return value.matches("[1-9][0-9]*(/[1-9][0-9]*)*") ? null : "msg.error.invalidValue";
   }
 
-  @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
-  {
-    return thisValue.equals(otherValue) ? Similarity.SIMILAR
-      : (thisValue.endsWith(otherValue) || otherValue.endsWith(thisValue)) ? Similarity.HINT
-        : Similarity.DIFFERENT;
-  }
+    @Override
+    protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
+    {
+        return thisValue.equals(otherValue) ? Similarity.SIMILAR
+                                            : (thisValue.endsWith(otherValue) || otherValue.endsWith(thisValue))
+                                              ? Similarity.HINT : Similarity.DIFFERENT;
+    }
 
-  @Override
-  public Question getQuestion(DescribedObject object)
-  {
-    return super.getQuestion(object).alignWithPrevious();
-  }
+    @Override
+    public Question getQuestion(DescribedObject object)
+    {
+        Question result = super.getQuestion(object);
+        result.setAlignWithPrevious(true);
+        return result;
+    }
 }

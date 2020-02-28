@@ -175,7 +175,6 @@ public class RestServer
       log.error("Exception occurred, causing HTTP 500", e);
       response.status(500);
       return "Internal server error";
-
     }
   }
 
@@ -187,11 +186,21 @@ public class RestServer
 
   private Object download(Request request, Response response) throws IOException
   {
-
     String ref = splatParam(request);
     try (InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
     {
-      return doDownload(src, response, ref);
+      String type = "application/octet-stream";
+      if (ref.toLowerCase(Locale.ENGLISH).endsWith(".jpg"))
+      {
+        type = "image/jpeg";
+      }
+      response.header("Content-Type", type);
+      response.header("Content-Disposition", "attachment");
+      try (OutputStream dest = response.raw().getOutputStream())
+      {
+        src.transferTo(dest);
+        return null;
+      }
     }
   }
 
@@ -200,22 +209,6 @@ public class RestServer
     StringBuffer refb = new StringBuffer();
     Arrays.asList(request.splat()).forEach(s -> refb.append("/").append(s));
     return refb.length() == 0 ? "" : refb.substring(1);
-  }
-
-  private Object doDownload(InputStream src, Response response, String ref) throws IOException
-  {
-    String type = "application/octet-stream";
-    if (ref.toLowerCase(Locale.ENGLISH).endsWith(".jpg"))
-    {
-      type = "image/jpeg";
-    }
-    response.header("Content-Type", type);
-    response.header("Content-Disposition", "attachment");
-    try (OutputStream dest = response.raw().getOutputStream())
-    {
-      src.transferTo(dest);
-      return null;
-    }
   }
 
   /**

@@ -28,7 +28,7 @@ public class NumberCards extends FreeText
   }
 
   @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if ("110".equals(thisValue) && "55".equals(otherValue) || thisValue.equals(otherValue))
     {

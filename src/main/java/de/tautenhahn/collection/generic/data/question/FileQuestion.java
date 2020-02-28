@@ -1,5 +1,8 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Question asking for upload of some binary content
  *
@@ -7,55 +10,34 @@ package de.tautenhahn.collection.generic.data.question;
  */
 public class FileQuestion extends Question
 {
+    @Getter
+    @Setter
+    private String accept;
 
-  private String accept;
+    /**
+     * Actual or estimated value of the primary key of the surrounding
+     * {@link de.tautenhahn.collection.generic.data.DescribedObject}.
+     * The client may submit that information when uploading a file so the storage can create a reference with a
+     * "speaking" name.
+     */
+    @Getter
+    @Setter
+    private String contextKey;
 
-  private String proposedRef;
+    @Getter
+    @Setter
+    private String contextType;
 
-  /**
-   * Creates instance.
-   *
-   * @param paramName
-   * @param text
-   * @param form
-   */
-  public FileQuestion(String paramName, String text, String form)
-  {
-    super("file-upload", paramName, text, form);
-  }
 
-  /**
-   * Returns proposed value of the accept attribute.
-   */
-  public String getAccept()
-  {
-    return accept;
-  }
-
-  /**
-   * Specifies filtered file extensions
-   *
-   * @param accept for instance ".jpg,.gif"
-   */
-  public void setAccept(String accept)
-  {
-    this.accept = accept;
-  }
-
-  /**
-   * Returns the reference to use for uploading some new content. It is only a proposal, the front end may
-   * choose another reference and write it into the answer.
-   */
-  public String getProposedRef()
-  {
-    return proposedRef;
-  }
-
-  /**
-   * @see #getProposedRef()
-   */
-  public void setProposedRef(String proposedRef)
-  {
-    this.proposedRef = proposedRef;
-  }
+    /**
+     * Creates instance.
+     *
+     * @param paramName
+     * @param text
+     * @param form
+     */
+    public FileQuestion(String paramName, String text, String form)
+    {
+        super("file-upload", paramName, text, form);
+    }
 }

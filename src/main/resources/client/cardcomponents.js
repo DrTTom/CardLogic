@@ -7,10 +7,10 @@ class CardMaker extends DefaultTile {
 	}
 
 	fillContent(node, data) {
-		BuildNode.div().in(node).text(data.attributes.place);
-		//buildChildNode(node, 'div').get().innerHTML = data.attributes.place;
-		buildChildNode(node, 'div').get().innerHTML = data.attributes.from + ' - ' + data.attributes.to;
-		buildChildNode(node, 'p').class('scroll5lines').get().innerHTML = data.attributes.remark;
+		const attrs=data.attributes;
+		BuildNode.div().in(node).text(attrs.place);
+		BuildNode.div().in(node).text(attrs.from + ' - ' + attrs.to);
+		BuildNode.tag('p').in(node).class('scroll5lines').text(attrs.remark);
 	}
 }
 
@@ -24,14 +24,14 @@ class DeckSmall extends DefaultTile {
 		buildChildNode(node, 'div').get().innerHTML = i18n('maker', data.attributes.maker);
 		buildChildNode(node, 'div').get().innerHTML = DeckSmall.timeString(data.attributes);
 		let text = data.attributes.remark ? data.attributes.remark : i18n('pattern', data.attributes.pattern);
-		buildChildNode(node, 'p').class('scroll2lines').get().innerHTML = text;
+		buildChildNode(node, 'p').class('scroll2lines').text(text);
 	}
 
 	static timeString(attrs) {
 		let to = attrs.printedLatest;
 		let from = attrs.printedEarliest;
 		if (to) {
-			return to == from ? to : (from ? 'zwischen ' + from + ' und ' : 'spätestens ') + to;
+			return to === from ? to : (from ? 'zwischen ' + from + ' und ' : 'spätestens ') + to;
 		}
 		return from ? 'frühestens ' + from : 'keine Zeitangabe';
 	}
@@ -60,7 +60,7 @@ class DeckBig extends DefaultTile {
 	}
 	fillContent(node, data) {
 		buildChildNode(node, 'img').class('image-default').attribute('src', '/download/' + data.attributes.image);
-		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker))
+		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker));
 		buildChildNode(node, 'div').text(DeckSmall.timeString(data.attributes));
 		buildChildNode(node, 'div').class('separated').text(data.attributes.numberCards + ' Blatt, ' + data.attributes.format);
 		let text = 'erworben '+data.attributes.bought+', '+i18n('condition', data.attributes.condition);
@@ -72,10 +72,10 @@ class DeckBig extends DefaultTile {
 
 class FullDeck extends FullView {
 	fillContent(node, data) {
-		node.classList.add('dialog-big')
+		node.classList.add('dialog-big');
 		let values = data.attributes;
 		buildChildNode(node, 'img').attribute("class", "image-big").attribute('src', '/download/' + values.image);
-		buildChildNode(node, 'div').text(i18n('maker', values.maker))
+		buildChildNode(node, 'div').text(i18n('maker', values.maker));
 		buildChildNode(node, 'div').text(DeckSmall.timeString(values));
 		buildChildNode(node, 'div').class('separated').text(values.numberCards + ' Blatt, ' + values.format);
 		buildChildNode(node, 'div').text('Auge des Königs bei '+values.specialMeasure);
@@ -99,7 +99,7 @@ class MakerSign extends DefaultTile {
 	}
 	fillContent(node, data) {
 		buildChildNode(node, 'img').class('image-tiny').attribute('src', '/download/' + data.attributes.image);
-		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker))
+		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker));
 		buildChildNode(node, 'div').class('clear separated').text(data.attributes.usedFrom +' bis '+ data.attributes.usedTo);			
 	}
 }

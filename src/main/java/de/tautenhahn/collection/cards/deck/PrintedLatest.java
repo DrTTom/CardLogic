@@ -28,6 +28,8 @@ public class PrintedLatest extends Year
   @Override
   public Question getQuestion(DescribedObject object)
   {
-    return super.getQuestion(object).alignWithPrevious();
+    Question result = super.getQuestion(object);
+    result.setAlignWithPrevious(true);
+    return result;
   }
 }

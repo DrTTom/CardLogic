@@ -28,7 +28,7 @@ public class SpecialMeasure extends FreeText
   }
 
   @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {

@@ -151,7 +151,7 @@ public class WorkspacePersistence implements Persistence
   /**
    * Returns a path for a new binary resource, makes sure no directory becomes too full.
    *
-   * @throws IOException
+   * @throws IOException in case of problems with the files
    */
   @Override
   public String createNewBinRef(String parentsPrimKey, String parentsType, String fileExtension)
@@ -256,8 +256,8 @@ public class WorkspacePersistence implements Persistence
   /**
    * Writes filtered contents as ZIP into given output stream.
    *
-   * @param binRefs
-   * @param outs
+   * @param binRefs names of all attributes pointing to files for each stored type
+   * @param outs target stream
    * @throws IOException
    */
   public void exportZip(Map<String, Collection<String>> binRefs, OutputStream outs) throws IOException
@@ -279,8 +279,8 @@ public class WorkspacePersistence implements Persistence
   /**
    * Imports contents of given ZIP file, avoids security problems.
    *
-   * @param ins
-   * @throws IOException
+   * @param ins source stream
+   * @throws IOException in case of streaming problems
    */
   public void importZip(InputStream ins) throws IOException
   {

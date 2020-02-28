@@ -45,7 +45,7 @@ public abstract class Enumeration extends AttributeInterpreter
   public abstract List<String> getAllowedValues(DescribedObject context);
 
   @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
   {
     if (thisValue.equals(otherValue))
     {
@@ -58,12 +58,6 @@ public abstract class Enumeration extends AttributeInterpreter
   public String toDisplayValue(String internalValue)
   {
     return internalValue == null ? NULL_PLACEHOLDER : internalValue;
-  }
-
-  @Override
-  public String toInternalValue(String displayValue)
-  {
-    return NULL_PLACEHOLDER.equals(displayValue) ? null : displayValue;
   }
 
   /**

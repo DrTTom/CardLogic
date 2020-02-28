@@ -1,13 +1,11 @@
 package de.tautenhahn.collection.generic.data;
 
-import java.io.IOException;
-import java.util.Optional;
-
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.FileQuestion;
 import de.tautenhahn.collection.generic.data.question.Question;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
 
 /**
  * Basic image illustrating the object.
@@ -35,29 +33,23 @@ public class ImageRef extends AttributeInterpreter
       : "msg.error" + ".missingReferenceImage";
   }
 
-  @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
-  {
-    return Similarity.NO_STATEMENT; // TODO: could incorporate image recognition if too much computing power
-    // is available and images are strictly defined
-  }
+    @Override
+    protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
+    {
+        return Similarity.NO_STATEMENT;
+        // TODO: could incorporate image recognition images are strictly defined
+    }
 
-  @Override
-  public Question getQuestion(DescribedObject object)
-  {
-    FileQuestion result = createQuestion(object, (text, form) -> new FileQuestion(getName(), text, form));
-    result.setAccept(".jpg,.gif,.png,.tiff");
-    ApplicationContext ctx = ApplicationContext.getInstance();
-    String primkey = Optional.ofNullable(object.getPrimKey())
-                             .orElse(ctx.getInterpreter(object.getType()).proposeNewPrimKey(object));
-    try
+    @Override
+    public Question getQuestion(DescribedObject object)
     {
-      result.setProposedRef(ctx.getPersistence().createNewBinRef(primkey, object.getType(), ""));
+        FileQuestion result = createQuestion(object, (text, form) -> new FileQuestion(getName(), text, form));
+        result.setAccept(".jpg,.gif,.png,.tiff");
+        ApplicationContext ctx = ApplicationContext.getInstance();
+        result.setContextKey(Optional
+            .ofNullable(object.getPrimKey())
+            .orElse(ctx.getInterpreter(object.getType()).proposeNewPrimKey(object)));
+        result.setContextType(object.getType());
+        return result;
     }
-    catch (IOException e)
-    {
-      log.error("", e);
-    }
-    return result;
-  }
 }

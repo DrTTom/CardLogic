@@ -56,6 +56,8 @@ class BuildNode {
 	get() {
 		return this.element;
 	}
+
+	id(value) { return this.attribute('id', value); }
 	
 }
 /**

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -65,7 +66,7 @@ public abstract class DescribedObjectInterpreter
     for ( String name : getSupportedAttributes() )
     {
       AttributeInterpreter interpreter = getAttributeInterpreter(name);
-      result = result.add(interpreter.computeCorrellation(searchMask.getAttributes().get(name),
+      result = result.add(interpreter.computeCorrelation(searchMask.getAttributes().get(name),
                                                           candidate.getAttributes().get(name),
                                                           searchMask));
     }
@@ -133,27 +134,20 @@ public abstract class DescribedObjectInterpreter
             .collect(Collectors.joining(""));
     }
 
-  /**
-   * Creates an object with given values.
-   *
-   * @param primKey
-   * @param parameters contains translations for some technical key values
-   */
-  public DescribedObject createObject(String primKey, Map<String, String> parameters)
-  {
-    Map<String, String> attribs = new HashMap<>();
-
-    for ( String key : getSupportedAttributes() )
+    /**
+     * Creates an object with given values.
+     *
+     * @param primKey
+     * @param parameters contains translations for some technical key values
+     */
+    public DescribedObject createObject(String primKey, Map<String, String> parameters)
     {
-      String value = parameters.get(key);
-      if (value == null || value.chars().allMatch(Character::isWhitespace) || JS_NULL.equals(value))
-      {
-        continue;
-      }
-      AttributeInterpreter ai = getAttributeInterpreter(key);
-      Optional.ofNullable(ai.toInternalValue(value)).ifPresent(v -> attribs.put(key, v));
-    }
+        Map<String, String> attribs = new HashMap<>(parameters);
+        Predicate<Map.Entry<String, String>> valueMissing =
+            e -> e.getValue() == null || e.getValue().chars().allMatch(Character::isWhitespace) || JS_NULL.equals(
+                e.getValue());
+        attribs.entrySet().removeIf(valueMissing);
 
-    return new DescribedObject(type, primKey, attribs);
-  }
+        return new DescribedObject(type, primKey, attribs);
+    }
 }

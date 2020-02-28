@@ -22,7 +22,7 @@ public class Index extends FreeText
   }
 
   @Override
-  protected Similarity correllateValue(String a, String b, DescribedObject context)
+  protected Similarity correlateValue(String a, String b, DescribedObject context)
   {
     if (a.equals(b))
     {

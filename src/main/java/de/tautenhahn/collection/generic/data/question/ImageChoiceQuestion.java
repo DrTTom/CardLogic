@@ -1,5 +1,7 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.Getter;
+
 import java.util.Map;
 
 
@@ -13,9 +15,9 @@ public class ImageChoiceQuestion extends ObjectChoiceQuestion
 {
 
   private Map<String, String> urls;
-
+  @Getter
   private String width;
-
+  @Getter
   private String height;
 
   /**
@@ -46,22 +48,6 @@ public class ImageChoiceQuestion extends ObjectChoiceQuestion
   public void setUrls(Map<String, String> urls)
   {
     this.urls = urls;
-  }
-
-  /**
-   * Returns width to display images with.
-   */
-  public String getWidth()
-  {
-    return width;
-  }
-
-  /**
-   * Returns height to display images with.
-   */
-  public String getHeight()
-  {
-    return height;
   }
 
   /**

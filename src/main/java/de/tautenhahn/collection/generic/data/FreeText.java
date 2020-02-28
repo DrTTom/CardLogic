@@ -19,8 +19,8 @@ public class FreeText extends AttributeInterpreter
   /**
    * Creates new instance
    *
-   * @param name
-   * @param flags
+   * @param name property name
+   * @param flags specify how to handle that property
    */
   public FreeText(String name, int len, int lines, Flag... flags)
   {
@@ -36,7 +36,7 @@ public class FreeText extends AttributeInterpreter
   }
 
   @Override
-  protected Similarity correllateValue(String thisValue, String otherValue, DescribedObject context)
+  protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
   {
     return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
   }
