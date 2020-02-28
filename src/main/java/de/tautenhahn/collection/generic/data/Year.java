@@ -122,7 +122,7 @@ public class Year extends AttributeInterpreter
 
     int value;
 
-    public ReferencedValue(String[] path)
+    ReferencedValue(String ... path)
     {
       this.path = path;
     }

@@ -149,6 +149,7 @@ class InputElement extends MyCustomElement {
         if (data.problem) {
             $('#' + this.getRefId() + '_msg', this).innerText = data.problem;
         }
+        // TODO: eins davon raus!
         this.setAttribute('data-key', data.paramName);
     }
 
@@ -186,6 +187,25 @@ class BigTextInput extends InputElement {
     }
 }
 
+class FileInput extends InputElement {
+    createInputElement(id) {
+        let form = buildNode('form').attribute('action', '/file/sandbox').attribute('method', 'POST').attribute('enctype', 'multipart/form-data').get();
+        buildChildNode(form, 'input').type('text').attribute('disabled', 'true').id(id);
+        buildChildNode(form, 'input').attribute('name', 'file').type('file');
+        buildChildNode(form, 'label').class('button').text('Hochladen').get().onclick= ()=> {
+            let formData= new FormData(form);
+            fetch(form.getAttribute('action'), {method: 'POST', body: formData }).then((response) => alert(response));
+        };
+        return form;
+    }
+
+    loadInput(data) {
+        this.input().value = data.value;
+        let form = $('form', this);
+        form.title = data.helptext;
+        form.setAttribute('action', '/file/' + data.paramName + '?'+data.proposedKey);
+    }
+}
 
 /**
  * Select element supporting only text.
@@ -453,4 +473,4 @@ elements.define("tab-row", TabRow);
 elements.define("simple-tile", SimpleTile);
 elements.define("default-tile", DefaultTile);
 elements.define("default-full", FullView);
-
+elements.define("file-upload", FileInput);

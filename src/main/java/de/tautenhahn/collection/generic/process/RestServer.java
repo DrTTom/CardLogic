@@ -95,8 +95,8 @@ public class RestServer
     put("/collected/:type/key/:key", this::update, transformer);
     delete("/collected/:type/key/:key", this::doDelete, transformer);
 
-    get("/file/:type/:id", this::download);
-    post("/file/:type", "multipart/form-data", this::doUpload);
+    get("/file/:ref", this::download);
+    post("/file/:type", this::doUpload);
 
     post("/collection", this::importCollection);
     get("/collection", (req, resp) -> export(resp));
