@@ -317,6 +317,11 @@ class SearchView extends MyCustomElement {
     }
 
     update(data) {
+	    let primKey = this.getAttribute('currentPrimkey');
+		if(primKey)
+		{
+			data.primKey=primKey;
+		}
         let params = Object.entries(data).filter(e => e[1] !== null && e[1] !== '' && e[1] !== '(Keine Angabe)')
             .map(e => e[0] + '=' + encodeURIComponent(e[1])).join('&');
         let url = '/collected/' + this.getAttribute('type') + '/search' + (params === '' ? '' : '?' + params);
@@ -354,6 +359,7 @@ class SearchView extends MyCustomElement {
             if (r.questions) {
                 this.loadQuestions(r.questions, $('#' + this.getRefId() + '_questions', this), true);
             }
+			// TODO: set currentPrimKey!
         });
     }
 

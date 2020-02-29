@@ -75,10 +75,10 @@ public class SearchProcess implements PersistenceChangeListener
    * implementation does not require the similarity to be additive.
    *
    * @param parameters attribute values to match
-   * @param primKey
+   * @param primKey optional, if missing, some proposed value is used.
    * @param checkStrict to create problem messages for missing mandatory values
    */
-  private SearchResult execute(Map<String, String> parameters, String primKey, boolean checkStrict)
+  public SearchResult execute(Map<String, String> parameters, String primKey, boolean checkStrict)
   {
     DescribedObject searchMask = interpreter.createObject(primKey, parameters);
 

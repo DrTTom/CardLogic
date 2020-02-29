@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
  * Primitive implementation of a renderer: just output csv
  *
@@ -13,23 +14,25 @@ import java.util.stream.Collectors;
  */
 public class CsvLabelRenderer implements LabelRenderer
 {
-    @Override
-    public void render(List<Label> labels, OutputStream target) throws Exception
-    {
-        try (OutputStreamWriter writer = new OutputStreamWriter(target, StandardCharsets.UTF_8))
-        {
-            for (Label l : labels)
-            {
-                writer.write(l.getHeader().replace(",", "\\,"));
-                writer.write(',');
-                writer.write(l.lines.stream().map(line -> line.replace(",", "\\,")).collect(Collectors.joining(",")));
-            }
-        }
-    }
 
-    @Override
-    public String getMediaType()
+  @Override
+  public void render(List<Label> labels, OutputStream target) throws Exception
+  {
+    try (OutputStreamWriter writer = new OutputStreamWriter(target, StandardCharsets.UTF_8))
     {
-        return "text/comma-separated-values";
+      for ( Label l : labels )
+      {
+        writer.write("\"" + l.getHeader());
+        writer.write("\",\"");
+        writer.write(l.lines.stream().collect(Collectors.joining("\",\"")));
+        writer.write("\"\n");
+      }
     }
+  }
+
+  @Override
+  public String getMediaType()
+  {
+    return "text/comma-separated-values";
+  }
 }

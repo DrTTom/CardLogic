@@ -294,7 +294,8 @@ public class RestServer
     SearchProcess proc = ProcessFactory.getInstance().getSearch(type);
     Map<String, String> allParams = new Hashtable<>();
     req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));
-    return strictCheck ? proc.checkValues("TODO", allParams) : proc.search(allParams);
+    String primKey = allParams.remove("primKey");
+    return proc.execute(allParams, primKey, strictCheck);
   }
 
   /**

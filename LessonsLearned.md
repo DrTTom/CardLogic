@@ -15,14 +15,15 @@ und ist mit 145 KB die Jar bzw. etwas über 2MB einschließlich Jetty-Server (ge
 Es ist sorgfältig dokumentiert unter [http://sparkjava.com/documentation.html] und kommt auch mit Sonderlocken wie Dateiupload 
 klar.
 
-VUEJS und update von gebundenen Elementen
-=========================================
+Für größere Projekte ist ggf. javalin besser, jedoch für die vorliegende Anwendung bietet es keine Vorteile. 
 
-- Wenn z.B. eine Checkbox an eine Variable von Vue gebunden ist und sich die Variable ändert, erfolgt manchmal kein Update. 
-VUE triggert den Update nicht, wenn es sich bei der Variable um ein Attribut in einem Attribut handelt. Anhilfe: irgendein _direktes_ Attribut der VUE Komponente ändern 
-- Arrays als properties einer Komponente funktionieren nicht wie beschrieben. Alle Instanzen einer Vue-Komponente teilen sich das selbe Array, 
-überschreiben also ihre Werte gegenseitig.
-Benötigt man ein Array als property einer Komponente, muss man es in ein künstliches Object einpacken. 
+VUEJS 
+======
+
+- Von den vielen JS-Frameworks eher eins der kleineren und weniger invasiven. Nach inkompatiblem API-Änderungen bei Versionswechsel 
+  wurde das Framework aus der Anwendung entfernt. Der Client benötigt ohne VUE weniger Quelltextzeilen als mit bei gleicher
+  Funktionalität. 
+
 
 CSS Frameworks: z.B. Blaze CSS
 ==============================
@@ -41,6 +42,7 @@ _Fazit:_
 - Ein CSS-Framework kann niemals mit einem professionell für eine Anwendung designten CSS konkurrieren.
 - Die Dinger sind aber extrem nützlich, wenn man selbst ein CSS schreibt und kein CSS-Guru ist. Allein zu erfahren, was 
   alles rein mit CSS zu machen ist, lohnt die Beschäftigung.
+- wurde aus Anwendung entfernt.  
 
 Außerdem hat sich in diesem Zusammenhang die Webseite https://jsfiddle.net/ als recht nützlich erwiesen. Dort kann man das Zusamenspiel von CSS, HTML und JS-Schnipselns schnell und einfach ausprobieren.
 
@@ -53,3 +55,15 @@ Für die aktuelle Anwendung ist der Verzicht auf VueJS ein erheblicher Gewinn.
 Achtung: Custom Components sind zwar Klassen, aber die Instanzen sind keine Objekte wie in Java, sondern 
 lediglich Sichten auf das DOM-Element. Attribute müssen also zwingend im DOM abgelegt werden, da das JS-Objekt 
 ggf. aus dem DOM-Element rekonstruiert wird.  
+
+PDF-Erzeugung
+==============
+
+Geeignet sind verschiedene Libs, allerdings ist der programmatische Aufbau eines auch einfachen Dokuments so komplex, dass 
+die Umsetzung zu teuer wird. Für "document from scratch" ist lediglich itextpdf geiegnet, das scheidet aber aus Lizenzgründen aus.
+Anständige Druckausgaben sollten durch ein Textverbeitungssystem oder ein Textsatzsystem erzeugt werden.
+
+_Fazit:_
+
+Erzeuge keine PDFs selbst, sondern stattdessen docx. Die Vorlage kann mit LibreOffice beliebig elegant erstellt werden, die 
+Daten fügt dann EasyData ein. Vorteil ist, dass der Nutzer die Dokumente vor Druck ggf. noch bearbeiten kann.   

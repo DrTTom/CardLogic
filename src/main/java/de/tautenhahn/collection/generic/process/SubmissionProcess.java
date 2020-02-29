@@ -3,7 +3,6 @@ package de.tautenhahn.collection.generic.process;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
@@ -44,8 +43,7 @@ public class SubmissionProcess
    */
   public SubmissionResponse submit(Map<String, String> values, boolean force)
   {
-    String newKey = UUID.randomUUID().toString(); // TODO: find shorter better one
-    DescribedObject candidate = interpreter.createObject(newKey, values);
+    DescribedObject candidate = interpreter.createObject(null, values);
     return checkAndStore(candidate, !force);
   }
 

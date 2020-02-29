@@ -1,8 +1,5 @@
 package de.tautenhahn.collection.generic.data;
 
-import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.data.question.Question;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +9,10 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.Question;
+
 
 /**
  * Information about supported features of certain type of {@link DescribedObject}. Instances must be
@@ -67,8 +68,8 @@ public abstract class DescribedObjectInterpreter
     {
       AttributeInterpreter interpreter = getAttributeInterpreter(name);
       result = result.add(interpreter.computeCorrelation(searchMask.getAttributes().get(name),
-                                                          candidate.getAttributes().get(name),
-                                                          searchMask));
+                                                         candidate.getAttributes().get(name),
+                                                         searchMask));
     }
     return result;
   }
@@ -115,39 +116,40 @@ public abstract class DescribedObjectInterpreter
   /**
    * Returns a primary key value which is not used so far and suitable for given object.
    *
-   * @param candidate
+   * @param attribs
    */
-  public String proposeNewPrimKey(DescribedObject candidate)
+  public String proposeNewPrimKey(Map<String, String> attribs)
   {
-    String name = candidate.getAttributes().get(DescribedObject.NAME_KEY);
-    return Optional.ofNullable(name).map(this::abbreviate).orElseGet(()-> UUID.randomUUID().toString());
+    String name = attribs.get(DescribedObject.NAME_KEY);
+    return Optional.ofNullable(name).map(this::abbreviate).orElseGet(() -> UUID.randomUUID().toString());
   }
 
-    private String abbreviate(String s)
-    {
-        String[] parts = s.split(" ");
-        int pl = Math.max(6 / parts.length, 1);
-        return Arrays
-            .stream(parts)
-            .map(p -> p.replaceAll("\\W", "_"))
-            .map(p -> p.substring(0, Math.min(pl, p.length())))
-            .collect(Collectors.joining(""));
-    }
+  private String abbreviate(String s)
+  {
+    String[] parts = s.split(" ");
+    int pl = Math.max(6 / parts.length, 1);
+    return Arrays.stream(parts)
+                 .map(p -> p.replaceAll("\\W", "_"))
+                 .map(p -> p.substring(0, Math.min(pl, p.length())))
+                 .collect(Collectors.joining(""));
+  }
 
-    /**
-     * Creates an object with given values.
-     *
-     * @param primKey
-     * @param parameters contains translations for some technical key values
-     */
-    public DescribedObject createObject(String primKey, Map<String, String> parameters)
-    {
-        Map<String, String> attribs = new HashMap<>(parameters);
-        Predicate<Map.Entry<String, String>> valueMissing =
-            e -> e.getValue() == null || e.getValue().chars().allMatch(Character::isWhitespace) || JS_NULL.equals(
-                e.getValue());
-        attribs.entrySet().removeIf(valueMissing);
+  /**
+   * Creates an object with given values.
+   *
+   * @param primKey
+   * @param parameters contains translations for some technical key values
+   */
+  public DescribedObject createObject(String primKey, Map<String, String> parameters)
+  {
+    Map<String, String> attribs = new HashMap<>(parameters);
+    Predicate<Map.Entry<String, String>> valueMissing = e -> e.getValue() == null
+                                                             || e.getValue()
+                                                                 .chars()
+                                                                 .allMatch(Character::isWhitespace)
+                                                             || JS_NULL.equals(e.getValue());
+    attribs.entrySet().removeIf(valueMissing);
 
-        return new DescribedObject(type, primKey, attribs);
-    }
+    return new DescribedObject(type, primKey == null ? proposeNewPrimKey(attribs) : primKey, attribs);
+  }
 }
