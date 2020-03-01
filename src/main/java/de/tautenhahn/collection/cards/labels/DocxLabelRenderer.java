@@ -3,8 +3,7 @@ package de.tautenhahn.collection.cards.labels;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-
-import com.google.gson.Gson;
+import java.util.Map;
 
 import de.tautenhahn.easydata.AccessibleData;
 import de.tautenhahn.easydata.DataIntoTemplate;
@@ -22,8 +21,7 @@ public class DocxLabelRenderer implements LabelRenderer
   @Override
   public void render(List<Label> labels, OutputStream target) throws Exception
   {
-    AccessibleData data = AccessibleData.byBean(labels);
-    System.out.println(new Gson().toJson(data));
+    AccessibleData data = AccessibleData.byBean(Map.of("labels", labels));
 
     DocxAdapter adapter = new DocxAdapter(new DataIntoTemplate(data, '(', '@', ')'));
 

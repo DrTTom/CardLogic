@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import de.tautenhahn.collection.cards.labels.DocxLabelRenderer;
@@ -48,7 +47,6 @@ public class LabelCreationTest
   }
 
   @Test
-  @Disabled("template not written")
   void createLabels() throws Exception
   {
     LabelCreator creator = new LabelCreator();
