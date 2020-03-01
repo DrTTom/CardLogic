@@ -57,45 +57,7 @@ class BuildNode {
 		return this.element;
 	}
 
-	id(value) { return this.attribute('id', value); }
-	
-}
-/**
- * Returns a builder for a new node.
- * @param name tag name of new node.
- * @returns {InternalBuilder}
- */
-function buildNode(name) {
-	return new InternalBuilder(name);
-}
-
-/**
- * Returns a builder for new node which is already appended as child to parent node.
- * @param parent parent node
- * @param name tag name
- * @returns {InternalBuilder}
- */
-function buildChildNode(parent, name) {
-	let result = new InternalBuilder(name);
-	parent.appendChild(result.get());
-	return result;
-}
-
-class InternalBuilder {
-	constructor(name) {
-		this.element = document.createElement(name);
-	}
-
-	attribute(name, value) {
-		this.element.setAttribute(name, value);
-		return this;
-	}
-
-	text(value) {
-		this.element.innerText = value;
-		return this;
-	}
-
+		
 	id(value) {
 		return this.attribute('id', value);
 	}
@@ -117,7 +79,23 @@ class InternalBuilder {
 		return this.attribute('for', value);
 	}
 
-	get() {
-		return this.element;
-	}
+	
+}
+/**
+ * Returns a builder for a new node.
+ * @param name tag name of new node.
+ * @returns {InternalBuilder}
+ */
+function buildNode(name) {
+	return BuildNode.tag(name);
+}
+
+/**
+ * Returns a builder for new node which is already appended as child to parent node.
+ * @param parent parent node
+ * @param name tag name
+ * @returns {InternalBuilder}
+ */
+function buildChildNode(parent, name) {
+	return BuildNode.tag(name).in(parent);
 }

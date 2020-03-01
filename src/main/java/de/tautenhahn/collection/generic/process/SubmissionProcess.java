@@ -50,16 +50,18 @@ public class SubmissionProcess
   private SubmissionResponse checkAndStore(DescribedObject data, boolean performChecks)
   {
     List<Question> remainingQuestions = null;
+    ApplicationContext app = ApplicationContext.getInstance();
     if (performChecks)
     {
       remainingQuestions = interpreter.getQuestions(data, true);
       if (remainingQuestions.stream().map(Question::getProblem).anyMatch(Objects::nonNull))
       {
-        return new SubmissionResponse("msg.error.remainingProblems", data.getPrimKey(), remainingQuestions);
+        return new SubmissionResponse(app.getText("msg.error.remainingProblems"), data.getPrimKey(),
+                                      remainingQuestions);
       }
     }
     ApplicationContext.getInstance().getPersistence().store(data);
-    return new SubmissionResponse("msg.ok.objectStored", data.getPrimKey(), null);
+    return new SubmissionResponse(app.getText("msg.ok.objectStored"), data.getPrimKey(), null);
   }
 
   /**
