@@ -56,12 +56,12 @@ public class SubmissionProcess
       remainingQuestions = interpreter.getQuestions(data, true);
       if (remainingQuestions.stream().map(Question::getProblem).anyMatch(Objects::nonNull))
       {
-        return new SubmissionResponse(app.getText("msg.error.remainingProblems"), data.getPrimKey(),
+        return new SubmissionResponse(app.getText("msg.error.remainingProblems"), false, data.getPrimKey(),
                                       remainingQuestions);
       }
     }
     ApplicationContext.getInstance().getPersistence().store(data);
-    return new SubmissionResponse(app.getText("msg.ok.objectStored"), data.getPrimKey(), null);
+    return new SubmissionResponse(app.getText("msg.ok.objectStored"), true, data.getPrimKey(), null);
   }
 
   /**

@@ -1,8 +1,9 @@
 package de.tautenhahn.collection.generic.data.question;
 
-import lombok.Getter;
-
 import java.util.Map;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 
 /**
@@ -11,12 +12,15 @@ import java.util.Map;
  *
  * @author TT
  */
+@EqualsAndHashCode(callSuper = true)
 public class ImageChoiceQuestion extends ObjectChoiceQuestion
 {
 
   private Map<String, String> urls;
+
   @Getter
   private String width;
+
   @Getter
   private String height;
 

@@ -38,17 +38,17 @@ public class TestStorage
     String protType = "protocol";
     String urlType = "cryptoUrl";
     String https = "https";
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
+    try (WorkspacePersistence systemUnderTestRes = new WorkspacePersistence())
     {
-      systemUnderTest.init("testStoreAndFind");
+      systemUnderTestRes.init("testStoreAndFind");
       DescribedObject obj = new DescribedObject(urlType, "primary");
       obj.getAttributes().put(protType, https);
       DescribedObject prot = new DescribedObject(protType, https);
-      reference = systemUnderTest.createNewBinRef(https, protType, "bin");
+      reference = systemUnderTestRes.createNewBinRef(https, protType, "bin");
       prot.getAttributes().put("image", reference);
-      systemUnderTest.store(new ByteArrayInputStream(content), reference);
-      systemUnderTest.store(obj);
-      systemUnderTest.store(prot);
+      systemUnderTestRes.store(new ByteArrayInputStream(content), reference);
+      systemUnderTestRes.store(obj);
+      systemUnderTestRes.store(prot);
     }
 
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
@@ -56,9 +56,9 @@ public class TestStorage
       systemUnderTest.init("testStoreAndFind");
       assertThat(systemUnderTest.find(urlType, "primary").getAttributes().get(protType)).isEqualTo(https);
       assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isTrue();
-      try (InputStream ins = systemUnderTest.find(reference))
+      try (InputStream insRes = systemUnderTest.find(reference))
       {
-        assertThat(ins.available()).isEqualTo(content.length);
+        assertThat(insRes.available()).isEqualTo(content.length);
       }
       assertThat(systemUnderTest.findByRestriction(urlType, Map.of(protType, https)).count()).isEqualTo(1);
       systemUnderTest.delete(urlType, "primary");
@@ -80,8 +80,8 @@ public class TestStorage
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
       OutputStream outs = new FileOutputStream("build/exportedByTest.zip"))
     {
-      systemUnderTest.init("cards");
-      assertThat(systemUnderTest.toString()).contains("cards, loaded 5 types");
+      systemUnderTest.init("storageTest");
+      assertThat(systemUnderTest.toString()).contains("storageTest, loaded 5 types");
       assertThat(systemUnderTest.getKeyValues("deck")).hasSize(99);
       Collection<String> binAttrs = Collections.singletonList("image");
       Map<String, Collection<String>> refs = Map.of("deck",
@@ -106,7 +106,7 @@ public class TestStorage
     try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
       InputStream ins = TestStorage.class.getResourceAsStream("/example.zip"))
     {
-      systemUnderTest.init("cards");
+      systemUnderTest.init("storageTest");
       systemUnderTest.importZip(ins);
     }
   }

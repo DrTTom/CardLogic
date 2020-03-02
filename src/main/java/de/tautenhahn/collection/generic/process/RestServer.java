@@ -139,7 +139,7 @@ public class RestServer
     SubmissionResponse resp = proc.update(req.params(":key"),
                                           object,
                                           "true".equals(req.queryParams("lenient")));
-    if (resp.getMessage().contains(".error."))
+    if (!resp.isSuccess())
     {
       res.status(422);
     }
@@ -187,7 +187,7 @@ public class RestServer
   private Object download(Request request, Response response) throws IOException
   {
     String ref = splatParam(request);
-    try (InputStream src = ApplicationContext.getInstance().getPersistence().find(ref))
+    try (InputStream storedRes = ApplicationContext.getInstance().getPersistence().find(ref))
     {
       String type = "application/octet-stream";
       if (ref.toLowerCase(Locale.ENGLISH).endsWith(".jpg"))
@@ -198,7 +198,7 @@ public class RestServer
       response.header("Content-Disposition", "attachment");
       try (OutputStream dest = response.raw().getOutputStream())
       {
-        src.transferTo(dest);
+        storedRes.transferTo(dest);
         return null;
       }
     }
@@ -237,7 +237,7 @@ public class RestServer
 
     SubmissionProcess proc = new SubmissionProcess(req.params(":type"));
     SubmissionResponse resp = proc.submit(object, "true".equals(req.queryParams("lenient")));
-    if (resp.getMessage().contains(".error."))
+    if (!resp.isSuccess())
     {
       res.status(422);
     }
@@ -257,9 +257,9 @@ public class RestServer
     persistence.close();
     persistence.init(req.params("collectionName"));
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-    try (InputStream ins = req.raw().getPart("uploaded_file").getInputStream())
+    try (InputStream insRes = req.raw().getPart("uploaded_file").getInputStream())
     {
-      persistence.importZip(ins);
+      persistence.importZip(insRes);
     }
     res.status(200);
     return "OK";

@@ -1,5 +1,5 @@
 plugins {
-    // TODO: id 'com.github.spotbugs' version '2.0.0'
+    id 'com.github.spotbugs' version '2.0.0'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'io.freefair.lombok' version '4.1.6'
 }
@@ -44,8 +44,9 @@ pmd {
     ignoreFailures = true // TODO!
 }
 
-//spotbugs {
-//   effort = "max"
-//   reportLevel = "low"
-//   excludeFilter = file("findbugs-exclude.xml")
-//}
+spotbugs {
+   toolVersion = '4.0.0'
+   effort = 'max'
+   reportLevel = 'low'
+   excludeFilter = file('findbugs-exclude.xml')
+}

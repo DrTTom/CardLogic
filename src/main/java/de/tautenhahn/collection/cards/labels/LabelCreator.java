@@ -50,8 +50,11 @@ public class LabelCreator
   {
     String from = data.getAttributes().get("printedEarliest");
     String to = data.getAttributes().get("printedLatest");
-    return from == null ? (to == null ? "(keine Datierung)" : "spätestens " + to)
-      : (to == null ? "frühestens " + from : (to.equals(from) ? "gedruckt " + to : from + " - " + to));
+    if (from == null)
+    {
+      return to == null ? "(keine Datierung)" : "spätestens " + to;
+    }
+    return to == null ? "frühestens " + from : to.equals(from) ? "gedruckt " + to : from + " - " + to;
   }
 }
 

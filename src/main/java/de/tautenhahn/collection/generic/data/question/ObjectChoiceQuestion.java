@@ -1,12 +1,15 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
 
 /**
  * Question for an auxiliary object of some type.
  *
  * @author TT
  */
+@EqualsAndHashCode(callSuper = true)
 public class ObjectChoiceQuestion extends ChoiceQuestion
 {
 

@@ -94,14 +94,14 @@ public class SearchWrapper
    */
   public void addToIndex(DescribedObject... obj) throws IOException
   {
-    try (IndexWriter writer = getWriter())
+    try (IndexWriter writerRes = getWriter())
     {
       for ( DescribedObject element : obj )
       {
         Document doc = buildDocument(element);
-        writer.addDocument(doc);
+        writerRes.addDocument(doc);
       }
-      writer.commit();
+      writerRes.commit();
     }
   }
 

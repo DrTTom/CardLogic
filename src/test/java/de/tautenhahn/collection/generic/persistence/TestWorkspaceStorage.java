@@ -67,9 +67,9 @@ public class TestWorkspaceStorage
                                 .getAttributes()
                                 .get("protocol")).isEqualTo("https");
       assertThat(systemUnderTest.isReferenced("protocol", "https", "cryptoUrl")).isTrue();
-      try (InputStream ins = systemUnderTest.find(reference))
+      try (InputStream insRes = systemUnderTest.find(reference))
       {
-        assertThat(ins.available()).isEqualTo(content.length);
+        assertThat(insRes.available()).isEqualTo(content.length);
       }
       systemUnderTest.delete("cryptoUrl", "primary");
       assertThat(systemUnderTest.find("cryptoUrl", "primary")).isNull();
@@ -136,15 +136,17 @@ public class TestWorkspaceStorage
         }
         String newRef = systemUnderTest.createNewBinRef(key, type, "jpg");
         object.getAttributes().put("image", newRef);
-        try (InputStream ins = getClass().getResourceAsStream(imageRef.charAt(0) == '/' ? imageRef
+        try (InputStream insRes = getClass().getResourceAsStream(imageRef.charAt(0) == '/' ? imageRef
           : "/" + imageRef))
         {
-          if (ins == null)
+          if (insRes == null)
           {
             object.getAttributes().remove("image");
-            return;
           }
-          systemUnderTest.store(ins, newRef);
+          else
+          {
+            systemUnderTest.store(insRes, newRef);
+          }
         }
       }
     }

@@ -23,6 +23,11 @@ public class SubmissionResponse
   private String message;
 
   /**
+   * True if submission was executed
+   */
+  private boolean success;
+
+  /**
    * Primary key of created object. May be omitted in case of updating an existing one.
    */
   private String primaryKey;

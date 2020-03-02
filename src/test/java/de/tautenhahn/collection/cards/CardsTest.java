@@ -244,9 +244,9 @@ public class CardsTest
       RestServer.getInstance().start();
       Spark.awaitInitialization();
       try (
-        InputStream ins = (InputStream)new URL("http://localhost:4567/collected/maker/search").getContent())
+        InputStream insRes = (InputStream)new URL("http://localhost:4567/collected/maker/search").getContent())
       {
-        assertThat(ins.available()).isGreaterThan(255);
+        assertThat(insRes.available()).isGreaterThan(255);
       }
       assertThat(new URL("http://localhost:4567/download/deck/e0/77.jpg").getContent()).isInstanceOf(ImageProducer.class);
     }

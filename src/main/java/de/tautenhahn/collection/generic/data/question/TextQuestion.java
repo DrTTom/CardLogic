@@ -1,5 +1,6 @@
 package de.tautenhahn.collection.generic.data.question;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 
@@ -8,6 +9,7 @@ import lombok.Getter;
  *
  * @author TT
  */
+@EqualsAndHashCode(callSuper = true)
 public class TextQuestion extends Question
 {
 

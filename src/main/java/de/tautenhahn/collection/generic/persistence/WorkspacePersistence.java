@@ -89,9 +89,9 @@ public class WorkspacePersistence implements Persistence
     Path path = collectionBaseDir.resolve(JSON_FILENAME);
     if (Files.exists(path))
     {
-      try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8))
+      try (Reader readerRes = Files.newBufferedReader(path, StandardCharsets.UTF_8))
       {
-        importGson(reader);
+        importGson(readerRes);
       }
     }
   }
@@ -201,8 +201,8 @@ public class WorkspacePersistence implements Persistence
     Gson gson = new GsonBuilder().create();
 
     Path path = collectionBaseDir.resolve(JSON_FILENAME);
-    try (Writer wr = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-      JsonWriter writer = new JsonWriter(wr))
+    try (Writer wRes = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+      JsonWriter writer = new JsonWriter(wRes))
     {
       writer.setIndent(" ");
       writer.beginArray();
@@ -215,16 +215,16 @@ public class WorkspacePersistence implements Persistence
   {
     int result = 0;
     Gson gson = new GsonBuilder().create();
-    try (JsonReader jr = gson.newJsonReader(reader))
+    try (JsonReader jsRes = gson.newJsonReader(reader))
     {
-      jr.beginArray();
-      while (jr.hasNext())
+      jsRes.beginArray();
+      while (jsRes.hasNext())
       {
-        DescribedObject item = gson.fromJson(jr, DescribedObject.class);
+        DescribedObject item = gson.fromJson(jsRes, DescribedObject.class);
         getTypeMap(item.getType()).put(item.getPrimKey(), item);
         result++;
       }
-      jr.endArray();
+      jsRes.endArray();
     }
     listeners.forEach(l -> l.onChange("*"));
     return result;

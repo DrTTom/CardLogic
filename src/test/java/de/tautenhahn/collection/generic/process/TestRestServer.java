@@ -48,7 +48,7 @@ public class TestRestServer
   static void setUp() throws IOException
   {
     CardApplicationContext.register();
-    ApplicationContext.getInstance().getPersistence().init("cards");
+    ApplicationContext.getInstance().getPersistence().init("cardsTest");
     RestServer.getInstance().start();
     Spark.awaitInitialization();
     log.debug("Started server");
@@ -93,7 +93,7 @@ public class TestRestServer
   {
     Map<String, String> data = new HashMap<>(Map.of("name", "Ostermann AG", "remark", "test data"));
     SubmissionResponse response = callService(post("/collected/maker", data), 422, SubmissionResponse.class);
-    assertThat(response.getMessage()).isEqualTo("msg.error.remainingProblems");
+    assertThat(response.getMessage()).startsWith("Der Datensatz ist noch fehlerhaft");
 
     data.putAll(Map.of("from", "1990", "to", "2001", "place", "Neverland", "domain", "WW"));
     response = callService(post("/collected/maker", data), 200, SubmissionResponse.class);
@@ -141,7 +141,7 @@ public class TestRestServer
     ur = callService(put("/collected/maker/key/" + found.getPrimKey(), found.getAttributes()),
                      200,
                      SubmissionResponse.class);
-    assertThat(ur.getMessage()).isEqualTo("msg.ok.objectStored");
+    assertThat(ur.getMessage()).contains("wurde erfolgreich gespeichert");
 
     DescribedObject changed = readMaker(found.getPrimKey());
     assertThat(changed.getAttributes().get("from")).isEqualTo("1989");
@@ -195,8 +195,9 @@ public class TestRestServer
     throws IOException, InterruptedException
   {
     HttpResponse<String> response = CLIENT.send(req, HttpResponse.BodyHandlers.ofString());
-    assertThat(response.statusCode()).as("status code").isEqualTo(expectedCode);
+    String body = response.body();
+    assertThat(response.statusCode()).as("status code for response " + body).isEqualTo(expectedCode);
     // noinspection unchecked
-    return String.class == responseClass ? (T)response.body() : GSON.fromJson(response.body(), responseClass);
+    return String.class == responseClass ? (T)body : GSON.fromJson(body, responseClass);
   }
 }
