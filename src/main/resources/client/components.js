@@ -297,17 +297,29 @@ class SearchView extends MyCustomElement {
 			const questionType = elements.get(q.type) === undefined ? 'text-input' : q.type;
 			let element = buildChildNode(group.content(), questionType).get();
 			element.load(q);
-			element.input().addEventListener("change", () => this.updateFromQuestions());
+			element.input().addEventListener("change", () => {
+				let next = element.nextSibling;
+				if (next && typeof(next.input)==='function') {
+					next.input().focus();					
+				}
+				this.updateFromQuestions(); 
+				});
+			element.input().onfocus= ()=> this.currentFocus=element.getAttribute('data-key'); 			
 			if (q.message) {
 				group.expand();
 			}
 		});
+		if (this.currentFocus) {
+			let question = $('[data-key='+this.currentFocus+']', this);
+			if (question) {
+			question.input().focus();	
+			}			
+		}
 		$$('vertical-accordion', targetNode).forEach(a => {
 			if (a.isExpanded()) {
 				a.expand();
 			}
-		}
-		);
+		});
 	}
 
 	updateFromQuestions() {
