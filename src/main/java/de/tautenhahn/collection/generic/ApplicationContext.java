@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic;
 
 import java.awt.Image;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -78,4 +79,9 @@ public abstract class ApplicationContext
    * @return image to be shown in place of missing images.
    */
   public abstract Image getNoImage();
+
+  /**
+   * @return map of data types handled in the collection, value is translation
+   */
+  public abstract Map<String, String> listTypes();
 }

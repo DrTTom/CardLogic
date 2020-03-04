@@ -19,6 +19,8 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
@@ -101,7 +103,7 @@ public class RestServer
     post("/collection", this::importCollection);
     get("/collection", (req, resp) -> export(resp));
 
-    get("/datatypes", (req, resp) -> ApplicationContext.getInstance().getPersistence().getObjectTypes());
+    get("/datatypes", (req, resp) -> ApplicationContext.getInstance().listTypes());
 
     // end of new paths
 

@@ -25,7 +25,8 @@
     tabs.add('Steuerstempel', () => loadSearchView('taxStamp'));
     tabs.add('Bild', () => loadSearchView('pattern'));
     tabs.add('');
-    tabs.add('Einstellungen', () => alert('Noch nicht implementiert'));
+    tabs.add('Import/Export', () =>
+        $('modal-dialog').show('Import und Export', BuildNode.tag('import-export').get()));
 
     function loadSearchView(type) {
         getJson('/collected/' + type + '/search', x => $('#xxx').load(x));

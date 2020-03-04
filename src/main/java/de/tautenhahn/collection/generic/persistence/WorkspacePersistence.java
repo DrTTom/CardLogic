@@ -290,6 +290,10 @@ public class WorkspacePersistence implements Persistence
   @Override
   public String toString()
   {
+    if (collectionBaseDir==null)
+    {
+      return "WorksapcePesistence[nothing loaded yet]";
+    }
     return "WorksapcePesistence[" + collectionBaseDir.getFileName() + ", loaded " + objects.size()
            + " types]";
   }

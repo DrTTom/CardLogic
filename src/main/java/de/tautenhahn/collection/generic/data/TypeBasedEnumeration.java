@@ -61,8 +61,6 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Persis
    *
    * @param name attribute name, must be equal to the type
    * @param matchValue
-   * @param supportAbsent true to allow that the value is explicitly set to "absent", for instance to indicate
-   *          that there is no maker sign on an object
    * @param flags
    */
   public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
@@ -107,7 +105,10 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Persis
                       .sorted(Map.Entry.comparingByValue())
                       .forEach(e -> options.put(e.getKey(), e.getValue()));
     options.put(NOT_SPECIFIED, NULL_PLACEHOLDER);
-    options.put(WITHOUT, toDisplayValue(WITHOUT));
+    if (supportAbsent)
+    {
+        options.put(WITHOUT, toDisplayValue(WITHOUT));
+    }
 
     if (width == null)
     {

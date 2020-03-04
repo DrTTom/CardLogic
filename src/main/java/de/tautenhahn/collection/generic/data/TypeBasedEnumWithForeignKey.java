@@ -42,8 +42,7 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
     if (foreignKeyValue != null)
     {
-      result.removeIf(v -> !("".equals(v) || WITHOUT.equals(v)
-                             || foreignKeyValue.equals(foreignKeyByPrimKey.get(v))));
+      result.removeIf(v -> !foreignKeyByPrimKey.getOrDefault(v, foreignKeyValue).equals(foreignKeyValue));
     }
     return result;
   }
@@ -78,5 +77,7 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
       DescribedObject obj = persistence.find(getName(), key);
       foreignKeyByPrimKey.put(key, obj.getAttributes().get(foreignKey));
     }
+    System.out.println(this);
+    System.out.println(foreignKeyByPrimKey);
   }
 }
