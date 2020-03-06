@@ -5,23 +5,25 @@ import java.util.List;
 import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.renderer.Label;
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import lombok.AllArgsConstructor;
 
 
 /**
- * Creates labels to print out. TODO: implement generic generation, move this class.
+ * Creates labels to print out.
  *
  * @author t.tautenhahn
  */
 @AllArgsConstructor
-public class LabelCreator
+public class DeckLabelCreator implements de.tautenhahn.collection.generic.renderer.LabelCreator
 {
 
   /**
-   * @param data some data of supported type
+   * @param data object with type "deck"
    * @return sensible information to be shown on a label
    */
+  @Override
   public Label createLabel(DescribedObject data)
   {
     Label result = new Label();

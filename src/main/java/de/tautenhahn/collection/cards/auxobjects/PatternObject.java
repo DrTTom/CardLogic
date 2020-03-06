@@ -24,10 +24,4 @@ public class PatternObject extends MapBasedDescribedObjectInterpreter
   {
     super("pattern", true, new FreeText("name", 40, 1), new ImageRef(), new Suits());
   }
-
-  @Override
-  public Collection<String> getBinaryValuedAttributes()
-  {
-    return Collections.singletonList("image");
-  }
 }

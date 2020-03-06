@@ -6,6 +6,8 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 /**
  * Unit test for check logic in Year class.
  *
@@ -14,15 +16,15 @@ import org.junit.jupiter.api.Test;
 public class TestYear
 {
 
-    // do not call init or close in this test!
     private static Persistence persistence = new WorkspacePersistence();
 
     /**
      * Asserts that Year class produces errors when value violates defined restrictions.
      */
     @Test
-    public void imposedBounds()
+    public void imposedBounds() throws IOException
     {
+        persistence.init("testYear");
         DescribedObject master = new DescribedObject("a", "b");
         master.getAttributes().put("maker", "makerA");
         master.getAttributes().put("invented", "1954");

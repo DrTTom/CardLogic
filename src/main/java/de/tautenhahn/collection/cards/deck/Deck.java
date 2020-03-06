@@ -38,12 +38,6 @@ public class Deck extends MapBasedDescribedObjectInterpreter
   }
 
   @Override
-  public Collection<String> getBinaryValuedAttributes()
-  {
-    return Collections.singletonList("image");
-  }
-
-  @Override
   public String proposeNewPrimKey(Map<String, String> attributes)
   {
     Persistence persistence = ApplicationContext.getInstance().getPersistence(); // NOPMD: TODO

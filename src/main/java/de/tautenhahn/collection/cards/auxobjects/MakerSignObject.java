@@ -27,9 +27,4 @@ public class MakerSignObject extends MapBasedDescribedObjectInterpreter
           new FreeText("remark", 80, 4));
   }
 
-  @Override
-  public Collection<String> getBinaryValuedAttributes()
-  {
-    return Collections.emptyList();
-  }
 }

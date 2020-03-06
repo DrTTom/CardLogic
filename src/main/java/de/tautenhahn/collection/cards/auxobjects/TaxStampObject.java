@@ -22,13 +22,8 @@ public class TaxStampObject extends MapBasedDescribedObjectInterpreter
    */
   public TaxStampObject()
   {
-    super("taxStamp", true, new Year("usedFrom"), new Year("usedTo"), new ImageRef(),
+    super("taxStamp", true, new FreeText("name", 80, 1), new Year("usedFrom"), new Year("usedTo"), new ImageRef(),
           new FreeText("remark", 80, 2));
   }
 
-  @Override
-  public Collection<String> getBinaryValuedAttributes()
-  {
-    return Collections.emptyList();
-  }
 }

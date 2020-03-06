@@ -1,23 +1,25 @@
-package de.tautenhahn.collection.cards.labels;
+package de.tautenhahn.collection.generic.renderer;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
 
 /**
- * Translates labels into some printable form.
+ * Translates objects into some printable form.
  * 
  * @author t.tautenhahn
+ * @param <T> type of supported object
  */
-public interface LabelRenderer
+public interface DataRenderer<T>
 {
   /**
    * Writes the given labels into the target stream.
-   * @param labels
+   * @param data
    * @param target
    * @throws Exception
    */
-  void render(List<Label> labels, OutputStream target) throws Exception;
+  void render(List<T> data, OutputStream target) throws IOException;
 
   /**
    *

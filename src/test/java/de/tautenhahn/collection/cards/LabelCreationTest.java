@@ -7,13 +7,13 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.tautenhahn.collection.generic.renderer.DocxLabelRenderer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import de.tautenhahn.collection.cards.labels.DocxLabelRenderer;
-import de.tautenhahn.collection.cards.labels.Label;
-import de.tautenhahn.collection.cards.labels.LabelCreator;
-import de.tautenhahn.collection.cards.labels.LabelRenderer;
+import de.tautenhahn.collection.generic.renderer.Label;
+import de.tautenhahn.collection.cards.labels.DeckLabelCreator;
+import de.tautenhahn.collection.generic.renderer.DataRenderer;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
@@ -49,8 +49,8 @@ public class LabelCreationTest
   @Test
   void createLabels() throws Exception
   {
-    LabelCreator creator = new LabelCreator();
-    LabelRenderer renderer = new DocxLabelRenderer();
+    DeckLabelCreator creator = new DeckLabelCreator();
+    DataRenderer renderer = new DocxLabelRenderer();
     List<Label> labels = persistence.findAll("deck").map(creator::createLabel).collect(Collectors.toList());
     try (OutputStream target = new FileOutputStream("build/labels.docx"))
     {

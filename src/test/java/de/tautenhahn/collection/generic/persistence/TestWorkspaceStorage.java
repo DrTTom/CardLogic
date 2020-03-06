@@ -12,8 +12,10 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import de.tautenhahn.collection.generic.ApplicationContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +40,7 @@ public class TestWorkspaceStorage
   {
     byte[] content = new byte[1001];
     String reference = null;
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
+    try (WorkspacePersistence systemUnderTest = new NoInterpreterPersistence())
     {
       systemUnderTest.init("testing");
       DescribedObject obj = new DescribedObject("cryptoUrl", "primary");
@@ -51,8 +53,7 @@ public class TestWorkspaceStorage
       systemUnderTest.store(prot);
       try (FileOutputStream outs = new FileOutputStream("build/checkme.zip"))
       {
-        systemUnderTest.exportZip(Collections.singletonMap("protocol", Collections.singletonList("image")),
-                                  outs);
+        systemUnderTest.exportZip(outs, x->true);
       }
     }
 
@@ -93,66 +94,12 @@ public class TestWorkspaceStorage
     }
   }
 
-  /**
-   * Sort migrated data into new workspace
-   *
-   * @throws IOException
-   */
-  @Test
-  @Disabled
-  public void read() throws IOException
+  static class NoInterpreterPersistence extends WorkspacePersistence
   {
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-      OutputStream out = new FileOutputStream("example.zip"))
+    @Override
+    Map<String, Collection<String>> getKeysForExportableEntities()
     {
-      systemUnderTest.init("cards");
-      systemUnderTest.close();
-      systemUnderTest.getObjectTypes()
-                     .forEach(t -> systemUnderTest.getKeyValues(t)
-                                                  .forEach(k -> importImage(t, k, systemUnderTest)));
-      systemUnderTest.close();
-
-      Map<String, Collection<String>> binRefs = new HashMap<>();
-      binRefs.put("deck", Collections.singletonList("image"));
-      binRefs.put("makerSign", Collections.singletonList("image"));
-      binRefs.put("pattern", Collections.singletonList("image"));
-      binRefs.put("taxStamp", Collections.singletonList("image"));
-      systemUnderTest.exportZip(binRefs, out);
-    }
-  }
-
-  private void importImage(String type, String key, WorkspacePersistence systemUnderTest)
-  {
-    try
-    {
-      DescribedObject object = systemUnderTest.find(type, key);
-      String imageRef = object.getAttributes().get("image");
-      if (imageRef != null)
-      {
-        if ("null".equals(imageRef))
-        {
-          object.getAttributes().remove("image");
-          return;
-        }
-        String newRef = systemUnderTest.createNewBinRef(key, type, "jpg");
-        object.getAttributes().put("image", newRef);
-        try (InputStream insRes = getClass().getResourceAsStream(imageRef.charAt(0) == '/' ? imageRef
-          : "/" + imageRef))
-        {
-          if (insRes == null)
-          {
-            object.getAttributes().remove("image");
-          }
-          else
-          {
-            systemUnderTest.store(insRes, newRef);
-          }
-        }
-      }
-    }
-    catch (IOException e)
-    {
-      fail(e);
+      return Map.of("cryptoUrl", Collections.emptyList(), "protocol", List.of("image"));
     }
   }
 }

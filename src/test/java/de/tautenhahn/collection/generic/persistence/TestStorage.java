@@ -83,16 +83,7 @@ public class TestStorage
       systemUnderTest.init("storageTest");
       assertThat(systemUnderTest.toString()).contains("storageTest, loaded 5 types");
       assertThat(systemUnderTest.getKeyValues("deck")).hasSize(99);
-      Collection<String> binAttrs = Collections.singletonList("image");
-      Map<String, Collection<String>> refs = Map.of("deck",
-                                                    binAttrs,
-                                                    "makerSign",
-                                                    binAttrs,
-                                                    "pattern",
-                                                    binAttrs,
-                                                    "taxStamp",
-                                                    binAttrs);
-      systemUnderTest.exportZip(refs, outs);
+      systemUnderTest.exportZip( outs, x-> true);
     }
   }
 

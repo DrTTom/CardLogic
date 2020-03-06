@@ -126,6 +126,16 @@ class Pattern extends DefaultTile {
 	}
 }
 
+class ImportExport extends HTMLElement {
+	connectedCallback(){
+		BuildNode.tag('h3').in(this).text('Herunterladen');
+		BuildNode.tag('a').in(this).class('button').text('Gesamte Sammlung').attribute('href', '/collection');
+		BuildNode.tag('a').in(this).class('button').text('Etiketten').attribute('href', '/collection?fileType=labels&objectType=deck');
+		BuildNode.tag('h3').in(this).text('Hochladen');
+		BuildNode.div().in(this).class('button').text('Gesamte Sammlung');
+	}
+}
+
 
 supportedTiles.deck = ['deck-big', 'deck-medium', 'deck-small'];
 supportedTiles.maker = ['card-maker'];
@@ -143,3 +153,4 @@ elements.define("deck-full", FullDeck);
 elements.define("makersign-medium", MakerSign);
 elements.define("tax-stamp", TaxStamp);
 elements.define("pattern-medium", Pattern);
+elements.define("import-export", ImportExport);

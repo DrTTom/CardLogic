@@ -27,9 +27,4 @@ public class MakerData extends MapBasedDescribedObjectInterpreter
     ((Year)getAttributeInterpreter("to")).addNotBeforeRestriction("from");
   }
 
-  @Override
-  public Collection<String> getBinaryValuedAttributes()
-  {
-    return Collections.emptyList();
-  }
 }

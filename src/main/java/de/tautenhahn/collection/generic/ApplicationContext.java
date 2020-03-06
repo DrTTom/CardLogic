@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
+import de.tautenhahn.collection.generic.renderer.LabelCreator;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 
@@ -84,4 +85,11 @@ public abstract class ApplicationContext
    * @return map of data types handled in the collection, value is translation
    */
   public abstract Map<String, String> listTypes();
+
+  /**
+   *
+   * @param objectType must match an object type in the collection.
+   * @return label creator for those objects
+   */
+    public abstract LabelCreator getLabelCreator(String objectType);
 }

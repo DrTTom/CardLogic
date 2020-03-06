@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.question.FileQuestion;
 import de.tautenhahn.collection.generic.data.question.Question;
 
 
@@ -44,9 +45,13 @@ public abstract class DescribedObjectInterpreter
 
   /**
    * Returns a list of all attributes backed up by binary objects. <br>
-   * TODO: remove this method, just look at the question type the attribute interpreter asks.
    */
-  public abstract Collection<String> getBinaryValuedAttributes();
+  public final Collection<String> getBinaryValuedAttributes()
+  {
+    DescribedObject dummyObject = new DescribedObject("dummy", "dummy");
+    return getSupportedAttributes().stream().filter(a-> getAttributeInterpreter(a).getQuestion(dummyObject) instanceof FileQuestion).collect(
+        Collectors.toList());
+  };
 
   /**
    * Returns the interpreter for attribute of specified name.

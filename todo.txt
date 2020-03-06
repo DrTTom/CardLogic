@@ -1,5 +1,3 @@
-
-0. send existing primKey with each search request to get better image refs. 
 1. make import/export/labels available from client
 2. add search to support free text fields
 3. make image upload component accept drop-in and add styling
@@ -9,4 +7,4 @@
 7. add function for integrity check of data
 8. Allow merging imports
 9. Fix media type and file extension for existing images
-10. change label creation to docx
+10 fix makerSign data - rename year attributes to match application

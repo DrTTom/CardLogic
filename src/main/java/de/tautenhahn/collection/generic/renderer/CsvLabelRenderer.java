@@ -1,5 +1,6 @@
-package de.tautenhahn.collection.cards.labels;
+package de.tautenhahn.collection.generic.renderer;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -12,11 +13,11 @@ import java.util.stream.Collectors;
  *
  * @author ttautenhahn
  */
-public class CsvLabelRenderer implements LabelRenderer
+public class CsvLabelRenderer implements DataRenderer<Label>
 {
 
   @Override
-  public void render(List<Label> labels, OutputStream target) throws Exception
+  public void render(List<Label> labels, OutputStream target) throws IOException
   {
     try (OutputStreamWriter writer = new OutputStreamWriter(target, StandardCharsets.UTF_8))
     {
@@ -24,7 +25,7 @@ public class CsvLabelRenderer implements LabelRenderer
       {
         writer.write("\"" + l.getHeader());
         writer.write("\",\"");
-        writer.write(l.lines.stream().collect(Collectors.joining("\",\"")));
+        writer.write(l.getLines().stream().collect(Collectors.joining("\",\"")));
         writer.write("\"\n");
       }
     }

@@ -1,4 +1,4 @@
-package de.tautenhahn.collection.cards.labels;
+package de.tautenhahn.collection.generic.renderer;
 
 import java.util.List;
 
