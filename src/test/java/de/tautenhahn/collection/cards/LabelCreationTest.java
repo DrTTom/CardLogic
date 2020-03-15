@@ -7,16 +7,16 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.tautenhahn.collection.generic.renderer.DocxLabelRenderer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import de.tautenhahn.collection.generic.renderer.Label;
 import de.tautenhahn.collection.cards.labels.DeckLabelCreator;
-import de.tautenhahn.collection.generic.renderer.DataRenderer;
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
+import de.tautenhahn.collection.generic.renderer.DataRenderer;
+import de.tautenhahn.collection.generic.renderer.DocxLabelRenderer;
+import de.tautenhahn.collection.generic.renderer.Label;
 
 
 /**

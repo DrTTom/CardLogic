@@ -1,5 +1,7 @@
 package de.tautenhahn.collection.cards.deck;
 
+import java.util.regex.Matcher;
+
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.FreeText;
 import de.tautenhahn.collection.generic.data.Similarity;
@@ -12,6 +14,8 @@ import de.tautenhahn.collection.generic.data.Similarity;
  */
 public class Index extends FreeText
 {
+
+  private static final java.util.regex.Pattern IGNORE_NUMBERS = java.util.regex.Pattern.compile("\\d+-?(\\d\\d.*)");
 
   /**
    * Creates immutable instance.
@@ -28,20 +32,11 @@ public class Index extends FreeText
     {
       return Similarity.SIMILAR;
     }
-    if (Character.isDigit(a.charAt(0)) && Character.isDigit(b.charAt(0)) && !a.contains("/")
-        && !b.contains("/"))
+    Matcher ma = IGNORE_NUMBERS.matcher(a);
+    Matcher mb = IGNORE_NUMBERS.matcher(b);
+    if (ma.matches() && mb.matches() && ma.group(1).equals(mb.group(1)))
     {
-      // ignore number in this cases - deck may have different number of
-      // cards
-      int i = 0;
-      while (i < a.length() && !Character.isLetter(a.charAt(i)))
-      {
-        i++;
-      }
-      if (i < a.length() && b.endsWith(a.substring(i)))
-      {
-        return Similarity.ALMOST_SIMILAR;
-      }
+      return Similarity.ALMOST_SIMILAR;
     }
     return Similarity.DIFFERENT;
   }

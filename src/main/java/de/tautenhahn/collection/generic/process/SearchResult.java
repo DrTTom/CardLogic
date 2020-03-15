@@ -1,12 +1,12 @@
 package de.tautenhahn.collection.generic.process;
 
-import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.question.Question;
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.question.Question;
+import lombok.Data;
 
 /**
  * Contains all data created by a search process. That data contains:

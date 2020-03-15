@@ -1,10 +1,16 @@
 package de.tautenhahn.collection.generic.data;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+
 /**
  * Describes how similar two objects are. In general, there will be no sensible absolute values.
  *
  * @author TT
  */
+@ToString
+@EqualsAndHashCode
 public class Similarity implements Comparable<Similarity>
 {
 
@@ -66,27 +72,6 @@ public class Similarity implements Comparable<Similarity>
   public int compareTo(Similarity o)
   {
     return value - o.value;
-  }
-
-  @Override
-  public int hashCode()
-  {
-    return value;
-  }
-
-  @Override
-  public boolean equals(Object obj)
-  {
-    if (this == obj)
-    {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass())
-    {
-      return false;
-    }
-    Similarity other = (Similarity)obj;
-    return value == other.value;
   }
 
   /**

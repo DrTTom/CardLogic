@@ -1,19 +1,6 @@
 package de.tautenhahn.collection.cards;
 
-import de.tautenhahn.collection.cards.auxobjects.MakerData;
-import de.tautenhahn.collection.cards.auxobjects.MakerSignObject;
-import de.tautenhahn.collection.cards.auxobjects.PatternObject;
-import de.tautenhahn.collection.cards.auxobjects.TaxStampObject;
-import de.tautenhahn.collection.cards.deck.Deck;
-import de.tautenhahn.collection.cards.labels.DeckLabelCreator;
-import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.renderer.LabelCreator;
-import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
-import de.tautenhahn.collection.generic.persistence.Persistence;
-import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Image;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,6 +9,20 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.swing.Icon;
+
+import de.tautenhahn.collection.cards.auxobjects.MakerData;
+import de.tautenhahn.collection.cards.auxobjects.MakerSignObject;
+import de.tautenhahn.collection.cards.auxobjects.PatternObject;
+import de.tautenhahn.collection.cards.auxobjects.TaxStampObject;
+import de.tautenhahn.collection.cards.deck.Deck;
+import de.tautenhahn.collection.cards.labels.DeckLabelCreator;
+import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
+import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
+import de.tautenhahn.collection.generic.renderer.LabelCreator;
 
 /**
  * Provides all the card-specific objects to make the generic collection application one which specifically supports

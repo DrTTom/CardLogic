@@ -1,14 +1,14 @@
 package de.tautenhahn.collection.generic.renderer;
 
-import de.tautenhahn.easydata.AccessibleData;
-import de.tautenhahn.easydata.DataIntoTemplate;
-import de.tautenhahn.easydata.docx.DocxAdapter;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+
+import de.tautenhahn.easydata.AccessibleData;
+import de.tautenhahn.easydata.DataIntoTemplate;
+import de.tautenhahn.easydata.docx.DocxAdapter;
 
 /**
  * Creates output in DOCX format.

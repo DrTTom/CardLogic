@@ -1,12 +1,5 @@
 package de.tautenhahn.collection.generic.persistence;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.data.DescribedObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,6 +23,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.DescribedObject;
 
 /**
  * Persistence implementation which holds all the data within a directory tree. DescribedObjects are loaded into memory,

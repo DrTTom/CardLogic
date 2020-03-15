@@ -1,7 +1,5 @@
 package de.tautenhahn.collection.cards.deck;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import de.tautenhahn.collection.generic.ApplicationContext;

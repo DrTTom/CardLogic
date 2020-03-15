@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.renderer.Label;
 import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.renderer.Label;
 import lombok.AllArgsConstructor;
 
 

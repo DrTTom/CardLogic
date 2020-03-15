@@ -2,21 +2,20 @@
 <ruleset name="Some hopefully sensible rules" xmlns="http://pmd.sf.net/ruleset/2.0.0"
 >
    <description>
-      Shall become bos default rule set.
+      Some rule set I think might be sensible.
    </description>
 
    <rule ref="category/java/bestpractices.xml">
       <exclude name="JUnitTestsShouldIncludeAssert" /> <!-- contradicts usage of private check methods -->
+      <exclude name="JUnitAssertionsShouldIncludeMessage" /> <!-- does not work with assert4j -->
       <exclude name="MethodReturnsInternalArray" /> <!-- we decide if we want that -->
       <exclude name="AccessorClassGeneration" /> <!-- singleton -->
       <exclude name="ArrayIsStoredDirectly" /> <!-- different opinion -->
-      <exclude name="AbstractClassWithoutAbstractMethod" /> <!-- we want more explicit naming -->
-      <exclude name="AvoidStringBufferField" /> <!-- some classes need to build a text report -->
    </rule>
    <rule
       ref="category/java/bestpractices.xml/JUnitTestContainsTooManyAsserts">
       <properties>
-         <property name="maximumAsserts" value="15" />
+         <property name="maximumAsserts" value="10" />
       </properties>
    </rule>
 
@@ -34,8 +33,8 @@
       <exclude name="GenericsNaming" /> <!-- understanding complex generics requires speaking names -->
       <exclude name="EmptyMethodInAbstractClassShouldBeAbstract" /> <!--optional callback methods -->
       <exclude name="ShortMethodName" /> <!-- fluent API might want methods like "of" -->
-      <exclude name="IdenticalCatchBranches" /> <!-- lots of false positives with PMD 6.4 -->
-      <exclude name="UnnecessaryFullyQualifiedName" /> <!-- false positives with inner classes / constants -->
+      <!-- exclude name="IdenticalCatchBranches" />  lots of false positives with PMD 6.4 -->
+      <!-- exclude name="UnnecessaryFullyQualifiedName" /> false positives with inner classes / constants -->
    </rule>
    <rule ref="category/java/codestyle.xml/ClassNamingConventions">
       <properties>
@@ -52,7 +51,7 @@
    </rule>
    <rule ref="category/java/codestyle.xml/TooManyStaticImports">
       <properties>
-         <property name="maximumStaticImports" value="15" /> <!-- thinking of hamcrest matchers -->
+         <property name="maximumStaticImports" value="6" /> <!-- allow some fluency -->
       </properties>
    </rule>
    <rule ref="category/java/codestyle.xml/ShortClassName">
@@ -70,46 +69,17 @@
       <exclude name="DataClass" /> <!-- contradicts rule above -->
       <exclude name="GodClass" /> <!-- too restrictive, not configurable -->
       <exclude name="AvoidRethrowingException" /> <!-- not compatible with some lambdas -->
-      <exclude name="ExcessiveMethodLength" /> <!-- special config below -->
-   </rule>
-   <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts">
-      <properties>
-         <property name="problemDepth" value="4" /> <!-- too many not so complex methods were marked -->
-      </properties>
-   </rule>
-   <rule ref="category/java/design.xml/NcssCount">
-      <properties>
-         <property name="methodReportLevel" value="40" />
-         <property name="classReportLevel" value="600" />
-      </properties>
    </rule>
    <rule ref="category/java/design.xml/ExcessiveImports">
       <properties>
-         <property name="minimum" value="60" /> <!-- handling JAXB stuff -->
+         <property name="minimum" value="50" /> <!-- server must import all the logic -->
       </properties>
    </rule>
    <rule ref="category/java/design.xml/TooManyMethods">
       <properties>
-         <property name="maxmethods" value="30" />
+         <property name="maxmethods" value="20" />
       </properties>
    </rule>
-   <rule ref="category/java/design.xml/CyclomaticComplexity">
-      <properties>
-         <property name="methodReportLevel" value="12" />
-         <property name="classReportLevel" value="100" />
-      </properties>
-   </rule>
-   <rule ref="category/java/design.xml/ExcessiveMethodLength">
-      <properties>
-         <property name="minimum" value="100" /> <!-- generous because we have NCSS count -->
-      </properties>
-   </rule>
-   <rule ref="category/java/design.xml/NPathComplexity">
-      <properties>
-         <property name="reportLevel" value="300" />
-      </properties>
-   </rule>
-
    <rule ref="category/java/documentation.xml">
       <exclude name="CommentSize" />
    </rule>
@@ -148,7 +118,6 @@
    <rule ref="category/java/performance.xml">
       <exclude name="AvoidFileStream" /> <!-- addresses an OpenJDK bug which is already fixed -->
       <exclude name="AvoidInstantiatingObjectsInLoops" /> <!-- too many false positives, sometimes we need n objects -->
-      <exclude name="InsufficientStringBufferDeclaration" /> <!-- false positives: does not recognize if statements -->
    </rule>
 
    <rule ref="category/java/security.xml" />

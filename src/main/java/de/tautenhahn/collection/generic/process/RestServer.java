@@ -7,43 +7,41 @@ import static spark.Spark.post;
 import static spark.Spark.put;
 import static spark.Spark.staticFiles;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import de.tautenhahn.collection.generic.ApplicationContext;
-import de.tautenhahn.collection.generic.renderer.DocxLabelRenderer;
-import de.tautenhahn.collection.generic.renderer.Label;
-import de.tautenhahn.collection.generic.renderer.LabelCreator;
-import de.tautenhahn.collection.generic.data.DescribedObject;
-import de.tautenhahn.collection.generic.data.SubmissionResponse;
-import de.tautenhahn.collection.generic.persistence.Persistence;
-import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
-import lombok.extern.slf4j.Slf4j;
-import spark.Request;
-import spark.Response;
-import spark.ResponseTransformer;
-import spark.Spark;
-
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletException;
-import javax.servlet.http.Part;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+import javax.servlet.http.Part;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import de.tautenhahn.collection.generic.ApplicationContext;
+import de.tautenhahn.collection.generic.data.DescribedObject;
+import de.tautenhahn.collection.generic.data.SubmissionResponse;
+import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
+import de.tautenhahn.collection.generic.renderer.DocxLabelRenderer;
+import de.tautenhahn.collection.generic.renderer.Label;
+import de.tautenhahn.collection.generic.renderer.LabelCreator;
+import lombok.extern.slf4j.Slf4j;
+import spark.Request;
+import spark.Response;
+import spark.ResponseTransformer;
+import spark.Spark;
 
 /**
  * Feeds the REST interface with content.
@@ -118,7 +116,7 @@ public class RestServer
 
     private String doDelete(Request req, Response res)
     {
-        String msg = ProcessFactory.getInstance().getDelete().delete(req.params(":type"), req.params(":key"));
+        String msg = ProcessFactory.getInstance().getDelete().delete(getTypeParam(req), req.params(":key"));
         switch (msg)
         {
             case "msg.error.notFound":
@@ -140,7 +138,7 @@ public class RestServer
     {
         Map<String, String> object = GSON.fromJson(req.body(), MAP_TYPE);
 
-        SubmissionProcess proc = new SubmissionProcess(req.params(":type"));
+        SubmissionProcess proc = new SubmissionProcess(getTypeParam(req));
         SubmissionResponse resp = proc.update(req.params(":key"), object, "true".equals(req.queryParams("lenient")));
         if (!resp.isSuccess())
         {
@@ -156,7 +154,7 @@ public class RestServer
      */
     private Object doUpload(Request request, Response response)
     {
-        String type = request.params(":type");
+        String type = getTypeParam(request);
         try
         {
             request.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
@@ -177,6 +175,11 @@ public class RestServer
             response.status(500);
             return "Internal server error";
         }
+    }
+
+    private String getTypeParam(Request request)
+    {
+      return request.params(":type");
     }
 
     private String extensionOf(String fileName)
@@ -219,7 +222,7 @@ public class RestServer
     private DescribedObject view(Request req, Response res)
     {
         DescribedObject result =
-            ProcessFactory.getInstance().getView().getData(req.params(":type"), req.params(":key"));
+            ProcessFactory.getInstance().getView().getData(getTypeParam(req), req.params(":key"));
         if (result == null)
         {
             res.status(404);
@@ -235,7 +238,7 @@ public class RestServer
     {
         Map<String, String> object = GSON.fromJson(req.body(), MAP_TYPE);
 
-        SubmissionProcess proc = new SubmissionProcess(req.params(":type"));
+        SubmissionProcess proc = new SubmissionProcess(getTypeParam(req));
         SubmissionResponse resp = proc.submit(object, "true".equals(req.queryParams("lenient")));
         if (!resp.isSuccess())
         {
@@ -302,7 +305,7 @@ public class RestServer
     {
         res.type("text/plain");
         res.header("Content-Type", "application/json; charset=UTF-8");
-        String type = req.params(":type");
+        String type = getTypeParam(req);
         SearchProcess proc = ProcessFactory.getInstance().getSearch(type);
         Map<String, String> allParams = new Hashtable<>();
         req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));

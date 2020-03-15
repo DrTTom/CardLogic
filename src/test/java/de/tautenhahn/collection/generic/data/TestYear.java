@@ -2,11 +2,12 @@ package de.tautenhahn.collection.generic.data;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.tautenhahn.collection.generic.persistence.Persistence;
-import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 
 /**
  * Unit test for check logic in Year class.

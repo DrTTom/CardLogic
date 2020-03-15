@@ -1,10 +1,10 @@
 package de.tautenhahn.collection.generic.data;
 
+import java.util.List;
+
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.Question;
 import de.tautenhahn.collection.generic.data.question.TextChoiceQuestion;
-
-import java.util.List;
 
 /**
  * Enumeration with fixed set of allowed String values. Values of other types require a {@link TypeBasedEnumeration}.

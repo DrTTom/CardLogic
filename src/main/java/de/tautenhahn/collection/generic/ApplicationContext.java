@@ -7,9 +7,9 @@ import java.util.ResourceBundle;
 
 import javax.swing.Icon;
 
-import de.tautenhahn.collection.generic.renderer.LabelCreator;
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;
+import de.tautenhahn.collection.generic.renderer.LabelCreator;
 
 
 /**
