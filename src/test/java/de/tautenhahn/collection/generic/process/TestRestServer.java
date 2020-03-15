@@ -73,6 +73,23 @@ public class TestRestServer
   }
 
   /**
+   * Perform exports, only checks that the obtained stuff looks like ZIP.
+   */
+  @Test
+  void export() throws Exception
+  {
+    HttpResponse<byte[]> response = CLIENT.send(get("/collection"), HttpResponse.BodyHandlers.ofByteArray());
+    assertThat(response.headers().allValues("Content-Type").get(0)).isEqualTo("application/zip");
+    assertThat(new String(response.body(), 0, 2, StandardCharsets.UTF_8)).isEqualTo("PK");
+
+    response = CLIENT.send(get("/collection?fileType=labels&objectType=deck"),
+                           HttpResponse.BodyHandlers.ofByteArray());
+    assertThat(response.headers().allValues("Content-Type").get(0)).isEqualTo("application/docx");
+    assertThat(new String(response.body(), 0, 2, StandardCharsets.UTF_8)).isEqualTo("PK");
+  }
+
+
+  /**
    * Create, search, update, check and delete the most simple entity in the system.
    *
    * @throws Exception all the unexpected Exceptions go to test protocol

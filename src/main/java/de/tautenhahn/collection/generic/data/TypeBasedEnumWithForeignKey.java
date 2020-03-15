@@ -42,7 +42,9 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
     String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
     if (foreignKeyValue != null)
     {
-      result.removeIf(v -> !foreignKeyValue.equals(foreignKeyByPrimKey.getOrDefault(v, foreignKeyValue)));
+      result.removeIf(v -> Optional.ofNullable(foreignKeyByPrimKey.get(v))
+                                   .map(fk -> !fk.equals(foreignKeyValue))
+                                   .orElse(Boolean.FALSE));
     }
     return result;
   }
@@ -52,7 +54,9 @@ public class TypeBasedEnumWithForeignKey extends TypeBasedEnumeration
   {
     return Optional.ofNullable(super.check(value, context)).orElseGet(() -> {
       String foreignKeyValue = dropEmptyString(context.getAttributes().get(foreignKey));
-      if (foreignKeyValue == null || foreignKeyValue.equals(foreignKeyByPrimKey.get(value)))
+      if (foreignKeyValue == null || Optional.ofNullable(foreignKeyByPrimKey.get(value))
+                                             .map(foreignKeyValue::equals)
+                                             .orElse(Boolean.TRUE))
       {
         return null;
       }

@@ -23,9 +23,12 @@ public class CsvLabelRenderer implements DataRenderer<Label>
     {
       for ( Label l : labels )
       {
-        writer.write("\"" + l.getHeader());
+        writer.write("\"" + l.getHeader().replace("\"", "\"\""));
         writer.write("\",\"");
-        writer.write(l.getLines().stream().collect(Collectors.joining("\",\"")));
+        writer.write(l.getLines()
+                      .stream()
+                      .map(v -> v.replace("\"", "\"\""))
+                      .collect(Collectors.joining("\",\"")));
         writer.write("\"\n");
       }
     }
@@ -34,6 +37,6 @@ public class CsvLabelRenderer implements DataRenderer<Label>
   @Override
   public String getMediaType()
   {
-    return "text/comma-separated-values";
+    return "text/csv; charset=utf-8";
   }
 }

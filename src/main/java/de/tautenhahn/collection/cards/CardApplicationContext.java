@@ -10,8 +10,6 @@ import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.swing.Icon;
-
 import de.tautenhahn.collection.cards.auxobjects.MakerData;
 import de.tautenhahn.collection.cards.auxobjects.MakerSignObject;
 import de.tautenhahn.collection.cards.auxobjects.PatternObject;
@@ -24,94 +22,88 @@ import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.persistence.WorkspacePersistence;
 import de.tautenhahn.collection.generic.renderer.LabelCreator;
 
+
 /**
- * Provides all the card-specific objects to make the generic collection application one which specifically supports
- * playing card collections.
+ * Provides all the card-specific objects to make the generic collection application one which specifically
+ * supports playing card collections.
  *
  * @author TT
  */
 public final class CardApplicationContext extends ApplicationContext
 {
 
-    private final Persistence persistence;
+  private final Persistence persistence;
 
-    private final ResourceBundle messages = ResourceBundle.getBundle("de.tautenhahn.collection.cards.CardMessages");
+  private final ResourceBundle messages = ResourceBundle.getBundle("de.tautenhahn.collection.cards.CardMessages");
 
-    private final Map<String, DescribedObjectInterpreter> interpreters = new HashMap<>();
+  private final Map<String, DescribedObjectInterpreter> interpreters = new HashMap<>();
 
-    private CardApplicationContext()
+  private CardApplicationContext()
+  {
+    persistence = new WorkspacePersistence();
+    interpreters.put("deck", new Deck());
+    interpreters.put("maker", new MakerData());
+    interpreters.put("makerSign", new MakerSignObject());
+    interpreters.put("pattern", new PatternObject());
+    interpreters.put("taxStamp", new TaxStampObject());
+  }
+
+  /**
+   * Make the current application a Card Collection.
+   */
+  public static void register()
+  {
+    if (ApplicationContext.getInstance() instanceof CardApplicationContext)
     {
-        persistence = new WorkspacePersistence();
-        interpreters.put("deck", new Deck());
-        interpreters.put("maker", new MakerData());
-        interpreters.put("makerSign", new MakerSignObject());
-        interpreters.put("pattern", new PatternObject());
-        interpreters.put("taxStamp", new TaxStampObject());
+      return;
     }
+    new CardApplicationContext();
+  }
 
-    /**
-     * Make the current application a Card Collection.
-     */
-    public static void register()
-    {
-        if (ApplicationContext.getInstance() instanceof CardApplicationContext)
-        {
-            return;
-        }
-        new CardApplicationContext();
-    }
+  @Override
+  public DescribedObjectInterpreter getInterpreter(String type)
+  {
+    return Optional.ofNullable(interpreters.get(type))
+                   .orElseThrow(() -> new IllegalArgumentException("unsupported type " + type));
+  }
 
-    @Override
-    public DescribedObjectInterpreter getInterpreter(String type)
-    {
-        return Optional
-            .ofNullable(interpreters.get(type))
-            .orElseThrow(() -> new IllegalArgumentException("unsupported type " + type));
-    }
+  @Override
+  protected String getSpecificText(String key)
+  {
+    return messages.containsKey(key) ? messages.getString(key) : null;
+  }
 
-    @Override
-    protected String getSpecificText(String key)
-    {
-        return messages.containsKey(key) ? messages.getString(key) : null;
-    }
+  @Override
+  public Persistence getPersistence()
+  {
+    return persistence;
+  }
 
-    @Override
-    public Icon getApplicationIcon()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
+  @Override
+  public Image getNoImage()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-    @Override
-    public Persistence getPersistence()
-    {
-        return persistence;
-    }
+  @Override
+  public Map<String, String> listTypes()
+  {
+    return List.of("deck", "maker", "makerSign", "pattern", "taxStamp")
+               .stream()
+               .collect(Collectors.toMap(Function.identity(),
+                                         s -> getSpecificText("type." + s),
+                                         (e1, e2) -> e1,
+                                         LinkedHashMap::new));
+  }
 
-    @Override
-    public Image getNoImage()
+  @Override
+  public LabelCreator getLabelCreator(String objectType)
+  {
+    if ("deck".equals(objectType))
     {
-        // TODO Auto-generated method stub
-        return null;
+      return new DeckLabelCreator();
     }
-
-    @Override
-    public Map<String, String> listTypes()
-    {
-        return List
-            .of("deck", "maker", "makerSign", "pattern", "taxStamp")
-            .stream()
-            .collect(Collectors.toMap(Function.identity(), s -> getSpecificText("type." + s), (e1, e2) -> e1,
-                LinkedHashMap::new));
-    }
-
-    @Override
-    public LabelCreator getLabelCreator(String objectType)
-    {
-        if ("deck".equals(objectType))
-        {
-            return new DeckLabelCreator();
-        }
-        throw new IllegalArgumentException("no labels for "+objectType);
-    }
+    throw new IllegalArgumentException("no labels for " + objectType);
+  }
 }

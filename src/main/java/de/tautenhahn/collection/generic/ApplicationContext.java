@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import javax.swing.Icon;
-
 import de.tautenhahn.collection.generic.data.DescribedObjectInterpreter;
 import de.tautenhahn.collection.generic.persistence.Persistence;
 import de.tautenhahn.collection.generic.renderer.LabelCreator;
@@ -67,11 +65,6 @@ public abstract class ApplicationContext
   protected abstract String getSpecificText(String key);
 
   /**
-   * Returns an icon for the application.
-   */
-  public abstract Icon getApplicationIcon();
-
-  /**
    * Returns the primary persistence wrapper of the application.
    */
   public abstract Persistence getPersistence();
@@ -87,9 +80,8 @@ public abstract class ApplicationContext
   public abstract Map<String, String> listTypes();
 
   /**
-   *
    * @param objectType must match an object type in the collection.
    * @return label creator for those objects
    */
-    public abstract LabelCreator getLabelCreator(String objectType);
+  public abstract LabelCreator getLabelCreator(String objectType);
 }

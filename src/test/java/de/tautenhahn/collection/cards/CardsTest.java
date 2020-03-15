@@ -52,6 +52,8 @@ public class CardsTest
 
   public static final String PATTERN = "pattern";
 
+  private static final String SUITS = "suits";
+
   private static DescribedObjectInterpreter deck;
 
   private static ApplicationContext application;
@@ -107,9 +109,9 @@ public class CardsTest
   {
     TypeBasedEnumWithForeignKey systemUnderTest = (TypeBasedEnumWithForeignKey)deck.getAttributeInterpreter(PATTERN);
     DescribedObject germanDeck = new DescribedObject("deck", "1");
-    germanDeck.getAttributes().put("suits", "deutsch");
+    germanDeck.getAttributes().put(SUITS, "deutsch");
     DescribedObject frenchDeck = new DescribedObject("deck", "2");
-    frenchDeck.getAttributes().put("suits", "französisch");
+    frenchDeck.getAttributes().put(SUITS, "französisch");
 
     assertThat(systemUnderTest.getAllowedValues(germanDeck)).as("allowed values")
                                                             .contains("halle")
@@ -130,7 +132,7 @@ public class CardsTest
     DescribedObject myDeck = new DescribedObject("deck", "1");
     assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(37);
     myDeck.getAttributes().put("maker", "AS");
-    assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(7);
+    assertThat(systemUnderTest.getAllowedValues(myDeck)).hasSize(8);
     // TODO: check that question describes images
   }
 
@@ -143,26 +145,26 @@ public class CardsTest
   {
     SearchProcess systemUnderTest = ProcessFactory.getInstance().getSearch("deck");
     SearchResult result = systemUnderTest.search(Collections.emptyMap());
-    ChoiceQuestion suitQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), "suits");
+    ChoiceQuestion suitQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), SUITS);
     assertThat(suitQuestion.getOptions().values()).contains("deutsch");
     int numberTotal = result.getNumberTotal();
     assertThat(result.getNumberPossible()).isEqualTo(numberTotal);
     ChoiceQuestion patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), PATTERN);
     assertThat(patternQuestion.getOptions().values()).contains("Berliner Bild");
 
-    result = systemUnderTest.search(Collections.singletonMap("suits", "deutsch"));
+    result = systemUnderTest.search(Collections.singletonMap(SUITS, "deutsch"));
     assertThat(result.getNumberPossible()).isLessThan(numberTotal);
     patternQuestion = (ChoiceQuestion)getQuestion(result.getQuestions(), PATTERN);
     assertThat(patternQuestion.getOptions().values()).doesNotContain("Berliner Bild");
-    assertThat(getQuestion(result.getQuestions(), "suits").getProblem()).isNull();
+    assertThat(getQuestion(result.getQuestions(), SUITS).getProblem()).isNull();
 
     HashMap<String, String> params = new HashMap<>();
-    params.put("suits", "marsianisch");
+    params.put(SUITS, "marsianisch");
     params.put(PATTERN, "french");
 
     result = systemUnderTest.search(params);
     assertThat(getQuestion(result.getQuestions(),
-                           "suits").getProblem()).isEqualTo(application.getText("msg.error.invalidOption"));
+                           SUITS).getProblem()).isEqualTo(application.getText("msg.error.invalidOption"));
     Question pq = getQuestion(result.getQuestions(), PATTERN);
     assertThat(pq.getProblem()).isEqualTo(application.getText("msg.error.optionMismatches.suits"));
     assertThat(pq.getValue()).isEqualTo("french");
@@ -176,7 +178,7 @@ public class CardsTest
   public void foreignKeyViolated()
   {
     DescribedObject myDeck = new DescribedObject("deck", null);
-    myDeck.getAttributes().put("suits", "deutsch");
+    myDeck.getAttributes().put(SUITS, "deutsch");
     myDeck.getAttributes().put(PATTERN, "french");
     DescribedObjectInterpreter interpreter = application.getInterpreter(myDeck.getType());
     ChoiceQuestion pq = (ChoiceQuestion)getQuestion(interpreter.getQuestions(myDeck, false), PATTERN);
@@ -184,6 +186,11 @@ public class CardsTest
     assertThat(pq.getValue()).isEqualTo("french");
     assertThat(pq.getOptions().values()).contains("Französisches Bild");
     assertThat(pq.getOptions().values()).contains("(Keine Angabe)");
+    assertThat(pq.getOptions().values()).contains("originell");
+
+    myDeck.getAttributes().put(PATTERN, "orig");
+    Question q = getQuestion(interpreter.getQuestions(myDeck, true), PATTERN);
+    assertThat(q.getProblem()).isNull();
   }
 
   /**
@@ -275,7 +282,7 @@ public class CardsTest
   private DescribedObject createValidDeck()
   {
     DescribedObject newDeck = new DescribedObject("deck", null);
-    newDeck.getAttributes().put("suits", "deutsch");
+    newDeck.getAttributes().put(SUITS, "deutsch");
     newDeck.getAttributes().put(PATTERN, "halle");
     newDeck.getAttributes()
            .put("format", (10 + MEASURE_SOURCE.nextInt(100)) + "x" + (50 + MEASURE_SOURCE.nextInt(200)));
