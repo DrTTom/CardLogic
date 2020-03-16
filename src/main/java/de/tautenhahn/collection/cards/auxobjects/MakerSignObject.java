@@ -22,6 +22,7 @@ public class MakerSignObject extends MapBasedDescribedObjectInterpreter
   {
     super("makerSign", true, new Year("usedFrom"), new Year("usedTo"), new ImageRef(), new Maker(),
           new FreeText("remark", 80, 4));
+    ((Year)getAttributeInterpreter("usedTo")).addNotBeforeRestriction("usedFrom");
   }
 
 }

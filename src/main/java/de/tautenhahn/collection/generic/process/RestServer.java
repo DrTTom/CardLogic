@@ -93,7 +93,7 @@ public class RestServer
 
     post("/collected/:type", this::submit, transformer);
 
-    get("/collected/:type/search", (req, resp) -> search(req, resp, false), transformer);
+    get("/collected/:type/search", (req, resp) -> search(req, resp), transformer);
 
     get("/collected/:type/key/:key", this::view, transformer);
     put("/collected/:type/key/:key", this::update, transformer);
@@ -311,7 +311,7 @@ public class RestServer
     return null;
   }
 
-  private SearchResult search(Request req, Response res, boolean strictCheck)
+  private SearchResult search(Request req, Response res)
   {
     res.type("text/plain");
     res.header("Content-Type", "application/json; charset=UTF-8");
@@ -320,7 +320,7 @@ public class RestServer
     Map<String, String> allParams = new Hashtable<>();
     req.queryParams().forEach(p -> allParams.put(p, req.queryParams(p)));
     String primKey = allParams.remove("primKey");
-    return proc.execute(allParams, primKey, strictCheck);
+    return proc.execute(allParams, primKey, req.queryParams("strictCheck") != null);
   }
 
   /**

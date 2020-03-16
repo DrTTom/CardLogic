@@ -343,6 +343,10 @@ class SearchView extends MyCustomElement {
         }
         let params = Object.entries(data).filter(e => e[1] !== null && e[1] !== '' && e[1] !== '(Keine Angabe)')
             .map(e => e[0] + '=' + encodeURIComponent(e[1])).join('&');
+		if (this.getAttribute('creatingObject')){
+			params=params+'&strictCheck=true';
+		}
+		
         let url = '/collected/' + this.getAttribute('type') + '/search' + (params === '' ? '' : '?' + params);
         getJson(url, x => this.load(x, true));
     }
@@ -362,41 +366,44 @@ class SearchView extends MyCustomElement {
     updateObject() {
         let data = {};
         $$('[data-key]', this).forEach(x => data[x.getAttribute('data-key')] = x.store());
-        putObject('/collected/' + this.getAttribute('type') + '/key/' + this.getAttribute('currentPrimkey') + this.isLenient(), data, r => {
-            alert(i18n('messages', r.message));
-            if (r.questions) {
-                this.loadQuestions(r.questions, $('#' + this.getRefId() + '_questions', this), true);
-            }
-			this.updateFromQuestions();
-        });
+        const path = '/collected/' + this.getAttribute('type') + '/key/' + this.getAttribute('currentPrimkey') + this.isLenient();
+        putObject(path, data, r => this.handleSubmissionResponse(r));
 
     }
 
     createObject() {
         let data = {};
         $$('[data-key]', this).forEach(x => data[x.getAttribute('data-key')] = x.store());
-        postObject('/collected/' + this.getAttribute('type') + this.isLenient(), data, r => {
-            alert(i18n('messages', r.message));
-            if (r.questions) {
-                this.loadQuestions(r.questions, $('#' + this.getRefId() + '_questions', this), true);
-            }
-			this.updateFromQuestions();
-            // TODO: set currentPrimKey!
+        const path = '/collected/' + this.getAttribute('type') + this.isLenient(); 
+        postObject(path, data, r => {
+	        this.handleSubmissionResponse(r);
+            this.setAttribute('currentPrimkey', r.primaryKey);
         });
-
     }
+	
+	handleSubmissionResponse(resp) {
+		this.setAttribute('creatingObject', 'true');
+		    alert(i18n('messages', resp.message));
+            if (resp.questions) {
+                this.loadQuestions(resp.questions, $('#' + this.getRefId() + '_questions', this), true);
+            }
+			if (resp.success) {
+			    this.updateFromQuestions();
+            }
+	}
 
     isLenient() {
         return $('#' + this.getRefId() + '_lenient', this).checked ? '?lenient=true' : '';
     }
 
     clear() {
-        this.update({});
         this.removeAttribute('currentPrimkey');
+        this.removeAttribute('creatingObject');
         let button = $('#' + this.getRefId() + '_update');
         button.setAttribute('disabled', 'true');
         button.innerHTML = 'Aktualisieren';
         button.onclick = null;
+        this.update({});
     }
 }
 
@@ -454,7 +461,12 @@ class FullView extends MyCustomElement {
             $('search-view').setObjectToEdit(data);
             $('modal-dialog').hide();
         };
-        $(idPrefix + 'delete').onclick = () => alert('Löschen kommt erst, wenn Create/Update fertig sind');
+        $(idPrefix + 'delete').onclick = () => {if (confirm('Wirklich löschen?')) {
+	      deleteObject('/collected/'+data.type+'/key/'+data.primKey, r=> {if (r.status===200) {
+		  $('search-view').updateFromQuestions();
+          $('modal-dialog').hide();
+	}});
+        }};
     }
 }
 

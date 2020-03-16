@@ -76,8 +76,13 @@ public class SubmissionProcess
     Persistence persistence = ApplicationContext.getInstance().getPersistence();
     DescribedObject existing = persistence.find(type, primKey);
     DescribedObject updatedValues = interpreter.createObject("updatedValues", attributes);
-    existing.getAttributes().putAll(updatedValues.getAttributes());
-    existing.getAttributes().keySet().removeIf(k -> existing.getAttributes().get(k).isBlank());
+    existing.getAttributes().clear();
+    updatedValues.getAttributes()
+                 .entrySet()
+                 .stream()
+                 .filter(e -> !e.getValue().isBlank())
+                 .forEach(e -> existing.getAttributes().put(e.getKey(), e.getValue()));
+    ;
     return checkAndStore(existing, !force);
   }
 }
