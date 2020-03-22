@@ -283,7 +283,6 @@ public class RestServer
     ApplicationContext app = ApplicationContext.getInstance();
     WorkspacePersistence persistence = (WorkspacePersistence)app.getPersistence();
     persistence.close();
-    res.header("Content-Disposition", "attachment");
 
     String resultType = Optional.ofNullable(req.queryParams("fileType")).orElse("zip");
     try (OutputStream dest = res.raw().getOutputStream())
@@ -292,7 +291,10 @@ public class RestServer
       {
         case "zip":
           res.header("Content-Type", "application/zip");
-          persistence.exportZip(dest, x -> true);
+          res.header("Content-Disposition", "attachment; filename=\"collection.zip\"");
+          // persistence.exportZip(dest, x -> true);
+          persistence.exportZip(dest,
+                                x -> !"deck".equals(x.getType()) || Integer.parseInt(x.getPrimKey()) < 100);
           return null;
         case "labels":
           String objectType = req.queryParams("objectType");
@@ -302,6 +304,7 @@ public class RestServer
                                           .map(creator::createLabel)
                                           .collect(Collectors.toList());
           res.header("Content-Type", renderer.getMediaType());
+          res.header("Content-Disposition", "attachment; filename=\"labels.docx\"");
           renderer.render(labels, dest);
           return null;
         default:

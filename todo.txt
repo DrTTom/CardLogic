@@ -7,4 +7,3 @@
 7. add function for integrity check of data
 8. Allow merging imports
 9. Fix media type and file extension for existing images, check download extension too.
-10. fix makerSign data - rename year attributes to match application

@@ -1,5 +1,5 @@
 plugins {
-    id 'com.github.spotbugs' version '2.0.0'
+    id 'com.github.spotbugs' version '3.0.0'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'io.freefair.lombok' version '4.1.6'
 }
@@ -19,7 +19,7 @@ check.dependsOn jacocoTestReport
 dependencies {
     implementation 'com.sparkjava:spark-core:2.9.1'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'org.apache.lucene:lucene-core:8.4.1'
+    implementation 'org.apache.lucene:lucene-core:8.5.0'
     implementation files('libs/EasyData-1.0.jar')
     
     runtime 'ch.qos.logback:logback-classic:1.3.0-alpha5'
@@ -37,14 +37,14 @@ test {
 mainClassName = 'de.tautenhahn.collection.cards.Main'
 
 pmd {
-    toolVersion = '6.21.0'
+    toolVersion = '6.22.0'
     ruleSets = []
     ruleSetFiles = files("pmd_config.xml")
     ignoreFailures = true // TODO!
 }
 
 spotbugs {
-   toolVersion = '4.0.0'
+   toolVersion = '4.0.1'
    effort = 'max'
    reportLevel = 'low'
    excludeFilter = file('findbugs-exclude.xml')
