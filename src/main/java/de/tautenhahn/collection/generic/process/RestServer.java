@@ -19,6 +19,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.servlet.MultipartConfigElement;
@@ -292,9 +294,7 @@ public class RestServer
         case "zip":
           res.header("Content-Type", "application/zip");
           res.header("Content-Disposition", "attachment; filename=\"collection.zip\"");
-          // persistence.exportZip(dest, x -> true);
-          persistence.exportZip(dest,
-                                x -> !"deck".equals(x.getType()) || Integer.parseInt(x.getPrimKey()) < 100);
+          persistence.exportZip(dest, x -> true);
           return null;
         case "labels":
           String objectType = req.queryParams("objectType");
@@ -303,6 +303,7 @@ public class RestServer
           List<Label> labels = persistence.findAll(objectType)
                                           .map(creator::createLabel)
                                           .collect(Collectors.toList());
+          labels = limit(labels, req.queryParams("range"));
           res.header("Content-Type", renderer.getMediaType());
           res.header("Content-Disposition", "attachment; filename=\"labels.docx\"");
           renderer.render(labels, dest);
@@ -312,6 +313,22 @@ public class RestServer
       }
     }
     return null;
+  }
+
+  private <T> List<T> limit(List<T> list, String range)
+  {
+    int start = 0;
+    int end = list.size();
+    if (range != null)
+    {
+      Matcher m = Pattern.compile("(\\d+)-(\\d+)").matcher(range);
+      if (m.matches())
+      {
+        start = Integer.parseInt(m.group(1));
+        end = Math.min(end, Integer.parseInt(m.group(2)));
+      }
+    }
+    return list.subList(start, end);
   }
 
   private SearchResult search(Request req, Response res)

@@ -268,8 +268,11 @@ class SearchView extends MyCustomElement {
 
     load(data, keepQuestionGroups = false) {
         const selectorPrefix = '#' + this.getRefId() + '_';
-        this.setAttribute('type', data.type);
-
+        if (this.getAttribute('type')!== data.type) {
+	        this.setAttribute('type', data.type);
+			this.clear();
+        }
+    
         this.loadQuestions(data.questions, $(selectorPrefix + 'questions', this), keepQuestionGroups);
 
         $(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";

@@ -38,7 +38,19 @@ public class FreeText extends AttributeInterpreter
   @Override
   protected Similarity correlateValue(String thisValue, String otherValue, DescribedObject context)
   {
-    return thisValue.equals(otherValue) ? Similarity.HINT : Similarity.NO_STATEMENT;
+    if (thisValue.equals(otherValue))
+    {
+      return Similarity.ALMOST_SIMILAR;
+    }
+    int result = 0;
+    for ( String word : thisValue.split(" ") )
+    {
+      if (otherValue.contains(word))
+      {
+        result += word.length();
+      }
+    }
+    return new Similarity(result);
   }
 
   @Override

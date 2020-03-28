@@ -3,6 +3,7 @@ package de.tautenhahn.collection.cards.labels;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.DescribedObject;
@@ -27,25 +28,35 @@ public class DeckLabelCreator implements de.tautenhahn.collection.generic.render
   public Label createLabel(DescribedObject data)
   {
     Label result = new Label();
-    result.setHeader("Nr. " + data.getPrimKey() + " " + data.getAttributes().get("name"));
+    result.setHeader(sanitize("Nr. " + data.getPrimKey() + " " + data.getAttributes().get("name")));
     List<String> lines = new ArrayList<>();
     lines.add(Optional.ofNullable(data.getAttributes().get("maker"))
                       .map(key -> ApplicationContext.getInstance().getPersistence().find("maker", key))
                       .map(m -> m.getAttributes().get("name"))
                       .orElse("Hersteller unbekannt"));
     lines.add(getTime(data));
-    if (!addOptional("designer", lines, data))
+    if (!addOptional("designer", "Entwurf: ", lines, data))
     {
-      addOptional("remark", lines, data);
+      addOptional("remark", "", lines, data);
     }
-    addOptional("refCat", lines, data);
-    result.setLines(lines);
+    addOptional("refCat", "siehe ", lines, data);
+    result.setLines(lines.stream().map(this::sanitize).collect(Collectors.toList()));
     return result;
   }
 
-  private boolean addOptional(String name, List<String> lines, DescribedObject data)
+
+  // TODO: move sanitize method into EasyDatas DocxAdapter!
+  private String sanitize(String input)
   {
-    return Optional.ofNullable(data.getAttributes().get(name)).filter(lines::add).isPresent();
+    return input.replace("&", "&amp;");
+  }
+
+  private boolean addOptional(String name, String prefix, List<String> lines, DescribedObject data)
+  {
+    return Optional.ofNullable(data.getAttributes().get(name))
+                   .map(s -> prefix + s)
+                   .filter(lines::add)
+                   .isPresent();
   }
 
   private String getTime(DescribedObject data)
