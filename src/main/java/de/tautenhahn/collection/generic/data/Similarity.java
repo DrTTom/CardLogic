@@ -1,6 +1,7 @@
 package de.tautenhahn.collection.generic.data;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 
@@ -11,7 +12,7 @@ import lombok.ToString;
  */
 @ToString
 @EqualsAndHashCode
-public class Similarity implements Comparable<Similarity>
+public class Similarity
 {
 
   /**
@@ -39,6 +40,7 @@ public class Similarity implements Comparable<Similarity>
    */
   public static final Similarity ALMOST_SIMILAR = new Similarity(50);
 
+  @Getter
   private final int value;
 
   /**
@@ -66,12 +68,6 @@ public class Similarity implements Comparable<Similarity>
       return this;
     }
     return new Similarity(value + other.value < 0 ? Integer.MAX_VALUE : value + other.value);
-  }
-
-  @Override
-  public int compareTo(Similarity o)
-  {
-    return value - o.value;
   }
 
   /**

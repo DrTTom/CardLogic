@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 
 /**
@@ -43,5 +44,27 @@ public class DescribedObject
   public DescribedObject(String type, String primKey)
   {
     this(type, primKey, new HashMap<>());
+  }
+
+  /**
+   * Same as outer class but states how much the object matches the search criteria.
+   */
+  public static class Matched extends DescribedObject
+  {
+
+    @Getter
+    final int matchValue;
+
+    /**
+     * Creates immutable instance.
+     * 
+     * @param data object to wrap
+     * @param similarity defines how much it matches the search criteria
+     */
+    public Matched(DescribedObject data, Similarity similarity)
+    {
+      super(data.type, data.primKey, data.attributes);
+      matchValue = similarity.getValue();
+    }
   }
 }

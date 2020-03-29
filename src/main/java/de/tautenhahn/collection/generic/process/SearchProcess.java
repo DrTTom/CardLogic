@@ -1,7 +1,7 @@
 package de.tautenhahn.collection.generic.process;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -105,23 +105,19 @@ public class SearchProcess implements PersistenceChangeListener
                                     Stream<DescribedObject> candidates,
                                     DescribedObject searchMask)
   {
-    Map<DescribedObject, Similarity> similars = new LinkedHashMap<>();
+    List<DescribedObject.Matched> similars = new ArrayList<>();
     List<DescribedObject> remainingCandidates = new ArrayList<>();
     candidates.forEach(d -> {
       Similarity sim = interpreter.countSimilarity(searchMask, d);
       if (sim.possiblyEqual())
       {
         remainingCandidates.add(d);
-        similars.put(d, sim);
+        similars.add(new DescribedObject.Matched(d, sim));
       }
     });
     result.setNumberPossible(similars.size());
-    result.setNumberMatching((int)similars.values().stream().filter(Similarity::probablyEqual).count());
-    if (result.getNumberMatching() > 0 || similars.size() < 100)
-    {
-      result.setMatches(new ArrayList<>(similars.keySet()));
-      result.getMatches().sort((a, b) -> similars.get(b).compareTo(similars.get(a)));
-    }
+    similars.sort(Comparator.comparing(DescribedObject.Matched::getMatchValue).reversed());
+    result.setMatches(similars.size() < 100 ? similars : similars.subList(0, 100));
 
     synchronized (this)
     {

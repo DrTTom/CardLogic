@@ -26,38 +26,36 @@ class BuildNode {
 	}
 
 	static div() { return BuildNode.tag('div'); }
-	static input(type) { return BuildNode.tag('input').attribute('type', type); }
+	static input(type) { return BuildNode.tag('input').attribute('type', type); }	
 	static tag(name) {
 		return new BuildNode(name);
 	}
 
-	in(parent)
-	{
+	in(parent) {
 		parent.appendChild(this.element);
-		return this;	
+		return this;
 	}
-	
-	appendTo(parent)
-	{
+
+	appendTo(parent) {
 		parent.appendChild(this.element);
 		return element;
 	}
-	
+
 	attribute(name, value) {
 		this.element.setAttribute(name, value);
 		return this;
 	}
-	
+
 	text(value) {
 		this.element.innerText = value;
 		return this;
 	}
-	
+
 	get() {
 		return this.element;
 	}
 
-		
+
 	id(value) {
 		return this.attribute('id', value);
 	}
@@ -79,7 +77,7 @@ class BuildNode {
 		return this.attribute('for', value);
 	}
 
-	
+
 }
 /**
  * Returns a builder for a new node.

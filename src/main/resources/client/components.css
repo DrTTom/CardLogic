@@ -95,6 +95,10 @@ body {
     font-weight: bold;
 }
 
+.indifferent {
+	color: gray;
+}
+
 .c-body {
     padding: 10px;
     position: relative;

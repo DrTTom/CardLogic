@@ -44,13 +44,21 @@ class DeckMedium extends DefaultTile {
 		$('div', this).classList.add('c-medium');
 	}
 	fillContent(node, data) {
-		buildChildNode(node, 'img').class('image-small').attribute('src', '/download/' + data.attributes.image);
+		DeckMedium.addImage(node, data, 'image-small');
 		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker));
 		buildChildNode(node, 'div').text(DeckSmall.timeString(data.attributes));
 		buildChildNode(node, 'div').class('separated').text(data.attributes.numberCards + ' Blatt, ' + data.attributes.format);
 		let text = data.attributes.remark ? data.attributes.remark : i18n('pattern', data.attributes.pattern);
 		buildChildNode(node, 'p').class('scroll3lines separated clear').text(text);
 	}
+    static addImage(node, data, styleclass) {
+		if (data.attributes.image) {
+			buildChildNode(node, 'img').class(styleclass).attribute('src', '/download/' + data.attributes.image);
+			} else {
+				buildChildNode(node, 'div').class(styleclass);
+			}
+    }
+
 }
 
 class DeckBig extends DefaultTile {
@@ -59,7 +67,7 @@ class DeckBig extends DefaultTile {
 		$('div', this).classList.add('c-big');
 	}
 	fillContent(node, data) {
-		buildChildNode(node, 'img').class('image-default').attribute('src', '/download/' + data.attributes.image);
+		DeckMedium.addImage(node, data, 'image-default');
 		buildChildNode(node, 'div').text(i18n('maker', data.attributes.maker));
 		buildChildNode(node, 'div').text(DeckSmall.timeString(data.attributes));
 		buildChildNode(node, 'div').class('separated').text(data.attributes.numberCards + ' Blatt, ' + data.attributes.format);
@@ -74,7 +82,7 @@ class FullDeck extends FullView {
 	fillContent(node, data) {
 		node.classList.add('dialog-big');
 		let values = data.attributes;
-		buildChildNode(node, 'img').attribute("class", "image-big").attribute('src', '/download/' + values.image);
+		DeckMedium.addImage(node, data, 'image-big');
 		buildChildNode(node, 'div').text(i18n('maker', values.maker));
 		buildChildNode(node, 'div').text(DeckSmall.timeString(values));
 		buildChildNode(node, 'div').class('separated').text(values.numberCards + ' Blatt, ' + values.format);

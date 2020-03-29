@@ -268,13 +268,16 @@ public class CardsTest
     SubmissionProcess systemUnderTest = ProcessFactory.getInstance().getSubmission("deck");
     SearchProcess search = ProcessFactory.getInstance().getSearch("deck");
     SearchResult before = search.search(newDeck.getAttributes());
-    assertThat(before.getNumberMatching()).isEqualTo(0);
+    assertThat(before.getMatches().stream().filter(m -> m.getMatchValue() > 0).count()).isEqualTo(0L);
 
     SubmissionResponse result = systemUnderTest.submit(newDeck.getAttributes(), force);
-    // assertThat("done (" + result.getStatus() + ")", result.isDone(), is(expectSuccess));
+    assertThat(result.isSuccess()).isEqualTo(expectSuccess);
 
     SearchResult after = search.search(newDeck.getAttributes());
-    assertThat(after.getNumberMatching()).isEqualTo(expectSuccess ? 1 : 0);
+    assertThat(after.getMatches()
+                    .stream()
+                    .filter(m -> m.getMatchValue() > 50)
+                    .count()).isEqualTo(expectSuccess ? 1L : 0L);
     assertThat(after.getNumberTotal()).isEqualTo(before.getNumberTotal() + (expectSuccess ? 1 : 0));
     return result;
   }

@@ -275,7 +275,7 @@ class SearchView extends MyCustomElement {
     
         this.loadQuestions(data.questions, $(selectorPrefix + 'questions', this), keepQuestionGroups);
 
-        $(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend, " + data.numberMatching + " wahrscheinlich";
+        $(selectorPrefix + 'stats').innerHTML = data.numberPossible + " von " + data.numberTotal + " passend";
         const tags = supportedTiles[data.type];
         const tagName = tags[Math.min(Math.floor(Math.log(data.numberPossible) / 2.1), tags.length - 1)];
         const resultsDiv = $(selectorPrefix + 'results');
@@ -422,6 +422,9 @@ class DefaultTile extends MyCustomElement {
         let header = $(idPrefix + '_header');
         header.innerHTML = data.attributes.name;
         header.title = data.primKey;
+        if (data.matchValue <= 50) {
+	      this.classList.add('indifferent');
+        }
         this.fillContent($(idPrefix + '_content'), data);
         $('div', this).onclick = () => this.showFull(data.type, data.primKey);
     }
