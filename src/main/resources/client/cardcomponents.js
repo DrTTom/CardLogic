@@ -52,11 +52,8 @@ class DeckMedium extends DefaultTile {
 		buildChildNode(node, 'p').class('scroll3lines separated clear').text(text);
 	}
     static addImage(node, data, styleclass) {
-		if (data.attributes.image) {
-			buildChildNode(node, 'img').class(styleclass).attribute('src', '/download/' + data.attributes.image);
-			} else {
-				buildChildNode(node, 'div').class(styleclass);
-			}
+	    const path= data.attributes.image ? '/download/' + data.attributes.image : 'no_image.png';
+		buildChildNode(node, 'img').class(styleclass).attribute('src', path);
     }
 
 }

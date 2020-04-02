@@ -26,7 +26,8 @@ class BuildNode {
 	}
 
 	static div() { return BuildNode.tag('div'); }
-	static input(type) { return BuildNode.tag('input').attribute('type', type); }	
+	static input(type) { return BuildNode.tag('input').attribute('type', type); }
+	static button(text) { return BuildNode.tag('button').text(text); }	
 	static tag(name) {
 		return new BuildNode(name);
 	}
