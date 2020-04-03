@@ -93,7 +93,10 @@ public class SecureZip
       {
         throw new IOException("Cannot create directory " + target.getParentFile().getAbsolutePath());
       }
-      doWrite(content, target);
+      if (!target.exists())
+      {
+        doWrite(content, target);
+      }
     }
   }
 

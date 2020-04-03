@@ -191,7 +191,7 @@ class BigTextInput extends InputElement {
 class FileInput extends InputElement {
 	createInputElement(id) {
 		let form = buildNode('form').attribute('enctype', 'multipart/form-data').get();
-		buildChildNode(form, 'img').attribute('title', 'Bild hochlanden').attribute('alt', 'Bild').attribute('height', '80').attribute('src', 'no_image.gif');
+		buildChildNode(form, 'img').attribute('title', 'Bild hochlanden').attribute('alt', 'Bild').attribute('height', '80').attribute('src', 'no_image.png');
 		buildChildNode(form, 'input').type('text').id(id).attribute('style', 'display:none');
 		buildChildNode(form, 'input').attribute('name', 'file').type('file').attribute('style', 'display:none');
 		return form;
@@ -217,6 +217,18 @@ class FileInput extends InputElement {
 		};
 	}
 }
+
+class FileUpload extends HTMLElement {
+	connectedCallback() {
+		let form = BuildNode.tag('form').in(this).attribute('enctype', 'multipart/form-data').get();
+		let inp = buildChildNode(form, 'input').attribute('name', 'file').type('file').attribute('style', 'display:none').get();
+		inp.onchange = () =>
+			fetch(this.getAttribute('url'), { method: 'POST', body: new FormData($('form', this)) })
+				.then(response => response.text()).then(text => alert(text));
+		BuildNode.div().in(form).text(this.getAttribute('text')).class('button').get().onclick = () => inp.click();
+	}
+}
+
 
 /**
  * Select element supporting only text.
@@ -278,8 +290,9 @@ class SearchView extends MyCustomElement {
 		const tagName = tags[Math.min(Math.floor(Math.log(data.numberPossible) / 2.1), tags.length - 1)];
 		const resultsDiv = $(selectorPrefix + 'results');
 		resultsDiv.innerHTML = '';
+		const showMatching = data.matches.length > 0 && data.matches[0].matchValue > 50;
 		data.matches.forEach(d =>
-			buildChildNode(resultsDiv, tagName).get().load(d));
+			buildChildNode(resultsDiv, tagName).get().load(d, showMatching));
 	}
 
 	buildStoreControls(node, refId) {
@@ -423,12 +436,12 @@ class DefaultTile extends MyCustomElement {
 		buildChildNode(div, 'div').class('c-body').id(refId + "_content");
 	}
 
-	load(data) {
+	load(data, doShowMatching = true) {
 		const idPrefix = '#' + this.getRefId();
 		let header = $(idPrefix + '_header');
 		header.innerHTML = data.attributes.name;
 		header.title = data.primKey;
-		if (data.matchValue <= 50) {
+		if (doShowMatching && data.matchValue <= 50) {
 			this.classList.add('indifferent');
 		}
 		this.fillContent($(idPrefix + '_content'), data);
@@ -538,3 +551,4 @@ elements.define("simple-tile", SimpleTile);
 elements.define("default-tile", DefaultTile);
 elements.define("default-full", FullView);
 elements.define("file-upload", FileInput);
+elements.define("upload-file", FileUpload);

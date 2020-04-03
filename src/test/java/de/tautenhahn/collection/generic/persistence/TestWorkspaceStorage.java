@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import de.tautenhahn.collection.generic.data.DescribedObject;
@@ -72,23 +71,6 @@ public class TestWorkspaceStorage
       }
       systemUnderTest.delete(primaryType, "primary");
       assertThat(systemUnderTest.find(primaryType, "primary")).isNull();
-    }
-  }
-
-  /**
-   * Imports ZIP data into workspace:
-   *
-   * @throws IOException
-   */
-  @Test
-  @Disabled("this is a tool")
-  public void importZip() throws IOException
-  {
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-      InputStream ins = TestWorkspaceStorage.class.getResourceAsStream("/example.zip"))
-    {
-      systemUnderTest.init("cards");
-      systemUnderTest.importZip(ins);
     }
   }
 

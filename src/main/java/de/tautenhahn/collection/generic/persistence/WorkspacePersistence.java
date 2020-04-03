@@ -234,7 +234,7 @@ public class WorkspacePersistence implements Persistence
       while (jsRes.hasNext())
       {
         DescribedObject item = gson.fromJson(jsRes, DescribedObject.class);
-        getTypeMap(item.getType()).put(item.getPrimKey(), item);
+        getTypeMap(item.getType()).computeIfAbsent(item.getPrimKey(), key -> item);
         result++;
       }
       jsRes.endArray();
@@ -311,6 +311,7 @@ public class WorkspacePersistence implements Persistence
   public void importZip(InputStream ins) throws IOException
   {
     new SecureZip().expand(ins, collectionBaseDir, JSON_FILENAME, this::importGson);
+    close();
   }
 
   @Override

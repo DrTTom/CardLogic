@@ -38,14 +38,6 @@ public class SpecialMeasure extends FreeText
     {
       return Similarity.NO_STATEMENT; // cannot decide uniquely whether eye is visible and has unique position
     }
-    try
-    {
-      return new Format.Rectangle(thisValue).similar(new Format.Rectangle(otherValue))
-        ? Similarity.ALMOST_SIMILAR : Similarity.DIFFERENT;
-    }
-    catch (@SuppressWarnings("unused") IllegalArgumentException e)
-    {
-      return Similarity.NO_STATEMENT;
-    }
+    return Format.similarityByTolerance(thisValue, otherValue);
   }
 }

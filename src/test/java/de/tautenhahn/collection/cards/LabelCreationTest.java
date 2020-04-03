@@ -50,7 +50,7 @@ public class LabelCreationTest
   void createLabels() throws Exception
   {
     DeckLabelCreator creator = new DeckLabelCreator();
-    DataRenderer renderer = new DocxLabelRenderer();
+    DataRenderer<Label> renderer = new DocxLabelRenderer();
     List<Label> labels = persistence.findAll("deck").map(creator::createLabel).collect(Collectors.toList());
     try (OutputStream target = new FileOutputStream("build/labels.docx"))
     {

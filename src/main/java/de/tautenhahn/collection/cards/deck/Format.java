@@ -1,9 +1,8 @@
 package de.tautenhahn.collection.cards.deck;
 
-import java.util.StringTokenizer;
-
 import de.tautenhahn.collection.generic.data.DescribedObject;
 import de.tautenhahn.collection.generic.data.FreeText;
+import de.tautenhahn.collection.generic.data.Rectangle;
 import de.tautenhahn.collection.generic.data.Similarity;
 
 
@@ -26,7 +25,7 @@ public class Format extends FreeText
   @Override
   public String check(String value, DescribedObject context)
   {
-    return value.matches("[1-9][0-9]*x[1-9][0-9]*( \\(.*\\))?") ? null : "msg.error.invalidValue";
+    return Rectangle.FORMAT_EXT.matcher(value).matches() ? null : "msg.error.invalidValue";
   }
 
   @Override
@@ -36,51 +35,27 @@ public class Format extends FreeText
     {
       return Similarity.SIMILAR;
     }
-    try
-    {
-      return new Rectangle(thisValue).similar(new Rectangle(otherValue)) ? Similarity.ALMOST_SIMILAR
-        : Similarity.DIFFERENT;
-    }
-    catch (@SuppressWarnings("unused") IllegalArgumentException e)
-    {
-      return Similarity.NO_STATEMENT;
-    }
+    return similarityByTolerance(thisValue, otherValue);
   }
 
-  /**
-   * Just wraps width and height.
-   */
-  static class Rectangle
+  static Similarity similarityByTolerance(String thisValue, String otherValue)
   {
-
-    int width;
-
-    int height;
-
-    Rectangle(String value)
+    try
     {
-      // TODO: use regex!
-      StringTokenizer tokens = new StringTokenizer(value, "x (");
-      try
+      switch (new Rectangle(thisValue).biggestDiffTo(new Rectangle(otherValue)))
       {
-        if (tokens.hasMoreTokens())
-        {
-          width = Integer.parseInt(tokens.nextToken());
-        }
-        if (tokens.hasMoreTokens())
-        {
-          height = Integer.parseInt(tokens.nextToken());
-        }
-      }
-      catch (NumberFormatException e)
-      {
-        throw new IllegalArgumentException(e);
+        case 0: // NOPMD same as 1
+        case 1:
+          return Similarity.ALMOST_SIMILAR;
+        case 2:
+          return Similarity.HINT;
+        default:
+          return Similarity.DIFFERENT;
       }
     }
-
-    boolean similar(Rectangle other)
+    catch (IllegalArgumentException e)
     {
-      return Math.abs(width - other.width) < 2 && Math.abs(height - other.height) < 2;
+      return Similarity.NO_STATEMENT;
     }
   }
 }

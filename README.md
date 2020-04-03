@@ -20,7 +20,7 @@ Why is collecting playing cards different?
 * Cards may or may not have maker signs, covers ...
 
 ## Usage
-The project is not finished, the application cannot really be used now.
-Run tests first, that will leave a directory called ```.Collection``` in your
-home folder which contains some example data. Then run the application and have
-a look.
+The project is not finished, but the application is usable to keep track of my playing cards collection.
+For a quick view, call ``gradlew run``, then navigate to "Import/Export" -> "Hochladen" -> "Gesamte Sammlung" 
+and upload the file ``src/stest/resources/example.zip`` from this project. This loads some data you can browse or manipulate.
+ 

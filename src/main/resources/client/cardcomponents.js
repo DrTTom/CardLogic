@@ -137,7 +137,7 @@ class ImportExport extends HTMLElement {
 		BuildNode.tag('a').in(this).class('button').text('Gesamte Sammlung').attribute('href', '/collection');
 		BuildNode.tag('a').in(this).class('button').text('Etiketten').attribute('href', '/collection?fileType=labels&objectType=deck');
 		BuildNode.tag('h3').in(this).text('Hochladen');
-		BuildNode.div().in(this).class('button').text('Gesamte Sammlung');
+		BuildNode.tag('upload-file').attribute('text', 'Gesamte Sammlung').attribute('url','/collection?collectionName=cards').in(this);
 	}
 }
 

@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -258,22 +259,27 @@ public class RestServer
   /**
    * @param req
    * @param res not needed
-   * @throws IOException
-   * @throws ServletException
+   * @throws IOException in case of streaming problems
+   * @throws ServletException in case of problems accessing the request parts
    */
   private String importCollection(Request req, Response res) throws IOException, ServletException
   {
     WorkspacePersistence persistence = (WorkspacePersistence)ApplicationContext.getInstance()
                                                                                .getPersistence();
     persistence.close();
-    persistence.init(req.params("collectionName"));
+    persistence.init(Objects.requireNonNull(req.queryParams("collectionName"), "param ?collectionName="));
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
-    try (InputStream insRes = req.raw().getPart("uploaded_file").getInputStream())
+    try (InputStream insRes = req.raw().getPart("file").getInputStream())
     {
       persistence.importZip(insRes);
+      res.status(200);
+      return "OK";
     }
-    res.status(200);
-    return "OK";
+    catch (RuntimeException e)
+    {
+      res.status(400);
+      return "Fehler: Ausgewählte Datei ist keine Sammlung.";
+    }
   }
 
   /**
