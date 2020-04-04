@@ -14,7 +14,7 @@ import de.tautenhahn.collection.generic.data.DescribedObject;
  *
  * @author TT
  */
-public interface Persistence extends AutoCloseable
+public interface Persistence
 {
 
   /**
@@ -25,16 +25,14 @@ public interface Persistence extends AutoCloseable
   void store(DescribedObject item);
 
   /**
-   * Returns object specified by primary key
-   *
+   * @return object specified by primary key
    * @param type specifies type of object
    * @param primKey primary key value
    */
   DescribedObject find(String type, String primKey);
 
   /**
-   * Returns all object of given type.
-   *
+   * @return all object of given type.
    * @param type specifies type of object
    */
   Stream<DescribedObject> findAll(String type);
@@ -42,7 +40,7 @@ public interface Persistence extends AutoCloseable
   /**
    * Returns objects of given type which match specified attribute values.
    *
-   * @param type
+   * @param type object type
    * @param exactValues only those values which require exact match
    */
   Stream<DescribedObject> findByRestriction(String type, Map<String, String> exactValues);
@@ -61,8 +59,7 @@ public interface Persistence extends AutoCloseable
   int getNumberItems(String type);
 
   /**
-   * Returns all values of primKey (unique name) of objects of specified type.
-   *
+   * @return all values of primKey (unique name) of objects of specified type.
    * @param type specifies type of object
    */
   List<String> getKeyValues(String type);
@@ -76,8 +73,7 @@ public interface Persistence extends AutoCloseable
   void delete(String type, String name);
 
   /**
-   * Returns true if object is referenced by other object.
-   *
+   * @return true if object is referenced by other object.
    * @param type specifies type of object
    * @param name primary key value of object to remove
    * @param referencingType specifies which kinds of object to search for references
@@ -85,23 +81,22 @@ public interface Persistence extends AutoCloseable
   boolean isReferenced(String type, String name, String... referencingType);
 
   /**
-   * Returns true if specified object exists.
-   *
-   * @param type
-   * @param name
+   * @return true if specified object exists.
+   * @param type object type
+   * @param key value of {@link DescribedObject#getPrimKey()}
    */
-  boolean keyExists(String type, String name);
+  boolean keyExists(String type, String key);
 
   /**
-   * Returns all object types.
+   * @return all object types.
    */
   List<String> getObjectTypes();
 
   /**
    * Stores a binary object.
    *
-   * @param ins
-   * @param ref
+   * @param ins content
+   * @param ref reference to store into
    * @throws IOException
    */
   void store(InputStream ins, String ref) throws IOException;
@@ -109,9 +104,10 @@ public interface Persistence extends AutoCloseable
   /**
    * Returns a new reference for storing a binary file.
    * 
-   * @param parentsPrimKey
-   * @param parentsType
+   * @param parentsPrimKey (expected) primary key of the DescribedObject owning that binary content
+   * @param parentsType type of the owner Object
    * @param fileExtension
+   * @return proposed reference, should enable guessing the owner object
    * @throws IOException
    */
   String createNewBinRef(String parentsPrimKey, String parentsType, String fileExtension) throws IOException;
@@ -119,15 +115,16 @@ public interface Persistence extends AutoCloseable
   /**
    * Returns a binary object
    *
-   * @param ref
-   * @throws IOException
+   * @param ref specifies which one
+   * @throws IOException in case of I/O problems
+   * @return contain the binary content
    */
   InputStream find(String ref) throws IOException;
 
   /**
    * Returns true if a binary content is stored under the specified reference.
    *
-   * @param ref
+   * @param ref specifies the binary object in question.
    */
   boolean binObjectExists(String ref);
 
@@ -137,4 +134,12 @@ public interface Persistence extends AutoCloseable
    * @param listener is notified as soon as persisted content changed
    */
   void addListener(PersistenceChangeListener listener);
+
+  /**
+   * Actually saves any cached data into persisted state. After calling this method, the process can be safely
+   * terminated.
+   * 
+   * @throws IOException in case of I/O problems
+   */
+  void flush() throws IOException;
 }

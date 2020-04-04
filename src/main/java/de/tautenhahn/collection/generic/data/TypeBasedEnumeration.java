@@ -60,8 +60,8 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Persis
    * Creates new instance.
    *
    * @param name attribute name, must be equal to the type
-   * @param matchValue
-   * @param flags
+   * @param matchValue relevance of a match
+   * @param flags specify further properties
    */
   public TypeBasedEnumeration(String name, int matchValue, Flag... flags)
   {
@@ -107,7 +107,7 @@ public abstract class TypeBasedEnumeration extends Enumeration implements Persis
     options.put(NOT_SPECIFIED, NULL_PLACEHOLDER);
     if (supportAbsent)
     {
-        options.put(WITHOUT, toDisplayValue(WITHOUT));
+      options.put(WITHOUT, toDisplayValue(WITHOUT));
     }
 
     if (width == null)

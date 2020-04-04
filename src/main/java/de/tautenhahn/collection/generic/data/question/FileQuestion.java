@@ -35,9 +35,9 @@ public class FileQuestion extends Question
   /**
    * Creates instance.
    *
-   * @param paramName
-   * @param text
-   * @param form
+   * @param paramName name of the described objects attribute
+   * @param text to display in label
+   * @param form in which context the question should be displayed
    */
   public FileQuestion(String paramName, String text, String form)
   {

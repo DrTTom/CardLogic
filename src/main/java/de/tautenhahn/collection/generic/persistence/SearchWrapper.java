@@ -47,8 +47,8 @@ public class SearchWrapper
    * Creates a new instance which works in the specified directory. If there is no index in that directory, it
    * creates one in a separate thread. Searching will block until the index is created.
    *
-   * @param directory
-   * @throws IOException
+   * @param directory where the index should be kept
+   * @throws IOException in case of file writing/reading problems
    */
   public SearchWrapper(Path directory) throws IOException
   {
@@ -63,9 +63,9 @@ public class SearchWrapper
   /**
    * Returns the primary keys of found objects.
    *
-   * @param phrase
-   * @param field
-   * @throws IOException
+   * @param phrase what to search
+   * @param field name of the field to search in
+   * @throws IOException in case of file writing/reading problems
    */
   public List<String> search(String phrase, String field) throws IOException
   {
@@ -89,8 +89,8 @@ public class SearchWrapper
   /**
    * Adds a given object to the search index.
    *
-   * @param obj
-   * @throws IOException
+   * @param obj to add all searchable attributes to the index
+   * @throws IOException in case of file writing/reading problems
    */
   public void addToIndex(DescribedObject... obj) throws IOException
   {
@@ -108,7 +108,7 @@ public class SearchWrapper
   /**
    * Removes the record specified by key from the index.
    *
-   * @param key
+   * @param key primKey of object to remove
    */
   public void removeFromIndex(String key)
   {

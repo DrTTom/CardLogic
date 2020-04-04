@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,7 +59,7 @@ public class WorkspacePersistence implements Persistence
     listeners.forEach(l -> l.onChange(item.getType()));
     try
     {
-      close();
+      flush();
     }
     catch (IOException e)
     {
@@ -133,14 +134,9 @@ public class WorkspacePersistence implements Persistence
   @Override
   public boolean isReferenced(String type, String name, String... referencingType)
   {
-    for ( String refType : referencingType )
-    {
-      if (findAll(refType).anyMatch(d -> name.equals(d.getAttributes().get(type))))
-      {
-        return true;
-      }
-    }
-    return false;
+    return Arrays.stream(referencingType)
+                 .flatMap(refType -> findAll(refType))
+                 .anyMatch(d -> name.equals(d.getAttributes().get(type)));
   }
 
   @Override
@@ -209,7 +205,7 @@ public class WorkspacePersistence implements Persistence
   }
 
   @Override
-  public void close() throws IOException
+  public void flush() throws IOException
   {
     Gson gson = new GsonBuilder().create();
 
@@ -277,7 +273,7 @@ public class WorkspacePersistence implements Persistence
    */
   public void exportZip(OutputStream outs, Predicate<DescribedObject> filter) throws IOException
   {
-    close();
+    flush();
     List<String> relPathes = new ArrayList<>();
     relPathes.add(JSON_FILENAME);
 
@@ -311,7 +307,7 @@ public class WorkspacePersistence implements Persistence
   public void importZip(InputStream ins) throws IOException
   {
     new SecureZip().expand(ins, collectionBaseDir, JSON_FILENAME, this::importGson);
-    close();
+    flush();
   }
 
   @Override

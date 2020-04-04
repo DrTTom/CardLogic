@@ -27,9 +27,9 @@ public abstract class Enumeration extends AttributeInterpreter
   /**
    * Creates new instance.
    *
-   * @param name
+   * @param name attribute name
    * @param matchValue describes how strong the hint is that equal values mean equal objects.
-   * @param flags
+   * @param flags define further properties
    */
   protected Enumeration(String name, int matchValue, Flag... flags)
   {
@@ -40,7 +40,8 @@ public abstract class Enumeration extends AttributeInterpreter
   /**
    * Returns the list of legal internal attribute values.
    *
-   * @param context
+   * @param context other attributes may influence which values are allowed
+   * @return allowed values
    */
   public abstract List<String> getAllowedValues(DescribedObject context);
 
@@ -62,15 +63,17 @@ public abstract class Enumeration extends AttributeInterpreter
 
   /**
    * Prepares the options to chose from
+   * 
    * @param object context which may affect allowed values
-   * @return key is data value, values is display value, contains null option and current value (even if illegal)
+   * @return key is data value, values is display value, contains null option and current value (even if
+   *         illegal)
    */
   protected Map<String, String> getOptions(DescribedObject object)
   {
     Map<String, String> options = new LinkedHashMap<>();
     getAllowedValues(object).forEach(v -> options.put(v, toDisplayValue(v)));
     options.put("", NULL_PLACEHOLDER);
-    String currentValue= Optional.ofNullable(object.getAttributes().get(getName())).orElse("");
+    String currentValue = Optional.ofNullable(object.getAttributes().get(getName())).orElse("");
     if (!options.containsKey(currentValue))
     {
       options.put(currentValue, toDisplayValue(currentValue));

@@ -36,33 +36,31 @@ public class TestStorage
     String protType = "protocol";
     String urlType = "cryptoUrl";
     String https = "https";
-    try (WorkspacePersistence systemUnderTestRes = new WorkspacePersistence())
-    {
-      systemUnderTestRes.init("testStoreAndFind");
-      DescribedObject obj = new DescribedObject(urlType, "primary");
-      obj.getAttributes().put(protType, https);
-      DescribedObject prot = new DescribedObject(protType, https);
-      reference = systemUnderTestRes.createNewBinRef(https, protType, "bin");
-      prot.getAttributes().put("image", reference);
-      systemUnderTestRes.store(new ByteArrayInputStream(content), reference);
-      systemUnderTestRes.store(obj);
-      systemUnderTestRes.store(prot);
-    }
+    WorkspacePersistence storingSysUnderTest = new WorkspacePersistence();
+    storingSysUnderTest.init("testStoreAndFind");
+    DescribedObject obj = new DescribedObject(urlType, "primary");
+    obj.getAttributes().put(protType, https);
+    DescribedObject prot = new DescribedObject(protType, https);
+    reference = storingSysUnderTest.createNewBinRef(https, protType, "bin");
+    prot.getAttributes().put("image", reference);
+    storingSysUnderTest.store(new ByteArrayInputStream(content), reference);
+    storingSysUnderTest.store(obj);
+    storingSysUnderTest.store(prot);
 
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
+    Persistence systemUnderTest = new WorkspacePersistence();
+
+    systemUnderTest.init("testStoreAndFind");
+    assertThat(systemUnderTest.find(urlType, "primary").getAttributes().get(protType)).isEqualTo(https);
+    assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isTrue();
+    try (InputStream insRes = systemUnderTest.find(reference))
     {
-      systemUnderTest.init("testStoreAndFind");
-      assertThat(systemUnderTest.find(urlType, "primary").getAttributes().get(protType)).isEqualTo(https);
-      assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isTrue();
-      try (InputStream insRes = systemUnderTest.find(reference))
-      {
-        assertThat(insRes.available()).isEqualTo(content.length);
-      }
-      assertThat(systemUnderTest.findByRestriction(urlType, Map.of(protType, https)).count()).isEqualTo(1);
-      systemUnderTest.delete(urlType, "primary");
-      assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isFalse();
-      assertThat(systemUnderTest.find(urlType, "primary")).isNull();
+      assertThat(insRes.available()).isEqualTo(content.length);
     }
+    assertThat(systemUnderTest.findByRestriction(urlType, Map.of(protType, https)).count()).isEqualTo(1);
+    systemUnderTest.delete(urlType, "primary");
+    assertThat(systemUnderTest.isReferenced(protType, https, urlType)).isFalse();
+    assertThat(systemUnderTest.find(urlType, "primary")).isNull();
+
   }
 
   /**
@@ -75,25 +73,20 @@ public class TestStorage
   public void importAndExport() throws IOException
   {
     importZip();
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-      OutputStream outs = new FileOutputStream("build/exportedByTest.zip"))
+    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+    try (OutputStream outs = new FileOutputStream("build/exportedByTest.zip"))
     {
       systemUnderTest.init("storageTest");
       assertThat(systemUnderTest.toString()).contains("storageTest, loaded 5 types");
       assertThat(systemUnderTest.getKeyValues("deck")).hasSize(99);
-      systemUnderTest.exportZip( outs, x-> true);
+      systemUnderTest.exportZip(outs, x -> true);
     }
   }
 
-  /**
-   * Imports zip data into workspace:
-   *
-   * @throws IOException
-   */
-  void importZip() throws IOException
+  private void importZip() throws IOException
   {
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence();
-      InputStream ins = TestStorage.class.getResourceAsStream("/example.zip"))
+    WorkspacePersistence systemUnderTest = new WorkspacePersistence();
+    try (InputStream ins = TestStorage.class.getResourceAsStream("/example.zip"))
     {
       systemUnderTest.init("storageTest");
       systemUnderTest.importZip(ins);

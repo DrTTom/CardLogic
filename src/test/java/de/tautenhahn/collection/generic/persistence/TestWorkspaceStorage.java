@@ -37,40 +37,39 @@ public class TestWorkspaceStorage
     String reference = null;
     String primaryType = "cryptoUrl";
     String auxType = "protocol";
-    try (WorkspacePersistence systemUnderTest = new NoInterpreterPersistence())
+    WorkspacePersistence systemUnderTest = new NoInterpreterPersistence();
+
+    systemUnderTest.init("testing");
+    DescribedObject obj = new DescribedObject(primaryType, "primary");
+    obj.getAttributes().put(auxType, "https");
+    DescribedObject prot = new DescribedObject(auxType, "https");
+    reference = systemUnderTest.createNewBinRef("https", auxType, "bin");
+    prot.getAttributes().put("image", reference);
+    systemUnderTest.store(new ByteArrayInputStream(content), reference);
+    systemUnderTest.store(obj);
+    systemUnderTest.store(prot);
+    try (FileOutputStream outs = new FileOutputStream("build/checkme.zip"))
     {
-      systemUnderTest.init("testing");
-      DescribedObject obj = new DescribedObject(primaryType, "primary");
-      obj.getAttributes().put(auxType, "https");
-      DescribedObject prot = new DescribedObject(auxType, "https");
-      reference = systemUnderTest.createNewBinRef("https", auxType, "bin");
-      prot.getAttributes().put("image", reference);
-      systemUnderTest.store(new ByteArrayInputStream(content), reference);
-      systemUnderTest.store(obj);
-      systemUnderTest.store(prot);
-      try (FileOutputStream outs = new FileOutputStream("build/checkme.zip"))
-      {
-        systemUnderTest.exportZip(outs, x -> true);
-      }
+      systemUnderTest.exportZip(outs, x -> true);
     }
 
-    try (WorkspacePersistence systemUnderTest = new WorkspacePersistence())
+    WorkspacePersistence systemUnderTest2 = new WorkspacePersistence();
     {
-      systemUnderTest.init("testingOther");
+      systemUnderTest2.init("testingOther");
       try (FileInputStream ins = new FileInputStream("build/checkme.zip"))
       {
-        systemUnderTest.importZip(ins);
+        systemUnderTest2.importZip(ins);
       }
-      assertThat(systemUnderTest.find(primaryType, "primary")
-                                .getAttributes()
-                                .get(auxType)).isEqualTo("https");
-      assertThat(systemUnderTest.isReferenced(auxType, "https", primaryType)).isTrue();
-      try (InputStream insRes = systemUnderTest.find(reference))
+      assertThat(systemUnderTest2.find(primaryType, "primary")
+                                 .getAttributes()
+                                 .get(auxType)).isEqualTo("https");
+      assertThat(systemUnderTest2.isReferenced(auxType, "https", primaryType)).isTrue();
+      try (InputStream insRes = systemUnderTest2.find(reference))
       {
         assertThat(insRes.available()).isEqualTo(content.length);
       }
-      systemUnderTest.delete(primaryType, "primary");
-      assertThat(systemUnderTest.find(primaryType, "primary")).isNull();
+      systemUnderTest2.delete(primaryType, "primary");
+      assertThat(systemUnderTest2.find(primaryType, "primary")).isNull();
     }
   }
 

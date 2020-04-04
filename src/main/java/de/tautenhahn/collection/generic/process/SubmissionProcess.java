@@ -82,7 +82,6 @@ public class SubmissionProcess
                  .stream()
                  .filter(e -> !e.getValue().isBlank())
                  .forEach(e -> existing.getAttributes().put(e.getKey(), e.getValue()));
-    ;
     return checkAndStore(existing, !force);
   }
 }

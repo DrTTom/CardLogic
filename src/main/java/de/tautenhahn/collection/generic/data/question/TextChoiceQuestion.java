@@ -15,9 +15,9 @@ public class TextChoiceQuestion extends ChoiceQuestion
   /**
    * Creates instance.
    *
-   * @param paramName
-   * @param text
-   * @param form
+   * @param paramName name of the described objects attribute
+   * @param text to display in label
+   * @param form in which context the question should be displayed
    */
   public TextChoiceQuestion(String paramName, String text, String form)
   {

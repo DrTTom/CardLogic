@@ -266,7 +266,7 @@ public class RestServer
   {
     WorkspacePersistence persistence = (WorkspacePersistence)ApplicationContext.getInstance()
                                                                                .getPersistence();
-    persistence.close();
+    persistence.flush();
     persistence.init(Objects.requireNonNull(req.queryParams("collectionName"), "param ?collectionName="));
     req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
     try (InputStream insRes = req.raw().getPart("file").getInputStream())
@@ -290,7 +290,6 @@ public class RestServer
   {
     ApplicationContext app = ApplicationContext.getInstance();
     WorkspacePersistence persistence = (WorkspacePersistence)app.getPersistence();
-    persistence.close();
 
     String resultType = Optional.ofNullable(req.queryParams("fileType")).orElse("zip");
     try (OutputStream dest = res.raw().getOutputStream())

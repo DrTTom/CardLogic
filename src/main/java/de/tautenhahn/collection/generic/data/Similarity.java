@@ -56,6 +56,9 @@ public class Similarity
 
   /**
    * Returns a combined Similarity guess.
+   * 
+   * @param other value to add
+   * @return verdict
    */
   public Similarity add(Similarity other)
   {
@@ -71,18 +74,10 @@ public class Similarity
   }
 
   /**
-   * Returns true if objects may be equal.
+   * @return true if objects may be equal.
    */
   public boolean possiblyEqual()
   {
     return value >= 0;
-  }
-
-  /**
-   * Returns true if there is a certain probability that the objects are equal.
-   */
-  public boolean probablyEqual()
-  {
-    return value >= 50;
   }
 }

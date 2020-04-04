@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.question.Question;
+import lombok.Getter;
 
 
 /**
@@ -17,12 +18,16 @@ import de.tautenhahn.collection.generic.data.question.Question;
 public abstract class AttributeInterpreter
 {
 
+  @Getter
   private final String name;
 
+  @Getter
   private final boolean optional;
 
+  @Getter
   private final boolean searchable;
 
+  @Getter
   private final boolean exact;
 
   String keyPrefix = NOT_SPECIFIED;
@@ -58,39 +63,6 @@ public abstract class AttributeInterpreter
   }
 
   /**
-   * Returns the attribute name.
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns true if value may be omitted.
-   */
-  public boolean isOptional()
-  {
-    return optional;
-  }
-
-  /**
-   * Returns true if value should be added to a search index, thus enabling free text search. Otherwise, the
-   * attribute is searchable via its {@link #computeCorrelation(String, String, DescribedObject)} method.
-   */
-  public boolean isSearchable()
-  {
-    return searchable;
-  }
-
-  /**
-   * Returns true if for the object this attribute can always be determined with certainty.
-   */
-  public boolean isExact()
-  {
-    return exact;
-  }
-
-  /**
    * Returns null if value is OK and message otherwise. System will call this method only if values is
    * present.
    *
@@ -98,15 +70,18 @@ public abstract class AttributeInterpreter
    * @param context provide a described object as context to allow the following methods changing behavior.
    *          For instance "Vienna Pattern" is legal for French suits but forbidden in German or Spanish
    *          suits.
+   * @return null or error message
    */
   public abstract String check(String value, DescribedObject context);
 
   /**
-   * Returns a value indicating whether two values could be for the same object. See {@link Similarity} for sensible values.
+   * Returns a value indicating whether two values could be for the same object. See {@link Similarity} for
+   * sensible values.
    *
    * @param thisValue one value to compare
    * @param otherValue one value to compare
    * @param context other attributes may influence interpretation of this attributes value
+   * @return how similar the values are 
    */
   public final Similarity computeCorrelation(String thisValue, String otherValue, DescribedObject context)
   {
@@ -120,6 +95,11 @@ public abstract class AttributeInterpreter
   /**
    * Same as {@link #computeCorrelation(String, String, DescribedObject)} but never called with null
    * arguments.
+   * 
+   * @param thisValue one value to compare
+   * @param otherValue one value to compare
+   * @param context other attributes may influence interpretation of this attributes value
+   * @return how similar the values are
    */
   protected abstract Similarity correlateValue(String thisValue, String otherValue, DescribedObject context);
 
@@ -127,6 +107,7 @@ public abstract class AttributeInterpreter
    * Returns the question for that attribute already knowing something about the object asked for.
    *
    * @param object already known values
+   * @return may be null if nothing to ask
    */
   public abstract Question getQuestion(DescribedObject object);
 
@@ -134,8 +115,9 @@ public abstract class AttributeInterpreter
    * Note that an empty String is filled in instead of a missing value because HTML and JavaScript front ends
    * cannot recognize null values properly and we do not want "undefined" pre-filled into input elements.
    *
-   * @param object
+   * @param object what is already known about the object
    * @param constructor returns the question, expects text and group
+   * @return Question for the current fields value.
    */
   protected <T extends Question> T createQuestion(DescribedObject object,
                                                   BiFunction<String, String, T> constructor)
@@ -150,10 +132,13 @@ public abstract class AttributeInterpreter
 
   /**
    * Translates empty Strings to null (value not given).
+   * 
+   * @param value any string
+   * @return value or null if value is empty (blank characters ignored)
    */
   protected String dropEmptyString(String value)
   {
-    return value == null ? null : value.chars().allMatch(Character::isWhitespace) ? null : value;
+    return value == null || value.isBlank() ? null : value;
   }
 
   /**
@@ -163,7 +148,8 @@ public abstract class AttributeInterpreter
    * By default, internally missing values are represented by empty String because most front ends can not
    * handle null values in both directions.
    *
-   * @param internalValue
+   * @param internalValue value as in the object
+   * @return value to display
    */
   public String toDisplayValue(String internalValue)
   {

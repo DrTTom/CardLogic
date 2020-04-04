@@ -2,6 +2,7 @@ package de.tautenhahn.collection.generic.data.question;
 
 import lombok.Data;
 
+
 /**
  * Defines how to get information from the front end / how to ask the user.
  *
@@ -11,50 +12,53 @@ import lombok.Data;
 public class Question
 {
 
-    private final String paramName;
+  private final String paramName;
 
-    private final String text;
+  private final String text;
 
-    private final String form;
+  private final String form;
 
-    private final String type;
+  private final String type;
 
-    private String value;
-    private String helptext;
+  private String value;
 
-    private boolean alignWithPrevious;
+  private String helptext;
 
-    private String problem;
+  private boolean alignWithPrevious;
 
-    /**
-     * Creates instance setting the mandatory parameters.
-     *
-     * @param paramName
-     * @param text
-     * @param form
-     */
-    protected Question(String type, String paramName, String text, String form)
-    {
-        this.type = type;
-        this.paramName = paramName;
-        this.text = text;
-        this.form = form;
-    }
+  private String problem;
 
-    /**
-     * Returns the answer if already known.
-     */
-    public String getValue()
-    {
-        return "".equals(value) ? null: value;
-    }
+  /**
+   * Creates instance setting the mandatory parameters.
+   *
+   * @param paramName name of described objects attribute
+   * @param text to display in label
+   * @param form specifies in which context the question is to be shown
+   */
+  protected Question(String type, String paramName, String text, String form)
+  {
+    this.type = type;
+    this.paramName = paramName;
+    this.text = text;
+    this.form = form;
+  }
 
-    /**
-     * @param value
-     * @see #getValue()
-     */
-    public void setValue(String value)
-    {
-        this.value = value==null ? "": value;
-    }
+  /**
+   * Returns the answer if already known.
+   * 
+   * @return empty String as null (using empty Strings to avoid undefined values in client)
+   */
+  public String getValue()
+  {
+    return "".equals(value) ? null : value;
+  }
+
+  /**
+   * @param value as obtained from objects attribute
+   * @see #getValue()
+   */
+  public void setValue(String value)
+  {
+    this.value = value == null ? "" : value;
+  }
 }
