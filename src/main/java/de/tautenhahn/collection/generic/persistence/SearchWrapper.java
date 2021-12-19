@@ -23,7 +23,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSLockFactory;
-import org.apache.lucene.store.SimpleFSDirectory;
+import org.apache.lucene.store.NIOFSDirectory;
 
 import de.tautenhahn.collection.generic.ApplicationContext;
 import de.tautenhahn.collection.generic.data.AttributeInterpreter;
@@ -56,7 +56,7 @@ public class SearchWrapper
     {
       Files.createDirectories(directory);
     }
-    index = new SimpleFSDirectory(directory, FSLockFactory.getDefault());
+    index = new NIOFSDirectory(directory, FSLockFactory.getDefault());
     analyzer = new StandardAnalyzer();
   }
 

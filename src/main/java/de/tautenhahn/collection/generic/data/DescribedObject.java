@@ -5,6 +5,7 @@ import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 
@@ -49,6 +50,7 @@ public class DescribedObject
   /**
    * Same as outer class but states how much the object matches the search criteria.
    */
+  @EqualsAndHashCode(callSuper = true)
   public static class Matched extends DescribedObject
   {
 
